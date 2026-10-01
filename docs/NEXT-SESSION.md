@@ -2,7 +2,7 @@
 
 ## Current checkpoint
 
-Human requested a stopping point due session limits. Work is PARKED, resume at BUILDING / revision 1. Repository: `/home/sam/Work/dial`, branch `factory/bootstrap`. Nothing pushed, merged, deployed or published. DIAL-001 has not started.
+Human requested a stopping point due session limits. Work is PARKED, resume at BUILDING / revision 1. Local repository: `/home/sam/Work/dial`, branch `factory/bootstrap`, tracking the public `sjfortin/dial-factory` repository. The checkpoint is pushed; nothing is merged or deployed. DIAL-001 has not started.
 
 The approved specification is `docs/BOOTSTRAP-CONTRACT.md`. User also approved model selection so lower-cost workers handle bounded work. Do not ask for bootstrap approval again. Do not begin Dial until this scaffold passes independent Review and Verify.
 

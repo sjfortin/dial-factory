@@ -1,6 +1,6 @@
 # Factory bootstrap — draft checkpoint notes
 
-Not published; human review required.
+This draft is publicly visible in the repository because the owner requested a public checkpoint. No separate post or announcement was published. Human review remains required before reusing or expanding these notes elsewhere.
 
 We built a small recorder around real worker agents, with a cheaper model handling bounded verification and a separate stronger reviewer. The first implementation passed its own six tests. Independent workers nevertheless found lifecycle bugs: old passing evidence could survive a failed retry, and some required revision/recovery steps could be bypassed.
 

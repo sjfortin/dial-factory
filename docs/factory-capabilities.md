@@ -10,7 +10,7 @@ Bootstrap environment: 2026-10-02 Asia/Tokyo (tool clock uses UTC).
 | Model selection | Spawn requests used gpt-6-sol/high, gpt-6-astra/medium and gpt-6-luna/medium. | Backend version and billed usage not independently attested by spawn responses. |
 | Files/processes | Shell, Git 2.55.0, Node 24.21.0 and Python 3.14.7 available. Local repo created; workers used disposable test workspaces. | Workspace writes limited to allowed roots; network/other access can require approval. |
 | Codex CLI | 0.155.1; authenticated with ChatGPT; help exposes exec/resume, JSONL, output schemas and worktrees. | Nested CLI agent execution and CLI-session restart not tested; not the v0 adapter. |
-| GitHub | Connector returned authenticated login sjfortin; scoped Dial repo search succeeded with no result. PR/issue/CI tools available in tool inventory. | Remote write permission untested; no repository created, pushed, merged or published. |
+| GitHub | Connector returned authenticated login sjfortin; scoped Dial repo search succeeded with no result. A public `sjfortin/dial-factory` repository was created with the user's authorization. Branch `factory/bootstrap` and checkpoint commit `f482eb6c75d5eaea93b1064139508c4ba916c75f` were pushed and fetched through the GitHub connector. | No merge or deployment. GitHub CLI authentication was invalid; push used approved network escalation. |
 | Browser verification | Browser tool discovery returned empty apps and browsers lists. | ChatGPT rendering/playback cannot currently be automated; audible playback requires separate evidence. |
 | Usage/cost | Wall timestamps, identities, requested settings and output reports can be saved. | Collaboration tools do not expose per-worker token accounting or billed cost. |
 
