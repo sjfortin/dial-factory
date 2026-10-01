@@ -1,0 +1,28 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "kind": "verification_planning_receipt",
+  "agent": "/root/factory_verify",
+  "requested_model": "gpt-6-luna",
+  "reported_model": null,
+  "reasoning_effort": "medium",
+  "harness": "current-session collaboration",
+  "observed_complete_at": "2026-10-01T22:15:04.335834+00:00",
+  "start_time": null,
+  "timing_note": "Pre-ledger planning task; precise duration unavailable.",
+  "input_contract": "docs/BOOTSTRAP-CONTRACT.md",
+  "result": "PLAN_READY_NOT_VERIFICATION",
+  "input_tokens": null,
+  "output_tokens": null,
+  "estimated_cost": null,
+  "usage_unavailable_reason": "Not exposed by collaboration tools.",
+  "plan": [
+    "Spec admission and exact-content approval",
+    "Independent identity and candidate/attempt evidence binding",
+    "Review/verification failures require revision; latest attempt wins",
+    "Human wait/resume, disk recovery, malformed report/path rejection",
+    "Requested models, escalation reasons, unavailable cost stays null",
+    "Honest BLOCKED handoff with journal and public notes",
+    "Metrics derived from synthetic histories, no publishing"
+  ],
+  "synthetic_fixtures": "To be used only in disposable verification workspace; never represented as real product evidence."
+}

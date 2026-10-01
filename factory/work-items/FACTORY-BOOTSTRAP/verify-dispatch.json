@@ -1,0 +1,21 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "role": "Verify",
+  "agent": "/root/factory_verify",
+  "requested_model": "gpt-6-luna",
+  "reported_model": null,
+  "reasoning_effort": "medium",
+  "start_time": "2026-10-01T22:33:17.472067+00:00",
+  "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+  "result": "FAIL",
+  "reason": "Deterministic CLI acceptance checks with scoped behavioral plan; independent from Implement.",
+  "input_tokens": null,
+  "output_tokens": null,
+  "estimated_cost": null,
+  "route_note": "Run concurrently with independent Review against fixed commit; final gate requires both results for same candidate.",
+  "dispatch_confirmed_at": "2026-10-01T22:33:57.079116+00:00",
+  "end_observed_at": "2026-10-01T22:36:59.157351+00:00",
+  "report": "verify-1.json",
+  "duration_note": "Wall time from recorded dispatch to completion observed by Foreman; not model compute time.",
+  "duration_seconds": 221.685284
+}

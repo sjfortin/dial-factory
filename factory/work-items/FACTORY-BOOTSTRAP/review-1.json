@@ -1,0 +1,67 @@
+{
+  "work_item": "FACTORY-BOOTSTRAP",
+  "run_id": "review-dispatch.json",
+  "agent": "/root/factory_review",
+  "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+  "attempt": 1,
+  "timestamp": "2026-10-01T22:34:56.284342+00:00",
+  "requirements": "Scaffold covers the requested local recorder, six roles, exact-document hashes, reports, state/result separation, real-run metadata, journal and notes. Bootstrap raw receipts are an intentional approved exception. Four enforced lifecycle/persistence requirements fail independent reproductions.",
+  "architecture": "Small standard-library recorder with authoritative state.json and event mirror is appropriate. No product work or external publishing added. Artifact persistence is not fully recovered.",
+  "correctness": "REVISE: older reports remain eligible after newer failed runs, revision routes reuse old implementation/review, approval invalidation stops being enforced after BUILDING, and interrupted handoff can complete without required artifacts.",
+  "tests": {
+    "commands": [
+      "python3 -B -m unittest discover -s factory/tests -v",
+      "python3 -B /tmp/factory_review_repro.py",
+      "git diff 027fdad -- factory/factory.py factory/tests/test_factory.py"
+    ],
+    "results": "6 repository tests passed; 4 independent synthetic reproductions passed by asserting defective behavior. All reproduction state and Git fixtures were temporary. Candidate code/test working copies matched commit. Existing tests do not exercise these regressions.",
+    "reproduction_script": "/tmp/factory_review_repro.py"
+  },
+  "security": "No security-isolation claim. Work-item ID validation and separate current Implement identity checks are present. No external writes performed by this reviewer.",
+  "complexity": "Scope and implementation size fit bootstrap. Fix the concrete gates/recovery paths rather than expanding into a scheduler or security framework.",
+  "findings": [
+    {
+      "id": "R1",
+      "severity": "P1",
+      "path": "factory/factory.py",
+      "line": 141,
+      "title": "Gate on the latest run, including failed/blocked runs without reports",
+      "reproduction": "Build -> Review ACCEPT -> Verify PASS; dispatch another Verify run; close-run that run FAIL; advance READY_FOR_HANDOFF and handoff PASS both succeed. Reproduction: test_closed_failed_verify_still_passes.",
+      "impact": "A historical PASS overrules the newest failed verification. current_review/current_verify and candidate inspect reports only, while close-run records failures only in runs. Violates latest-attempt evidence gating.",
+      "requested_change": "Bind eligible evidence to the latest relevant run/attempt; a new running, failed, or blocked run must invalidate earlier successful evidence until properly resolved. Add regression coverage for latest Implement, Review, and Verify runs."
+    },
+    {
+      "id": "R2",
+      "severity": "P1",
+      "path": "factory/factory.py",
+      "line": 363,
+      "title": "Require a fresh implementation attempt after a revision route",
+      "reproduction": "Build -> Review ACCEPT -> Verify FAIL -> BUILDING -> REVIEWING -> VERIFYING succeeds with only the original Implement and Review reports. Reproduction: test_revision_can_skip_implement_and_review.",
+      "impact": "The required Implement and independent Review revision steps can be skipped; historical acceptance is reused after a failure and loop metrics count work that never occurred.",
+      "requested_change": "Require an Implement report produced for the current BUILDING entry before REVIEWING, then require a Review for that new attempt. Cover both Review and Verify revision routes."
+    },
+    {
+      "id": "R3",
+      "severity": "P1",
+      "path": "factory/factory.py",
+      "line": 366,
+      "title": "Recheck exact Spec approval through acceptance and handoff",
+      "reproduction": "Approve PRODUCT.md/TECH.md, submit Implement, enter REVIEWING, edit PRODUCT.md. spec_ready returns false, but Review ACCEPT -> Verify PASS -> handoff PASS -> COMPLETE all succeed. Reproduction: test_spec_change_after_reviewing_still_passes.",
+      "impact": "Unapproved changed requirements can receive a passing completed handoff. Approval validation currently ends at BUILDING -> REVIEWING.",
+      "requested_change": "Invalidate downstream eligibility when approved content changes and provide a validated route to reapproval and fresh candidate evidence. Cover edits during review, verify, and before handoff."
+    },
+    {
+      "id": "R4",
+      "severity": "P2",
+      "path": "factory/factory.py",
+      "line": 443,
+      "title": "Recover required handoff artifacts before allowing completion",
+      "reproduction": "Fault-inject OSError on the journal atomic write in cmd_handoff after canonical save. load/recover followed by advance COMPLETE succeeds while journal and PUBLIC_NOTES are absent. Reproduction: test_interrupted_handoff_completes_without_artifacts.",
+      "impact": "Interrupted persistence produces a completed handoff missing both required delivery artifacts. recover only repairs events.jsonl and COMPLETE checks only non-null handoff metadata.",
+      "requested_change": "Make handoff artifact generation recoverable/idempotent from canonical state, and require or repair required artifacts before COMPLETE. Test interrupted journal/public-note writes; also consider packet/report mirror recovery."
+    }
+  ],
+  "model_selection": "Declared role defaults match approved policy and unavailable usage stays null. CLI accepts any gpt-* ID and does not enforce role defaults; actual selection still relies on Foreman procedure. No model invocation or billing fabricated.",
+  "metrics": "First reported attempt success and direct loop counts are implemented; nullable usage is honest. Core gate defects currently permit misleading successful-handoff and loop metrics. Human-decision revision routes via WAITING_FOR_HUMAN are not counted as review-to-implement loops; this is a secondary measurement limitation.",
+  "recommendation": "REVISE"
+}

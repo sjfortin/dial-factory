@@ -1,0 +1,32 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "role": "Implement",
+  "agent": "/root/factory_implement",
+  "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+  "received_at": "2026-10-01T22:33:17.471758+00:00",
+  "summary": "Added stdlib factory CLI, six role contracts, model policy, adapter, record schema, docs, focused tests.",
+  "decisions": [
+    "Bootstrap provenance outside ledger",
+    "Nullable usage/cost",
+    "Explicit evidence for terminal FAIL handoff"
+  ],
+  "tests": [
+    {
+      "command": "python3 -m unittest discover -s factory/tests -v",
+      "result": "6/6 PASS",
+      "source": "Implement report; independent verification pending"
+    },
+    {
+      "command": "python3 -m py_compile factory/factory.py",
+      "result": "PASS",
+      "source": "Implement report"
+    },
+    {
+      "command": "git diff --cached --check",
+      "result": "PASS before commit",
+      "source": "Implement report"
+    }
+  ],
+  "ambiguities": [],
+  "blockers": []
+}

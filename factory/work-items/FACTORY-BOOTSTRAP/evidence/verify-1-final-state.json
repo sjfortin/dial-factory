@@ -1,0 +1,355 @@
+{
+  "created_at": "2026-10-01T22:34:41+00:00",
+  "criteria": [
+    "criterion one"
+  ],
+  "events": [
+    {
+      "at": "2026-10-01T22:34:41+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Synthetic loop"
+    },
+    {
+      "at": "2026-10-01T22:34:41+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "agent": "triager",
+      "at": "2026-10-01T22:34:41+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-bce88bf583ec",
+      "seq": 3
+    },
+    {
+      "at": "2026-10-01T22:34:41+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "IMPLEMENT",
+      "role": "Triage",
+      "run_id": "run-bce88bf583ec",
+      "seq": 4
+    },
+    {
+      "at": "2026-10-01T22:34:41+00:00",
+      "by": "foreman",
+      "kind": "spec_skipped",
+      "reason": "synthetic bounded check",
+      "seq": 5
+    },
+    {
+      "at": "2026-10-01T22:34:41+00:00",
+      "from_state": "TRIAGE",
+      "kind": "advanced",
+      "seq": 6,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "builder",
+      "at": "2026-10-01T22:34:42+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Implement",
+      "run_id": "run-fc8c9519eb52",
+      "seq": 7
+    },
+    {
+      "at": "2026-10-01T22:34:42+00:00",
+      "attempt": 1,
+      "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-fc8c9519eb52",
+      "seq": 8
+    },
+    {
+      "at": "2026-10-01T22:34:42+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 9,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "reviewer",
+      "at": "2026-10-01T22:34:42+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-33bd86055246",
+      "seq": 10
+    },
+    {
+      "at": "2026-10-01T22:34:42+00:00",
+      "attempt": 1,
+      "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-33bd86055246",
+      "seq": 11
+    },
+    {
+      "at": "2026-10-01T22:34:42+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 12,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "verifier",
+      "at": "2026-10-01T22:34:43+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-315af341c0cd",
+      "seq": 13
+    },
+    {
+      "at": "2026-10-01T22:34:43+00:00",
+      "attempt": 1,
+      "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+      "kind": "reported",
+      "result": "FAIL",
+      "role": "Verify",
+      "run_id": "run-315af341c0cd",
+      "seq": 14
+    },
+    {
+      "at": "2026-10-01T22:34:43+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 15,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "at": "2026-10-01T22:34:43+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 16,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "reviewer2",
+      "at": "2026-10-01T22:34:43+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-cf07ce43f62c",
+      "seq": 17
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "VERIFY-LOOP",
+  "interventions": [],
+  "objective": "CLI gate check",
+  "reports": [
+    {
+      "agent": "triager",
+      "at": "2026-10-01T22:34:41+00:00",
+      "complexity": "low",
+      "evidence": [
+        "synthetic"
+      ],
+      "open_questions": [],
+      "recommendation": "IMPLEMENT",
+      "relevant_code": [],
+      "risks": [],
+      "role": "Triage",
+      "run_id": "run-bce88bf583ec",
+      "scope": "bounded",
+      "work_item": "VERIFY-LOOP"
+    },
+    {
+      "agent": "builder",
+      "ambiguities": [],
+      "at": "2026-10-01T22:34:42+00:00",
+      "attempt": 1,
+      "blockers": [],
+      "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+      "change_summary": "synthetic",
+      "decisions": [],
+      "role": "Implement",
+      "run_id": "run-fc8c9519eb52",
+      "tests": [
+        "synthetic"
+      ],
+      "work_item": "VERIFY-LOOP"
+    },
+    {
+      "agent": "reviewer",
+      "architecture": "checked",
+      "at": "2026-10-01T22:34:42+00:00",
+      "attempt": 1,
+      "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+      "complexity": "checked",
+      "correctness": "checked",
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": "checked",
+      "role": "Review",
+      "run_id": "run-33bd86055246",
+      "security": "checked",
+      "tests": "checked",
+      "work_item": "VERIFY-LOOP"
+    },
+    {
+      "agent": "verifier",
+      "at": "2026-10-01T22:34:43+00:00",
+      "attempt": 1,
+      "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+      "criteria": [
+        {
+          "criterion": "criterion one",
+          "evidence": "observed fail",
+          "method": "synthetic",
+          "result": "FAIL"
+        }
+      ],
+      "overall": "FAIL",
+      "role": "Verify",
+      "run_id": "run-315af341c0cd",
+      "work_item": "VERIFY-LOOP"
+    }
+  ],
+  "resume_stage": null,
+  "runs": [
+    {
+      "agent": "triager",
+      "cost": null,
+      "duration_seconds": 0,
+      "ended_at": "2026-10-01T22:34:41+00:00",
+      "harness": "current-collaboration",
+      "id": "run-bce88bf583ec",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "IMPLEMENT",
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "synthetic",
+      "started_at": "2026-10-01T22:34:41+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "builder",
+      "cost": null,
+      "duration_seconds": 0,
+      "ended_at": "2026-10-01T22:34:42+00:00",
+      "harness": "current-collaboration",
+      "id": "run-fc8c9519eb52",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Implement",
+      "selection_reason": "bootstrap synthetic",
+      "started_at": "2026-10-01T22:34:42+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "reviewer",
+      "cost": null,
+      "duration_seconds": 0,
+      "ended_at": "2026-10-01T22:34:42+00:00",
+      "harness": "current-collaboration",
+      "id": "run-33bd86055246",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": null,
+      "role": "Review",
+      "selection_reason": "independent synthetic",
+      "started_at": "2026-10-01T22:34:42+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "verifier",
+      "cost": null,
+      "duration_seconds": 0,
+      "ended_at": "2026-10-01T22:34:43+00:00",
+      "harness": "current-collaboration",
+      "id": "run-315af341c0cd",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "FAIL",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "synthetic",
+      "started_at": "2026-10-01T22:34:43+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "reviewer2",
+      "cost": null,
+      "duration_seconds": null,
+      "ended_at": null,
+      "harness": "current-collaboration",
+      "id": "run-cf07ce43f62c",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": null,
+      "retry_of": null,
+      "role": "Review",
+      "selection_reason": "synthetic retry",
+      "started_at": "2026-10-01T22:34:43+00:00",
+      "status": "RUNNING",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "at": "2026-10-01T22:34:41+00:00",
+    "by": "foreman",
+    "mode": "skipped",
+    "reason": "synthetic bounded check"
+  },
+  "state": "REVIEWING",
+  "title": "Synthetic loop",
+  "updated_at": "2026-10-01T22:34:43+00:00"
+}

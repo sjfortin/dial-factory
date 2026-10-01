@@ -1,0 +1,56 @@
+$ python3 /tmp/dial-verify/factory/factory.py create VERIFY-LOOP --title Synthetic loop --objective CLI gate check --criteria-file /tmp/dial-verify-records/criteria.json
+VERIFY-LOOP
+
+$ python3 /tmp/dial-verify/factory/factory.py advance VERIFY-LOOP TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify/factory/factory.py dispatch VERIFY-LOOP Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic
+run-bce88bf583ec
+
+$ python3 /tmp/dial-verify/factory/factory.py report VERIFY-LOOP --run run-bce88bf583ec --file /tmp/dial-verify-records/report.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify/factory/factory.py skip-spec VERIFY-LOOP --by foreman --reason synthetic bounded check
+
+$ python3 /tmp/dial-verify/factory/factory.py advance VERIFY-LOOP BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify/factory/factory.py dispatch VERIFY-LOOP Implement --agent builder --model gpt-6-sol --reasoning high --reason bootstrap synthetic
+run-fc8c9519eb52
+
+$ python3 /tmp/dial-verify/factory/factory.py report VERIFY-LOOP --run run-fc8c9519eb52 --file /tmp/dial-verify-records/report.json
+REPORTED
+
+$ python3 /tmp/dial-verify/factory/factory.py advance VERIFY-LOOP REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify/factory/factory.py dispatch VERIFY-LOOP Review --agent reviewer --model gpt-6-astra --reasoning medium --reason independent synthetic
+run-33bd86055246
+
+$ python3 /tmp/dial-verify/factory/factory.py report VERIFY-LOOP --run run-33bd86055246 --file /tmp/dial-verify-records/report.json
+ACCEPT
+
+$ python3 /tmp/dial-verify/factory/factory.py advance VERIFY-LOOP VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify/factory/factory.py dispatch VERIFY-LOOP Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic
+run-315af341c0cd
+
+$ python3 /tmp/dial-verify/factory/factory.py report VERIFY-LOOP --run run-315af341c0cd --file /tmp/dial-verify-records/report.json
+FAIL
+
+$ python3 /tmp/dial-verify/factory/factory.py advance VERIFY-LOOP BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify/factory/factory.py advance VERIFY-LOOP REVIEWING
+REVIEWING
+
+UNEXPECTED transition BUILDING->REVIEWING without a new Implement report succeeded: REVIEWING
+$ python3 /tmp/dial-verify/factory/factory.py dispatch VERIFY-LOOP Review --agent reviewer2 --model gpt-6-astra --reasoning medium --reason synthetic retry
+run-cf07ce43f62c
+
+$ python3 /tmp/dial-verify/factory/factory.py report VERIFY-LOOP --run run-cf07ce43f62c --file /tmp/dial-verify-records/report.json
+factory: attempt already has this role report; create a new implementation attempt
+
+duplicate attempt report rejected (expected consequence of stale candidate):
+factory: attempt already has this role report; create a new implementation attempt

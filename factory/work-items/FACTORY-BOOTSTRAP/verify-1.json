@@ -1,0 +1,40 @@
+{
+  "work_item": "FACTORY-BOOTSTRAP",
+  "run_id": "verify-1",
+  "agent": "factory_verify",
+  "candidate_commit": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+  "attempt": 1,
+  "criteria": [
+    {
+      "criterion": "Admission gates, independent identities, commit-bound reports, and Spec approval invalidation",
+      "method": "Ran factory unit suite in disposable clone; inspected role and record contracts.",
+      "result": "PASS",
+      "evidence": "`python3 -m unittest discover -s factory/tests -v`: all 6 tests passed, including illegal transition/Spec skip, exact Spec hash approval invalidation, self-review rejection, stale review commit rejection, and requiring a new review for attempt 2."
+    },
+    {
+      "criterion": "Failed verification returns through a fresh Implement report and Review before another Verify",
+      "method": "Drove an end-to-end synthetic lifecycle through the real CLI in disposable clone: Triage, Spec skip, Implement attempt 1, ACCEPT Review, FAIL Verify, then BUILDING.",
+      "result": "FAIL",
+      "evidence": "After `advance VERIFY-LOOP BUILDING`, `advance VERIFY-LOOP REVIEWING` succeeded with no new Implement report. A new Review dispatch was accepted, but its report failed with `attempt already has this role report; create a new implementation attempt`. This leaves the item in REVIEWING with the old candidate and prevents a valid retry. CLI transcript: `/tmp/dial-verify-records/cli-evidence.log`; snapshot: `/tmp/dial-verify-records/final-state.json`."
+    },
+    {
+      "criterion": "State recovery, malformed report handling, and metrics remain consistent",
+      "method": "Ran existing test suite and inspected synthetic CLI run metadata.",
+      "result": "PASS",
+      "evidence": "Unit suite passed recovery after corrupting the event mirror, rejecting incomplete verification evidence, and deriving first-review/verification and loop metrics. CLI run records captured requested model/reasoning and explicit null reported model/tokens/cost with a harness-unavailable reason."
+    },
+    {
+      "criterion": "Blocked/failed handoff preserves truthful result and generates journal/public notes",
+      "method": "Ran existing synthetic blocked and terminal-failure handoff tests.",
+      "result": "PASS",
+      "evidence": "Unit suite passed `test_blocked_handoff_and_artifacts` and `test_terminal_failure_needs_reason`; checks confirm BLOCKED remains final_result and both journal and PUBLIC_NOTES artifacts are generated."
+    },
+    {
+      "criterion": "Latest-attempt gating prevents older PASS evidence from overriding a later failed rerun",
+      "method": "Reviewed the candidate's current-attempt selectors and exercised a failed verification attempt through CLI.",
+      "result": "BLOCKED",
+      "evidence": "The executed CLI case had no earlier PASS report to compare. Candidate code selects Review/Verify reports matching the latest Implement attempt, but this specific PASS-then-later-FAIL sequence was not run."
+    }
+  ],
+  "overall": "FAIL"
+}

@@ -1,0 +1,32 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "kind": "bootstrap_dispatch_receipt",
+  "agent": "/root/factory_implement",
+  "role": "IMPLEMENT",
+  "requested_model": "gpt-6-sol",
+  "reported_model": null,
+  "reasoning_effort": "high",
+  "harness": "current-session collaboration",
+  "observed_running_at": "2026-10-01T22:13:43Z",
+  "start_time": null,
+  "timing_note": "Initial dispatch preceded first timestamp capture; do not claim exact dispatch duration.",
+  "input_contract": "docs/BOOTSTRAP-CONTRACT.md",
+  "input_contract_commit": "ffef4f0",
+  "result": "IMPLEMENTED_REJECTED_PENDING_REVISION",
+  "selection_reason": "Factory state and approval gates require substantial implementation judgment; use balanced model, reserve Astra for independent review.",
+  "input_tokens": null,
+  "output_tokens": null,
+  "estimated_cost": null,
+  "usage_unavailable_reason": "Collaboration tool does not expose per-worker usage or billing.",
+  "approval": {
+    "question": "Approve scaffold build, independent checks, then DIAL-001 intake?",
+    "human_response": "yes sounds good. approved. i want each subagent to have appropriate models working too so that I can have lower cost models working for low reasoning workers",
+    "reason": "Explicit bootstrap approval gate",
+    "could_factory_have_avoided_this": false,
+    "possible_improvement": "None; owner approval required."
+  },
+  "bootstrap_exception": "Factory ledger does not yet exist. This receipt preserves actual dispatch; do not fabricate earlier CLI events.",
+  "implementation_report": "implement-1.json",
+  "end_observed_at": "2026-10-01T22:33:17.471758+00:00",
+  "current_status": "PARKED at human request"
+}
