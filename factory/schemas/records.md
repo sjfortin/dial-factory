@@ -1,0 +1,9 @@
+# Record contracts, v1
+
+`state.json` is the canonical atomic work-item record. `events.jsonl` is a readable mirror rebuilt by `status` or `recover` after an interrupted write. Its monotonically numbered events preserve state transitions, dispatches, reports, approvals, skips, interventions, and handoffs. Reports are copied to `reports/<run-id>.json`; dispatch packets to `packets/<run-id>.json`. A report must match its running run ID, work-item ID, and agent identity. State and latest attempt gates live in `factory.py` and are exercised by tests.
+
+All role reports share `work_item`, `run_id`, and `agent`. Required role fields and enums are in each role contract and executable validation. `candidate_commit` must resolve to a local Git commit. Implement's attempt is assigned by the ledger. Review and Verify must name that latest attempt and commit and use an identity distinct from Implement. The latest matching report alone is eligible to advance. Verify lists every criterion in original order with a method, PASS/FAIL/BLOCKED, and nonempty evidence; overall follows its criterion results.
+
+Run records contain role, agent, harness, requested model/reasoning, reported model (null unless independently known), selection reason, replacement/retry reference, start/end/duration, result, nullable input/output tokens and cost, and unavailable reason. Interventions contain stage, reason, question, human response, avoidability, and possible improvement. Spec approval hashes exact bytes of both documents. Spec skips include a reason and Foreman identity.
+
+Lifecycle state and final result are distinct: a complete handoff may be PASS, FAIL, or BLOCKED. Fixable FAIL returns to implementation; a terminal experiment FAIL needs an explicit reason on the advance to handoff. These records coordinate honest work; they are not a security boundary against a malicious local writer.

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "harness": "current-collaboration",
+  "agents": {
+    "Foreman": {"model": "inherited-root", "reasoning": "inherited"},
+    "Triage": {"model": "gpt-6-luna", "reasoning": "medium"},
+    "Spec": {"model": "gpt-6-sol", "reasoning": "high"},
+    "Implement": {"model": "gpt-6-sol", "reasoning": "medium", "bootstrap_reasoning": "high"},
+    "Review": {"model": "gpt-6-astra", "reasoning": "medium"},
+    "Verify": {"model": "gpt-6-luna", "reasoning": "medium"}
+  },
+  "escalation": "Luna to Sol for ambiguous evidence or repeated reasoning failure only; record reason, replacement agent, and context handoff.",
+  "usage": "Requested model is recorded. Reported model and per-worker tokens/cost remain null unless independently exposed by the harness."
+}
