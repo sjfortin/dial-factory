@@ -75,6 +75,25 @@
       "role": "Implement",
       "run_id": "run-b4502348cf78",
       "seq": 7
+    },
+    {
+      "at": "2026-10-02T22:49:38+00:00",
+      "kind": "run_closed",
+      "reason": "Usage limit interrupted the previous session; the original worker is no longer live. Preserve partial implementation and resume with a replacement worker. Elapsed run time includes the session outage and is not compute time.",
+      "result": "BLOCKED",
+      "run_id": "run-b4502348cf78",
+      "seq": 8
+    },
+    {
+      "agent": "/root/dial_001_resume",
+      "at": "2026-10-02T22:49:39+00:00",
+      "kind": "dispatched",
+      "replaces": "run-b4502348cf78",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-d7771bdbdc1b",
+      "seq": 9
     }
   ],
   "final_result": null,
@@ -148,8 +167,8 @@
       "agent": "/root/dial_001_implement",
       "attempt": null,
       "cost": null,
-      "duration_seconds": null,
-      "ended_at": null,
+      "duration_seconds": 61280,
+      "ended_at": "2026-10-02T22:49:38+00:00",
       "harness": "current-collaboration",
       "id": "run-b4502348cf78",
       "input_tokens": null,
@@ -158,11 +177,33 @@
       "reported_model": null,
       "requested_model": "gpt-6-sol",
       "requested_reasoning": "medium",
-      "result": null,
+      "result": "BLOCKED",
       "retry_of": null,
       "role": "Implement",
       "selection_reason": "Bounded one-station TypeScript MCP Apps proof with explicit acceptance criteria; balanced model for implementation.",
       "started_at": "2026-10-02T05:48:18+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_001_resume",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": null,
+      "ended_at": null,
+      "harness": "current-collaboration",
+      "id": "run-d7771bdbdc1b",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-b4502348cf78",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": null,
+      "retry_of": "run-b4502348cf78",
+      "role": "Implement",
+      "selection_reason": "Continue the interrupted implementation from existing files and recorded Triage; no product scope change.",
+      "started_at": "2026-10-02T22:49:39+00:00",
       "status": "RUNNING",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
@@ -175,5 +216,5 @@
   },
   "state": "BUILDING",
   "title": "Prove live internet-radio playback inside ChatGPT MCP Apps UI",
-  "updated_at": "2026-10-02T05:48:18+00:00"
+  "updated_at": "2026-10-02T22:49:39+00:00"
 }
