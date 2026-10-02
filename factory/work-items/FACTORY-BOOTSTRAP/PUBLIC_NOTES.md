@@ -1,11 +1,11 @@
-# Factory bootstrap — draft checkpoint notes
+# Factory bootstrap — draft public notes
 
-This draft is publicly visible in the repository because the owner requested a public checkpoint. No separate post or announcement was published. Human review remains required before reusing or expanding these notes elsewhere.
+Repository content is public at the owner's request; no separate post or announcement is authorized by this file.
 
-We built a small recorder around real worker agents, with a cheaper model handling bounded verification and a separate stronger reviewer. The first implementation passed its own six tests. Independent workers nevertheless found lifecycle bugs: old passing evidence could survive a failed retry, and some required revision/recovery steps could be bypassed.
+We built a small recorder around real worker agents. Sol implemented, Astra reviewed independently, and Luna executed behavioral checks. The first implementation passed six tests but failed independent checks. Four lifecycle/recovery bugs were returned to Implement and repaired in one revision.
 
-The factory routed findings back to Implement. We paused at a committed checkpoint before applying the fixes; the product experiment has not started.
+The scaffold now passes independent Review and Verify: thirteen repository tests, six additional reviewer tests, and actual CLI lifecycles including a failed attempt followed by a successful retry. No human implementation was needed.
 
-Useful result: independent review and behavioral verification caught defects that the first test suite missed. This is not a claim that the factory is ready or that radio playback works.
+The owner approved the scope/models, paused near session limits, requested a public repo, and resumed. Costs and tokens are unavailable; exact bootstrap cycle time was not captured at intake. These are bootstrap observations, not an automation-rate claim across product work.
 
-Safe metrics: first Review requested changes; first Verify failed; no human implementation. One revision batch pending. Cost and token usage unavailable. No final cycle-time or automation percentage claim from this incomplete bootstrap.
+What changed: regression coverage now checks stale evidence, fresh revision work, late spec changes, and interrupted handoff recovery. DIAL-001 will be the first product task; no radio playback result is claimed here.

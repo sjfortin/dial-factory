@@ -1,0 +1,28 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "role": "Implement",
+  "agent": "/root/factory_implement",
+  "requested_model": "gpt-6-sol",
+  "reported_model": null,
+  "reasoning_effort": "high",
+  "harness": "current-collaboration",
+  "start_time": "2026-10-02T05:29:34.099226+00:00",
+  "result": "IMPLEMENTED",
+  "revision": 1,
+  "base_commit": "88e8c50469b6492ba13c540b8fb740aab9a848f2",
+  "previous_candidate": "027fdadea9f2c4250276944b06a11b44a7ff0a37",
+  "input_reports": [
+    "review-1.json",
+    "verify-1.json"
+  ],
+  "selection_reason": "Resume original Implement context for four independently reproduced gate/recovery defects.",
+  "context_preserved": true,
+  "input_tokens": null,
+  "output_tokens": null,
+  "estimated_cost": null,
+  "usage_unavailable_reason": "Not exposed by collaboration tools.",
+  "dispatch_confirmed_at": "2026-10-02T05:30:07.705814+00:00",
+  "candidate_commit": "3652c7e5958e8552892805996740b8d5e3e32760",
+  "end_observed_at": "2026-10-02T05:38:22.103603+00:00",
+  "duration_seconds": 528.004377
+}

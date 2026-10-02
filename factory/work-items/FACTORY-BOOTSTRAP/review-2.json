@@ -1,0 +1,52 @@
+{
+  "work_item": "FACTORY-BOOTSTRAP",
+  "run_id": "review-2-dispatch.json",
+  "agent": "/root/factory_review",
+  "candidate_commit": "3652c7e5958e8552892805996740b8d5e3e32760",
+  "attempt": 2,
+  "timestamp": "2026-10-02T05:41:01.459090+00:00",
+  "requirements": "Reassessed original R1-R4 against immutable candidate contents and approved bootstrap contract. All four defects are addressed. Scope remains a local recorder; bootstrap receipts outside the CLI are intentional. Final bootstrap admission still requires separate Verify evidence and Foreman handoff.",
+  "architecture": "Authoritative state and reconstructible report/handoff artifacts remain appropriate for this scaffold. Latest-run lookup and lifecycle-entry sequence gates prevent historical evidence from authorizing current work. No speculative new framework required.",
+  "correctness": "ACCEPT. Latest running/closed reruns supersede old eligible reports. Verify FAIL requires a new Implement attempt and independent Review before verification; stale attempt reports are rejected. Downstream changed Spec content blocks dispatch/advance/handoff and has a reapproval route that requires fresh candidate evidence. Interrupted report and handoff artifact writes recover from canonical state, and incomplete writes cannot reach COMPLETE while the write fault persists.",
+  "R1_R4_resolution": [
+    {
+      "id": "R1",
+      "result": "RESOLVED",
+      "evidence": "Repository latest-run test covers Implement/Review/Verify; independent test_failed_latest_verify_requires_fresh_full_pipeline rejects running and closed failed latest Verify, stale handoff, and direct Verify retry. Independent review rerun test rejects older ACCEPT after closed BLOCKED and accepts a new valid report."
+    },
+    {
+      "id": "R2",
+      "result": "RESOLVED",
+      "evidence": "Independent Verify FAIL and Review REVISE paths reject BUILDING -> REVIEWING without a fresh Implement report; old Review/Verify attempt 1 reports are rejected for attempt 2; complete fresh Implement -> Review -> Verify -> PASS completion succeeds."
+    },
+    {
+      "id": "R3",
+      "result": "RESOLVED",
+      "evidence": "Repository tests cover changes in BUILDING, REVIEWING, VERIFYING and READY_FOR_HANDOFF. Independent test modifies TECH.md after saved handoff, rejects COMPLETE and repeated handoff, reapproves, rejects old candidate reuse, then completes a fresh attempt 2 pipeline."
+    },
+    {
+      "id": "R4",
+      "result": "RESOLVED",
+      "evidence": "Repository tests inject journal and public-note write faults. Independent tests inject report mirror and public-note writes, recover through CLI main recover, verify artifact existence, prevent duplicate report/handoff records, and successfully complete after fault removal."
+    }
+  ],
+  "tests": {
+    "commands": [
+      "git diff 88e8c50 3652c7e -- factory/factory.py",
+      "git diff 3652c7e -- factory/factory.py factory/tests/test_factory.py",
+      "git show 3652c7e5958e8552892805996740b8d5e3e32760:factory/factory.py (and tests) to disposable /tmp copy",
+      "python3 -B -m unittest discover -s /tmp/factory-review-candidate-3652c7e/factory/tests -v",
+      "python3 -B /tmp/factory_review_recheck.py"
+    ],
+    "results": "13 repository tests passed from exact-commit disposable copy; 6 additional independently authored regression/positive-path tests passed. An initial independent script incorrectly passed argparse.Namespace to main; corrected that test-harness invocation before final successful run. No production or lifecycle edits. All test ledger/Git fixtures temporary.",
+    "reproduction_script": "/tmp/factory_review_recheck.py",
+    "reproduction_log": "/tmp/factory_review_recheck.log",
+    "exact_candidate_copy": "/tmp/factory-review-candidate-3652c7e"
+  },
+  "security": "Current Implement identity remains prohibited from reviewing/verifying its own candidate. Scope is procedural coordination, not hostile-writer isolation. No remote publishing, merging, deployment, or production edits performed.",
+  "complexity": "Fixes are focused on original gating and persistence defects. No correctness blocker found in this bounded reassessment.",
+  "findings": [],
+  "model_selection": "Approved role model policy and honest null usage metadata remain unchanged; actual worker model selection is Foreman procedure. This report makes no unexposed billing or runtime model claim.",
+  "metrics": "Original gate defects that permitted false successful handoffs and empty revision loops are corrected. Existing nullable usage and reported-attempt metrics remain unchanged. Secondary measurement limitations from review 1 are not new blockers for this revision.",
+  "recommendation": "ACCEPT"
+}

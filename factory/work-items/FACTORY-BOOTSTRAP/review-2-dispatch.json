@@ -1,0 +1,27 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "role": "Review",
+  "agent": "/root/factory_review",
+  "requested_model": "gpt-6-astra",
+  "reported_model": null,
+  "reasoning_effort": "medium",
+  "harness": "current-collaboration",
+  "start_time": "2026-10-02T05:38:22.103603+00:00",
+  "candidate_commit": "3652c7e5958e8552892805996740b8d5e3e32760",
+  "attempt": 2,
+  "result": "ACCEPT",
+  "context_preserved": true,
+  "input_reports": [
+    "review-1.json",
+    "verify-1.json"
+  ],
+  "input_tokens": null,
+  "output_tokens": null,
+  "estimated_cost": null,
+  "usage_unavailable_reason": "Not exposed by collaboration tools.",
+  "route_note": "Independent checks of same immutable candidate; final gate requires both accepted outcomes.",
+  "dispatch_confirmed_at": "2026-10-02T05:39:06.357085+00:00",
+  "end_observed_at": "2026-10-02T05:41:23.830569+00:00",
+  "duration_seconds": 181.726966,
+  "report": "review-2.json"
+}

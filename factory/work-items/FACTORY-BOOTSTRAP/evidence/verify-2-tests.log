@@ -1,0 +1,18 @@
+test_blocked_handoff_and_artifacts (test_factory.FactoryTest.test_blocked_handoff_and_artifacts) ... ok
+test_closed_failed_verify_can_enter_revision_path (test_factory.FactoryTest.test_closed_failed_verify_can_enter_revision_path) ... ok
+test_exact_spec_approval_and_recovery (test_factory.FactoryTest.test_exact_spec_approval_and_recovery) ... ok
+test_illegal_transition_and_spec_skip_gate (test_factory.FactoryTest.test_illegal_transition_and_spec_skip_gate) ... ok
+test_interrupted_handoff_artifacts_recover (test_factory.FactoryTest.test_interrupted_handoff_artifacts_recover) ... ok
+test_interrupted_public_note_write_recovers (test_factory.FactoryTest.test_interrupted_public_note_write_recovers) ... ok
+test_latest_runs_invalidate_old_evidence (test_factory.FactoryTest.test_latest_runs_invalidate_old_evidence) ... ok
+test_self_review_stale_commit_and_revision (test_factory.FactoryTest.test_self_review_stale_commit_and_revision) ... ok
+test_spec_change_during_build_has_reapproval_route (test_factory.FactoryTest.test_spec_change_during_build_has_reapproval_route) ... ok
+test_spec_change_requires_reapproval_and_fresh_attempt (test_factory.FactoryTest.test_spec_change_requires_reapproval_and_fresh_attempt) ... ok
+test_terminal_failure_needs_reason (test_factory.FactoryTest.test_terminal_failure_needs_reason) ... ok
+test_verification_evidence_failure_and_metrics (test_factory.FactoryTest.test_verification_evidence_failure_and_metrics) ... ok
+test_verify_failure_requires_fresh_implement_and_review (test_factory.FactoryTest.test_verify_failure_requires_fresh_implement_and_review) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.778s
+
+OK

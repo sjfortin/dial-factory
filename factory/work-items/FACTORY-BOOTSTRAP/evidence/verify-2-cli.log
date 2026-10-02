@@ -1,0 +1,446 @@
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-PASS --title Synthetic CL3-PASS --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-PASS-criteria.json
+CL3-PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-PASS TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-PASS Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-104aa808f785
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-PASS --run run-104aa808f785 --file /tmp/dial-verify2-cli/input.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py skip-spec CL3-PASS --by foreman --reason bounded synthetic check
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-PASS BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-PASS Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-383f1b2cd8f7
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-PASS --run run-383f1b2cd8f7 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-PASS REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-PASS Review --agent reviewer --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-edb0e70339be
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-PASS --run run-edb0e70339be --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-PASS VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-PASS Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-2a7a056ca7dd
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-PASS --run run-2a7a056ca7dd --file /tmp/dial-verify2-cli/input.json
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-PASS READY_FOR_HANDOFF
+READY_FOR_HANDOFF
+
+$ python3 /tmp/dial-verify-2/factory/factory.py handoff CL3-PASS --result PASS --summary Synthetic evidence supports PASS
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-PASS COMPLETE
+COMPLETE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-REVISION --title Synthetic CL3-REVISION --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-REVISION-criteria.json
+CL3-REVISION
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-88e49ff269d7
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-88e49ff269d7 --file /tmp/dial-verify2-cli/input.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py skip-spec CL3-REVISION --by foreman --reason bounded synthetic check
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-162afadf0342
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-162afadf0342 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Review --agent reviewer --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-608a1a4ff9a9
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-608a1a4ff9a9 --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-5589c4cfb3a8
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-5589c4cfb3a8 --file /tmp/dial-verify2-cli/input.json
+FAIL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION REVIEWING
+factory: fresh implementation report required for this BUILDING entry
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Implement --agent builder2 --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-c95cbfe1c353
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-c95cbfe1c353 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION VERIFYING
+factory: current candidate review required
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Review --agent reviewer2 --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-a1578dc1bf49
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-a1578dc1bf49 --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-REVISION Verify --agent verifier2 --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-e032970d4d85
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-REVISION --run run-e032970d4d85 --file /tmp/dial-verify2-cli/input.json
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION READY_FOR_HANDOFF
+READY_FOR_HANDOFF
+
+$ python3 /tmp/dial-verify-2/factory/factory.py handoff CL3-REVISION --result PASS --summary Synthetic evidence supports PASS
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-REVISION COMPLETE
+COMPLETE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-BLOCKED --title Synthetic CL3-BLOCKED --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-BLOCKED-criteria.json
+CL3-BLOCKED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-BLOCKED TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-BLOCKED Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-c5ef18255bce
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-BLOCKED --run run-c5ef18255bce --file /tmp/dial-verify2-cli/input.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py skip-spec CL3-BLOCKED --by foreman --reason bounded synthetic check
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-BLOCKED BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-BLOCKED Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-4431fed005b2
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-BLOCKED --run run-4431fed005b2 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-BLOCKED REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-BLOCKED Review --agent reviewer --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-b4345a795ad4
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-BLOCKED --run run-b4345a795ad4 --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-BLOCKED VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-BLOCKED Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-57dbe87db429
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-BLOCKED --run run-57dbe87db429 --file /tmp/dial-verify2-cli/input.json
+BLOCKED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-BLOCKED READY_FOR_HANDOFF
+READY_FOR_HANDOFF
+
+$ python3 /tmp/dial-verify-2/factory/factory.py handoff CL3-BLOCKED --result BLOCKED --summary Synthetic evidence supports BLOCKED
+BLOCKED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-BLOCKED COMPLETE
+COMPLETE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-TERMINAL-FAIL --title Synthetic CL3-TERMINAL-FAIL --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-TERMINAL-FAIL-criteria.json
+CL3-TERMINAL-FAIL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-TERMINAL-FAIL Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-7af3e454c8f5
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-TERMINAL-FAIL --run run-7af3e454c8f5 --file /tmp/dial-verify2-cli/input.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py skip-spec CL3-TERMINAL-FAIL --by foreman --reason bounded synthetic check
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-TERMINAL-FAIL Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-e8c1bc68a041
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-TERMINAL-FAIL --run run-e8c1bc68a041 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-TERMINAL-FAIL Review --agent reviewer --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-bf2ea308a070
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-TERMINAL-FAIL --run run-bf2ea308a070 --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-TERMINAL-FAIL Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-663f2c25daec
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-TERMINAL-FAIL --run run-663f2c25daec --file /tmp/dial-verify2-cli/input.json
+FAIL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL READY_FOR_HANDOFF
+factory: terminal failure reason must be nonempty text
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL READY_FOR_HANDOFF --terminal-failure-reason synthetic terminal outcome
+READY_FOR_HANDOFF
+
+$ python3 /tmp/dial-verify-2/factory/factory.py handoff CL3-TERMINAL-FAIL --result FAIL --summary Synthetic evidence supports FAIL
+FAIL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-TERMINAL-FAIL COMPLETE
+COMPLETE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-R1 --title Synthetic CL3-R1 --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-R1-criteria.json
+CL3-R1
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R1 TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R1 Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-867097a9994d
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R1 --run run-867097a9994d --file /tmp/dial-verify2-cli/input.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py skip-spec CL3-R1 --by foreman --reason bounded synthetic check
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R1 BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R1 Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-7febdba2da25
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R1 --run run-7febdba2da25 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R1 Implement --agent builder2 --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-9e484881f422
+
+$ python3 /tmp/dial-verify-2/factory/factory.py close-run CL3-R1 --run run-9e484881f422 --result FAIL --reason synthetic rerun failure
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R1 REVIEWING
+factory: fresh implementation report required for this BUILDING entry
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-R2 --title Synthetic CL3-R2 --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-R2-criteria.json
+CL3-R2
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R2 Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-7b5da70828d7
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R2 --run run-7b5da70828d7 --file /tmp/dial-verify2-cli/input.json
+SPEC
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 PLANNING
+PLANNING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R2 Spec --agent specifier --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-a93d5268c644
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R2 --run run-a93d5268c644 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 WAITING_FOR_SPEC_APPROVAL
+WAITING_FOR_SPEC_APPROVAL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py approve-spec CL3-R2 --by synthetic-human
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R2 Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-1b8d7db27e52
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R2 --run run-1b8d7db27e52 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 REVIEWING
+factory: current Spec approval or skip required
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 WAITING_FOR_SPEC_APPROVAL
+WAITING_FOR_SPEC_APPROVAL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py approve-spec CL3-R2 --by synthetic-human
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 REVIEWING
+factory: fresh implementation report required for this BUILDING entry
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R2 Implement --agent builder2 --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-53010c01db66
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R2 --run run-53010c01db66 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R2 VERIFYING
+factory: current candidate review required
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R2 Review --agent reviewer2 --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-8a6626dbb8ae
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R2 --run run-8a6626dbb8ae --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-R3 --title Synthetic CL3-R3 --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-R3-criteria.json
+CL3-R3
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R3 Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-4126ddd27e8f
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R3 --run run-4126ddd27e8f --file /tmp/dial-verify2-cli/input.json
+SPEC
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 PLANNING
+PLANNING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R3 Spec --agent specifier --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-62faf43f3ec0
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R3 --run run-62faf43f3ec0 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 WAITING_FOR_SPEC_APPROVAL
+WAITING_FOR_SPEC_APPROVAL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py approve-spec CL3-R3 --by synthetic-human
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R3 Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-a28f32bb342c
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R3 --run run-a28f32bb342c --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R3 Review --agent reviewer --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-fdcef039999b
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R3 --run run-fdcef039999b --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R3 Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-82923e699dfa
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R3 --run run-82923e699dfa --file /tmp/dial-verify2-cli/input.json
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R3 READY_FOR_HANDOFF
+READY_FOR_HANDOFF
+
+$ python3 /tmp/dial-verify-2/factory/factory.py handoff CL3-R3 --result PASS --summary synthetic
+factory: current Spec approval invalid; return to WAITING_FOR_SPEC_APPROVAL
+
+$ python3 /tmp/dial-verify-2/factory/factory.py create CL3-R4 --title Synthetic CL3-R4 --objective CLI acceptance check --criteria-file /tmp/dial-verify2-cli/CL3-R4-criteria.json
+CL3-R4
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R4 TRIAGE
+TRIAGE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R4 Triage --agent triager --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-d821a0a01906
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R4 --run run-d821a0a01906 --file /tmp/dial-verify2-cli/input.json
+IMPLEMENT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py skip-spec CL3-R4 --by foreman --reason bounded synthetic check
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R4 BUILDING
+BUILDING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R4 Implement --agent builder --model gpt-6-sol --reasoning high --reason synthetic behavioral verification
+run-db9cd433bdb7
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R4 --run run-db9cd433bdb7 --file /tmp/dial-verify2-cli/input.json
+REPORTED
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R4 REVIEWING
+REVIEWING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R4 Review --agent reviewer --model gpt-6-astra --reasoning medium --reason synthetic behavioral verification
+run-163efeee9d29
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R4 --run run-163efeee9d29 --file /tmp/dial-verify2-cli/input.json
+ACCEPT
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R4 VERIFYING
+VERIFYING
+
+$ python3 /tmp/dial-verify-2/factory/factory.py dispatch CL3-R4 Verify --agent verifier --model gpt-6-luna --reasoning medium --reason synthetic behavioral verification
+run-2bcf13364a9b
+
+$ python3 /tmp/dial-verify-2/factory/factory.py report CL3-R4 --run run-2bcf13364a9b --file /tmp/dial-verify2-cli/input.json
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R4 READY_FOR_HANDOFF
+READY_FOR_HANDOFF
+
+$ python3 /tmp/dial-verify-2/factory/factory.py handoff CL3-R4 --result PASS --summary synthetic recovery check
+PASS
+
+$ python3 /tmp/dial-verify-2/factory/factory.py advance CL3-R4 COMPLETE
+COMPLETE
+
+$ python3 /tmp/dial-verify-2/factory/factory.py recover CL3-R4
+recovered CL3-R4
+

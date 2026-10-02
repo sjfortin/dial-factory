@@ -1,0 +1,30 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "scope": "scaffold bootstrap; excluded from DIAL product automation sample",
+  "handoff_without_human_implementation": true,
+  "human_intervention_count": 4,
+  "factory_required_input_count": 1,
+  "intervention_breakdown": {
+    "approval_and_model_preference": 1,
+    "owner_requested_pause": 1,
+    "owner_requested_public_repository": 1,
+    "owner_requested_resume": 1
+  },
+  "cycle_time_seconds": null,
+  "cycle_time_unavailable_reason": "Exact bootstrap intake/initial dispatch was not timestamped before recorder existed.",
+  "observed_elapsed_lower_bound_seconds": 27012.707142,
+  "owner_pause_seconds": 24566.747822,
+  "first_pass_review_success": false,
+  "first_pass_verification_success": false,
+  "implementation_attempts": 2,
+  "review_to_implement_loops": 1,
+  "verify_to_implement_loops": 0,
+  "verification_failures_batched_into_existing_revision": 1,
+  "loop_note": "Review started revision 1; concurrent Verify failure joined that same revision, not a second cycle.",
+  "input_tokens": null,
+  "output_tokens": null,
+  "estimated_cost": null,
+  "usage_unavailable_reason": "Not exposed by collaboration tools.",
+  "final_result": "PASS",
+  "handoff_at": "2026-10-02T05:43:55.707142+00:00"
+}

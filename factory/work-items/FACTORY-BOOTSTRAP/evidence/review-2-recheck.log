@@ -1,0 +1,13 @@
+test_failed_latest_verify_requires_fresh_full_pipeline (__main__.IndependentReview2.test_failed_latest_verify_requires_fresh_full_pipeline) ... ok
+test_review_revision_requires_new_attempt_then_can_pass (__main__.IndependentReview2.test_review_revision_requires_new_attempt_then_can_pass) ... ok
+test_review_closed_rerun_supersedes_but_fresh_review_can_pass (__main__.IndependentReview2.test_review_closed_rerun_supersedes_but_fresh_review_can_pass) ... ok
+test_spec_change_after_saved_handoff_requires_new_full_pipeline (__main__.IndependentReview2.test_spec_change_after_saved_handoff_requires_new_full_pipeline) ... ok
+test_report_mirror_fault_recovers_without_duplicate_report (__main__.IndependentReview2.test_report_mirror_fault_recovers_without_duplicate_report) ... ok
+test_handoff_fault_recovery_is_idempotent (__main__.IndependentReview2.test_handoff_fault_recovery_is_idempotent) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.537s
+
+OK
+recovered TEST-1
+recovered TEST-1

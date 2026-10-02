@@ -1,17 +1,21 @@
-# FACTORY-BOOTSTRAP — checkpoint, not completion
+# FACTORY-BOOTSTRAP
 
 Objective: establish a real Foreman-operated factory before starting Dial.
 
-Route: human-approved contract -> Sol Implement -> independent Astra Review and Luna Verify -> revision requested -> human-requested pause.
+Route: approved contract -> Sol Implement -> independent Astra Review and Luna Verify -> one revision -> owner pause/resume -> same Sol Implement -> same independent workers -> Foreman handoff.
 
-Initial code candidate: 027fdad. Six tests passed; independent Review and CLI verification found real defects. Review result REVISE, Verify result FAIL. No revision edits started before this checkpoint. DIAL-001 remains unstarted.
+Result: scaffold PASS on 3652c7e5958e8552892805996740b8d5e3e32760. Initial candidate 027fdad failed independent review and verification despite six passing tests. The replacement passed thirteen repository tests, six additional independent reviewer tests, and CLI PASS/FAIL/BLOCKED/retry/reapproval/recovery exercises.
 
-What worked: real separate worker contexts, explicit per-worker models, independent findings, saved evidence, and routing findings back to the existing Implement worker. Foreman did not manually repair the production code.
+Agents: /root/factory_implement (requested gpt-6-sol/high), /root/factory_review (gpt-6-astra/medium), /root/factory_verify (gpt-6-luna/medium). Worker context survived the pause; no replacement was needed.
 
-What failed: initial tests did not exercise latest-run invalidation, fresh retry evidence, late Spec changes, or interrupted handoff writes. A long Implement turn needed a status checkpoint; cause beyond ongoing reasoning was not established.
+Review findings: old evidence could survive a failed rerun; revisions could omit fresh Implement/Review; changed specs could bypass renewed approval; interrupted handoff writes could omit required artifacts. All four are resolved in the accepted candidate.
 
-Human interventions: scaffold approval with model preference; request to pause near session limits. No human implementation. One revision batch contains both review and verification findings; do not count parallel reports as two completed rework loops.
+Human interventions: approval/model preference, pause, public-repository instruction, resume. No human implementation. One factory-required approval, four owner interactions recorded in metrics.
 
-Metrics: no final cycle time or terminal factory result yet. First review/verification success: false. Token usage and billed cost unavailable. Requested models are recorded, not inferred billing.
+What worked: real separate contexts and models, independent behavioral failures, returning findings to Implement, durable checkpoints. What failed: initial test coverage missed invalidation/recovery; an initial long worker turn needed a progress checkpoint.
 
-Suggested factory change: FI-001 regression coverage proposal. Resume through Implement -> Review -> Verify. See ../NEXT-SESSION.md for precise instructions and evidence paths.
+Metrics: first Review and Verify failed; two implementation attempts; one review-driven repair batch also incorporated concurrent Verify findings. Cost/tokens unavailable. Exact bootstrap intake-to-handoff time unavailable because intake preceded the recorder; metrics.json includes observed elapsed lower bound and the owner pause separately. DIAL-001 will use the actual ledger timestamps.
+
+Remaining limit: dispatch packet mirrors are not automatically reconstructed after write failure; canonical run metadata remains. Role permissions are procedural. FI-001 regression coverage is implemented and independently checked.
+
+Evidence and reports: ../../factory/work-items/FACTORY-BOOTSTRAP/. No merge or deployment. DIAL-001 is the next product work item.

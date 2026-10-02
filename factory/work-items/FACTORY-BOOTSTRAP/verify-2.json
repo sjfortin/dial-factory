@@ -1,0 +1,52 @@
+{
+  "work_item": "FACTORY-BOOTSTRAP",
+  "run_id": "verify-2",
+  "agent": "/root/factory_verify",
+  "candidate_commit": "3652c7e5958e8552892805996740b8d5e3e32760",
+  "attempt": 2,
+  "criteria": [
+    {
+      "criterion": "Repository behavioral regression suite passes on the pinned candidate.",
+      "method": "Ran `python3 -m unittest discover -s factory/tests -v` from a disposable clone checked out at the candidate SHA.",
+      "result": "PASS",
+      "evidence": "All 13 tests passed. Raw output: `factory/work-items/FACTORY-BOOTSTRAP/evidence/verify-2-tests.log`."
+    },
+    {
+      "criterion": "A synthetic work item can complete a normal PASS lifecycle through the documented CLI.",
+      "method": "Executed create, Triage dispatch/report, justified Spec skip, Implement dispatch/report, independent Review dispatch/report, Verify dispatch/report, READY_FOR_HANDOFF, handoff, and COMPLETE using the CLI in the disposable clone.",
+      "result": "PASS",
+      "evidence": "CLI transcript `factory/work-items/FACTORY-BOOTSTRAP/evidence/verify-2-cli.log`; assertions confirmed final_result PASS."
+    },
+    {
+      "criterion": "A failed Verify revision requires fresh Implement and Review evidence before a succeeding Verify and handoff.",
+      "method": "CLI lifecycle recorded FAIL Verify attempt 1, returned to BUILDING, confirmed REVIEWING was rejected before a fresh Implement report, confirmed VERIFYING was rejected before a fresh Review report, then completed attempt 2 and PASS handoff.",
+      "result": "PASS",
+      "evidence": "Same CLI transcript; assertions observed `fresh implementation report` and `current candidate review` gate errors, then final_result PASS."
+    },
+    {
+      "criterion": "BLOCKED and terminal FAIL handoffs preserve their result and terminal FAIL requires an explanatory reason.",
+      "method": "Completed separate CLI fixtures for BLOCKED and FAIL. Tried terminal FAIL transition without a reason before retrying with a reason.",
+      "result": "PASS",
+      "evidence": "Same CLI transcript; missing reason was rejected with `terminal failure reason`; completed fixture final_result values were BLOCKED and FAIL."
+    },
+    {
+      "criterion": "Newer failed or closed runs invalidate older evidence so a previous PASS cannot authorize handoff.",
+      "method": "Ran repository regression suite and a CLI fixture with an existing Implement report followed by a newer closed failed Implement run.",
+      "result": "PASS",
+      "evidence": "`test_latest_runs_invalidate_old_evidence` passed in the 13-test suite. CLI transcript confirms REVIEWING rejected the prior implementation evidence with `fresh implementation report` after the newer closed failed run."
+    },
+    {
+      "criterion": "Editing approved Spec content during the lifecycle requires reapproval and fresh implementation/review evidence, including before handoff.",
+      "method": "Ran Spec-change regression tests and CLI fixtures editing Product content during Building and Tech content after verification at READY_FOR_HANDOFF.",
+      "result": "PASS",
+      "evidence": "`test_spec_change_requires_reapproval_and_fresh_attempt` and `test_spec_change_during_build_has_reapproval_route` passed. CLI transcript confirms changed content blocked REVIEWING/handoff; after reapproval, a fresh Implement and Review were required."
+    },
+    {
+      "criterion": "Interrupted handoff artifacts and their report/event mirrors can be reconstructed from durable state.",
+      "method": "Ran interrupted-write recovery regression tests, then deleted a synthetic handoff's public note and journal in the CLI clone and invoked COMPLETE/recover.",
+      "result": "PASS",
+      "evidence": "`test_interrupted_handoff_artifacts_recover` and `test_interrupted_public_note_write_recovers` passed. CLI transcript confirms deleted journal/public note were recreated before completion; durable-state recovery remains available."
+    }
+  ],
+  "overall": "PASS"
+}

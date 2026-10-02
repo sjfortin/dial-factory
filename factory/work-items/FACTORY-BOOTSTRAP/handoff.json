@@ -1,0 +1,18 @@
+{
+  "work_item_id": "FACTORY-BOOTSTRAP",
+  "status": "COMPLETE",
+  "final_result": "PASS",
+  "scope": "Factory scaffold only; DIAL-001 not yet evaluated",
+  "candidate_commit": "3652c7e5958e8552892805996740b8d5e3e32760",
+  "completed_at": "2026-10-02T05:43:55.707142+00:00",
+  "review_report": "review-2.json",
+  "verification_report": "verify-2.json",
+  "metrics": "metrics.json",
+  "evidence_directory": "evidence/",
+  "known_limitations": [
+    "Dispatch-packet mirror writes are not automatically reconstructed; canonical run metadata survives and Foreman must close/retry failed dispatch.",
+    "Per-worker usage/cost unavailable; exact initial bootstrap intake time unavailable.",
+    "Role/tool boundaries are procedural, not security isolation."
+  ],
+  "next_action": "Admit DIAL-001 via real Triage and the now-verified CLI."
+}
