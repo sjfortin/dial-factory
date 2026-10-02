@@ -1,0 +1,25 @@
+
+> dial-one-station-proof@0.1.0 test
+> npm run build && node --test test/*.test.js
+
+
+> dial-one-station-proof@0.1.0 build
+> tsc && esbuild src/player.ts --bundle --format=iife --platform=browser --outfile=dist/player.js
+
+
+  dist/player.js  978.6kb
+
+⚡ Done in 118ms
+✔ Play, Pause while buffering, and resume use direct audio controls (4.693069ms)
+✔ play rejection exposes a retryable error (1.850815ms)
+✔ retry resets a retained media source error before playing (0.824499ms)
+✔ late rejection after Pause cannot overwrite paused state (6.534538ms)
+✔ HTTP MCP tool returns the station and its renderable UI resource (715.203993ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1250.938583

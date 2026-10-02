@@ -210,12 +210,55 @@
       "role": "Verify",
       "run_id": "run-66e3d0d7a50b",
       "seq": 21
+    },
+    {
+      "at": "2026-10-02T23:12:09+00:00",
+      "attempt": 2,
+      "candidate_commit": "c4122ec7c71d745f656510a52c790a272a26c214",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-66e3d0d7a50b",
+      "seq": 22
+    },
+    {
+      "at": "2026-10-02T23:12:41+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Pending: no response to this access question has been received; no access approval inferred.",
+      "kind": "intervention",
+      "possible_improvement": "Provide a reusable authorized development endpoint and connected ChatGPT verification surface; preserve BLOCKED evidence until actual observation.",
+      "question": "Is a reachable HTTPS development endpoint and ChatGPT custom MCP app access available? Share endpoint URL and access availability only.",
+      "reason": "Host verification requires missing ChatGPT access and a reachable HTTPS endpoint.",
+      "seq": 23,
+      "stage": "VERIFYING",
+      "work_item": "DIAL-001"
+    },
+    {
+      "at": "2026-10-02T23:12:41+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 24,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
     }
   ],
   "final_result": null,
   "handoff": null,
   "id": "DIAL-001",
-  "interventions": [],
+  "interventions": [
+    {
+      "at": "2026-10-02T23:12:41+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Pending: no response to this access question has been received; no access approval inferred.",
+      "possible_improvement": "Provide a reusable authorized development endpoint and connected ChatGPT verification surface; preserve BLOCKED evidence until actual observation.",
+      "question": "Is a reachable HTTPS development endpoint and ChatGPT custom MCP app access available? Share endpoint URL and access availability only.",
+      "reason": "Host verification requires missing ChatGPT access and a reachable HTTPS endpoint.",
+      "stage": "VERIFYING",
+      "work_item": "DIAL-001"
+    }
+  ],
   "objective": "Determine whether Dial can reliably play an HTTPS internet-radio stream from an MCP Apps UI rendered inside ChatGPT.",
   "reports": [
     {
@@ -475,9 +518,93 @@
         ]
       },
       "work_item": "DIAL-001"
+    },
+    {
+      "agent": "/root/dial_001_verify",
+      "at": "2026-10-02T23:12:09+00:00",
+      "attempt": 2,
+      "candidate_commit": "c4122ec7c71d745f656510a52c790a272a26c214",
+      "criteria": [
+        {
+          "criterion": "TypeScript MCP server runs.",
+          "evidence": "evidence/verify-1/npm-test.log shows a successful build and 5/5 tests; server printed 'Dial MCP listening at http://127.0.0.1:8787/mcp'.",
+          "method": "Ran npm test (which runs the TypeScript compiler and esbuild) and started the local server with npm start.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "MCP Inspector connects successfully.",
+          "evidence": "evidence/verify-1/inspector.log records exit code 0 and the returned open_radio tool.",
+          "method": "Ran @modelcontextprotocol/inspector CLI with HTTP transport against the local endpoint and requested tools/list.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Test tool returns one known station.",
+          "evidence": "evidence/verify-1/inspector.log records Radio Paradise and https://stream.radioparadise.com/mp3-128.",
+          "method": "Called open_radio through MCP Inspector CLI and inspected structuredContent.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "UI resource renders inside ChatGPT.",
+          "evidence": "README.md says no public HTTPS endpoint or ChatGPT connection is established. Local resources/read returned text/html;profile=mcp-app but cannot show ChatGPT rendering.",
+          "method": "ChatGPT host rendering requires a connected ChatGPT test host and reachable HTTPS MCP endpoint; neither is available in this run. Inspector did return the UI resource over local HTTP.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Play initiates audio.",
+          "evidence": "README.md documents the manual host check. Player unit doubles do not establish audible playback.",
+          "method": "Requires pressing Play in the ChatGPT-hosted iframe and confirming audible output; no connected host is available.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Pause stops audio.",
+          "evidence": "README.md documents the manual host check. Local pause-state tests do not establish audible silence.",
+          "method": "Requires confirming silence after Pause in the ChatGPT-hosted iframe; no connected host is available.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Playback can resume.",
+          "evidence": "README.md documents the manual host check and notes same-element resume may play buffered audio behind the live edge. Local tests do not establish audible resumption or timing.",
+          "method": "Requires pressing Play after Pause in the ChatGPT-hosted iframe and confirming audible return; no connected host is available.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Failure produces a clean error state.",
+          "evidence": "README.md provides a controlled host failure procedure. Local tests cover retry/error controller logic but do not prove rendered host behavior.",
+          "method": "Requires inducing a stream failure in the ChatGPT iframe and observing its rendered error and retry control; no connected host is available.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "CSP/network behavior is documented.",
+          "evidence": "README.md distinguishes local endpoint probe evidence from host behavior. resources/read returned resourceDomains [https://stream.radioparadise.com] and connectDomains []. Host CSP/network enforcement remains unobserved.",
+          "method": "Inspected README and independently read the advertised UI resource through MCP Inspector.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Persistence behavior is documented.",
+          "evidence": "README.md states state is per UI instance, remount/reload/new conversation resets to idle, and no storage or background playback guarantee exists.",
+          "method": "Inspected README's state and lifecycle description.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "PiP feasibility is investigated.",
+          "evidence": "README.md cites official UI guidance that PiP may present ongoing activity/live sessions, distinguishes browser-native video PiP from audio, and specifies checking host control/audio continuity. Whether this account exposes PiP remains unknown.",
+          "method": "Inspected README's PiP investigation and its proposed host observation.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Verification evidence is captured.",
+          "evidence": "evidence/verify-1/npm-test.log, evidence/verify-1/inspector.log, and verify-output.json.",
+          "method": "Saved local test output, Inspector results, and per-criterion verification record under the DIAL-001 work item.",
+          "result": "PASS"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-66e3d0d7a50b",
+      "work_item": "DIAL-001"
     }
   ],
-  "resume_stage": null,
+  "resume_stage": "VERIFYING",
   "runs": [
     {
       "agent": "/root/dial_001_triage",
@@ -615,8 +742,8 @@
       "agent": "/root/dial_001_verify",
       "attempt": 2,
       "cost": null,
-      "duration_seconds": null,
-      "ended_at": null,
+      "duration_seconds": 412,
+      "ended_at": "2026-10-02T23:12:09+00:00",
       "harness": "current-collaboration",
       "id": "run-66e3d0d7a50b",
       "input_tokens": null,
@@ -625,12 +752,12 @@
       "reported_model": null,
       "requested_model": "gpt-6-luna",
       "requested_reasoning": "medium",
-      "result": null,
+      "result": "BLOCKED",
       "retry_of": null,
       "role": "Verify",
       "selection_reason": "Independently exercise accepted candidate and account for every criterion; host/audio access gaps must be BLOCKED.",
       "started_at": "2026-10-02T23:05:17+00:00",
-      "status": "RUNNING",
+      "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
@@ -640,7 +767,7 @@
     "mode": "skipped",
     "reason": "The owner supplied twelve observable acceptance criteria and explicit non-goals; Triage found no product ambiguity. Build only one-station proof. ChatGPT access is a verification blocker, not an unresolved requirement."
   },
-  "state": "VERIFYING",
+  "state": "WAITING_FOR_HUMAN",
   "title": "Prove live internet-radio playback inside ChatGPT MCP Apps UI",
-  "updated_at": "2026-10-02T23:05:17+00:00"
+  "updated_at": "2026-10-02T23:12:41+00:00"
 }

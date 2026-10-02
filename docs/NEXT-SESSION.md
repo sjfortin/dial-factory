@@ -4,6 +4,10 @@ Factory scaffold is COMPLETE/PASS at accepted candidate 3652c7e5958e855289280599
 
 Current objective: run DIAL-001 through Triage -> optional Spec -> Implement -> Review -> Verify. Inspect its actual ledger state and Git status before continuing; do not repeat bootstrap. Read AGENTS.md and docs/BOOTSTRAP-CONTRACT.md. Owner approval persists, including appropriate per-worker models and public repository pushes. Never merge/deploy automatically.
 
+October 3 stopping point: DIAL-001 is WAITING_FOR_HUMAN, resume stage VERIFYING. Product candidate `c4122ec7c71d745f656510a52c790a272a26c214` passed independent Review attempt 2. Independent Verify `run-66e3d0d7a50b` reported BLOCKED: seven criteria PASS, five host/audio criteria BLOCKED. Local build and five tests passed; actual Inspector listed/called the tool and read the UI resource. See verify-output.json and evidence/verify-1. One Review -> Implement loop fixed retained-media-error retry and unsupported live-edge documentation. No Verify -> Implement loop.
+
+Pending question: Is a reachable HTTPS development endpoint and ChatGPT custom MCP app access available? No answer has been received. One pending access intervention is recorded explicitly without inventing approval. Do not set COMPLETE or claim a final handoff yet. Resume the same DIAL-001 via VERIFYING after recording the actual human response. Reuse `/root/dial_001_verify` if still available, otherwise record a replacement. Dispatch a fresh Verify run bound to the same accepted product commit unless product changes, in which case route through Implement and Review again. No automatic endpoint exposure/deployment is authorized.
+
 Local repo /home/sam/Work/dial; public remote https://github.com/sjfortin/dial-factory. Bootstrap branch factory/bootstrap. Root coordinates only; real workers implement/review/verify. Use the actual collaboration tools; Python records dispatches but cannot spawn agents.
 
 Model policy: Triage and Verify gpt-6-luna/medium; Implement gpt-6-sol/medium for bounded product work; Spec gpt-6-sol/high; Review gpt-6-astra/medium. Requested models are known; backend model/usage/cost may be unknown.
@@ -12,4 +16,4 @@ At the October 3 resume, live-agent inventory contained only the Foreman. DIAL-0
 
 Known limitations: dispatch packet write failure needs explicit close/retry; role boundaries are procedural; no per-worker cost telemetry. Browser discovery still returned no surfaces after resume, so ChatGPT rendering/audio checks may need minimal human verification and must be recorded BLOCKED until observed.
 
-Accepted bootstrap and handoff were pushed to `factory/bootstrap` at `6aa5eaf`. Current product work is on `work/DIAL-001`; inspect local and remote state before the next authorized push. No production deployment.
+Accepted bootstrap and handoff were pushed to `factory/bootstrap` at `6aa5eaf`. Current product work and its audit are pushed on `work/DIAL-001`; inspect local and remote state before the next authorized push. No production deployment.
