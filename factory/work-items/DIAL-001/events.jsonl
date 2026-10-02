@@ -1,0 +1,3 @@
+{"at": "2026-10-02T05:44:39+00:00", "kind": "created", "seq": 1, "title": "Prove live internet-radio playback inside ChatGPT MCP Apps UI"}
+{"at": "2026-10-02T05:44:39+00:00", "from_state": "INTAKE", "kind": "advanced", "seq": 2, "terminal_failure_reason": null, "to_state": "TRIAGE"}
+{"agent": "/root/dial_001_triage", "at": "2026-10-02T05:44:40+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-luna", "requested_reasoning": "medium", "role": "Triage", "run_id": "run-5fc912079003", "seq": 3}

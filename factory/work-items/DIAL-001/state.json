@@ -1,0 +1,81 @@
+{
+  "created_at": "2026-10-02T05:44:39+00:00",
+  "criteria": [
+    "TypeScript MCP server runs.",
+    "MCP Inspector connects successfully.",
+    "Test tool returns one known station.",
+    "UI resource renders inside ChatGPT.",
+    "Play initiates audio.",
+    "Pause stops audio.",
+    "Playback can resume.",
+    "Failure produces a clean error state.",
+    "CSP/network behavior is documented.",
+    "Persistence behavior is documented.",
+    "PiP feasibility is investigated.",
+    "Verification evidence is captured."
+  ],
+  "events": [
+    {
+      "at": "2026-10-02T05:44:39+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Prove live internet-radio playback inside ChatGPT MCP Apps UI"
+    },
+    {
+      "at": "2026-10-02T05:44:39+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "agent": "/root/dial_001_triage",
+      "at": "2026-10-02T05:44:40+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-5fc912079003",
+      "seq": 3
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "DIAL-001",
+  "interventions": [],
+  "objective": "Determine whether Dial can reliably play an HTTPS internet-radio stream from an MCP Apps UI rendered inside ChatGPT.",
+  "reports": [],
+  "resume_stage": null,
+  "runs": [
+    {
+      "agent": "/root/dial_001_triage",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": null,
+      "ended_at": null,
+      "harness": "current-collaboration",
+      "id": "run-5fc912079003",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": null,
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "Bounded investigation of the proof requirements, available verification tools, and current official MCP Apps constraints.",
+      "started_at": "2026-10-02T05:44:40+00:00",
+      "status": "RUNNING",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "title": "Prove live internet-radio playback inside ChatGPT MCP Apps UI",
+  "updated_at": "2026-10-02T05:44:40+00:00"
+}
