@@ -32,10 +32,10 @@ NEXT = {
     "WAITING_FOR_HUMAN": {"TRIAGE", "PLANNING", "WAITING_FOR_SPEC_APPROVAL", "BUILDING", "REVIEWING", "VERIFYING", "CANCELLED"},
     "PLANNING": {"WAITING_FOR_SPEC_APPROVAL", "WAITING_FOR_HUMAN", "CANCELLED"},
     "WAITING_FOR_SPEC_APPROVAL": {"BUILDING", "PLANNING", "WAITING_FOR_HUMAN", "CANCELLED"},
-    "BUILDING": {"REVIEWING", "WAITING_FOR_HUMAN", "CANCELLED"},
-    "REVIEWING": {"BUILDING", "VERIFYING", "WAITING_FOR_HUMAN", "CANCELLED"},
-    "VERIFYING": {"BUILDING", "READY_FOR_HANDOFF", "WAITING_FOR_HUMAN", "CANCELLED"},
-    "READY_FOR_HANDOFF": {"COMPLETE", "CANCELLED"},
+    "BUILDING": {"REVIEWING", "WAITING_FOR_SPEC_APPROVAL", "WAITING_FOR_HUMAN", "CANCELLED"},
+    "REVIEWING": {"BUILDING", "VERIFYING", "WAITING_FOR_SPEC_APPROVAL", "WAITING_FOR_HUMAN", "CANCELLED"},
+    "VERIFYING": {"BUILDING", "READY_FOR_HANDOFF", "WAITING_FOR_SPEC_APPROVAL", "WAITING_FOR_HUMAN", "CANCELLED"},
+    "READY_FOR_HANDOFF": {"COMPLETE", "WAITING_FOR_SPEC_APPROVAL", "CANCELLED"},
     "PARKED": {"TRIAGE", "CANCELLED"},
     "COMPLETE": set(), "CANCELLED": set(),
 }
@@ -91,6 +91,13 @@ def load(item_id):
     expected = "".join(json.dumps(e, sort_keys=True) + "\n" for e in data["events"])
     if not mirror.exists() or mirror.read_text(encoding="utf-8") != expected:
         atomic(mirror, expected)
+    for report in data["reports"]:
+        path = item_dir(item_id) / "reports" / f"{report['run_id']}.json"
+        expected_report = dump(report)
+        if not path.exists() or path.read_text(encoding="utf-8") != expected_report:
+            atomic(path, expected_report)
+    if data["handoff"] is not None:
+        ensure_handoff_artifacts(data)
     return data
 
 
@@ -124,24 +131,40 @@ def read_json_file(path):
         raise Invalid(f"invalid JSON: {exc}") from exc
 
 
+def last_run(data, role):
+    return next((r for r in reversed(data["runs"]) if r["role"] == role), None)
+
+
 def latest(data, role):
-    return next((r for r in reversed(data["reports"]) if r["role"] == role), None)
+    run = last_run(data, role)
+    if run is None or run["status"] != "FINISHED":
+        return None
+    return next((r for r in reversed(data["reports"]) if r["role"] == role and r["run_id"] == run["id"]), None)
+
+
+def entered_after(data, role, stage):
+    report = latest(data, role)
+    if report is None:
+        return None
+    entry = max((e["seq"] for e in data["events"] if e["kind"] == "advanced" and e.get("to_state") == stage), default=0)
+    reported = next((e["seq"] for e in reversed(data["events"]) if e["kind"] == "reported" and e["run_id"] == report["run_id"]), 0)
+    return report if reported > entry else None
 
 
 def candidate(data):
-    return latest(data, "Implement")
+    return entered_after(data, "Implement", "BUILDING")
 
 
 def current_review(data):
     impl = candidate(data)
-    return next((r for r in reversed(data["reports"]) if r["role"] == "Review" and impl
-                 and r["attempt"] == impl["attempt"] and r["candidate_commit"] == impl["candidate_commit"]), None)
+    review = entered_after(data, "Review", "REVIEWING")
+    return review if review and impl and review["attempt"] == impl["attempt"] and review["candidate_commit"] == impl["candidate_commit"] else None
 
 
 def current_verify(data):
     impl = candidate(data)
-    return next((r for r in reversed(data["reports"]) if r["role"] == "Verify" and impl
-                 and r["attempt"] == impl["attempt"] and r["candidate_commit"] == impl["candidate_commit"]), None)
+    verify = entered_after(data, "Verify", "VERIFYING")
+    return verify if verify and impl and verify["attempt"] == impl["attempt"] and verify["candidate_commit"] == impl["candidate_commit"] else None
 
 
 def spec_hashes(data):
@@ -159,7 +182,10 @@ def spec_ready(data):
     if spec["mode"] == "skipped":
         return bool(spec.get("reason"))
     if spec["mode"] == "approved":
-        return spec["hashes"] == spec_hashes(data)
+        try:
+            return spec["hashes"] == spec_hashes(data)
+        except (Invalid, OSError):
+            return False
     return False
 
 
@@ -235,6 +261,22 @@ def cmd_dispatch(args):
     stage = {"Triage": "TRIAGE", "Spec": "PLANNING", "Implement": "BUILDING",
              "Review": "REVIEWING", "Verify": "VERIFYING"}[args.role]
     need(data["state"] == stage, f"{args.role} dispatch requires {stage}")
+    if args.role in {"Implement", "Review", "Verify"}:
+        need(spec_ready(data), "current Spec approval or skip required")
+    if args.role == "Review":
+        impl = candidate(data)
+        need(impl is not None, "current implementation report required")
+        previous = latest(data, "Review")
+        need(previous is None or previous.get("attempt") != impl["attempt"] or previous["recommendation"] != "REVISE",
+             "review requested revision; return to BUILDING")
+    if args.role == "Verify":
+        review = current_review(data)
+        need(review is not None and review["recommendation"] == "ACCEPT", "current accepted review required")
+        previous = current_verify(data)
+        need(previous is None or previous["overall"] != "FAIL", "failed verification requires Implement and Review revision")
+        prior_run = last_run(data, "Verify")
+        need(prior_run is None or prior_run.get("attempt") != candidate(data)["attempt"] or prior_run["result"] != "FAIL",
+             "failed verification requires Implement and Review revision")
     nonempty(args.agent, "agent")
     nonempty(args.reason, "selection reason")
     need(args.model.startswith("gpt-"), "explicit model ID required")
@@ -245,6 +287,7 @@ def cmd_dispatch(args):
         need(args.replaces == previous["id"], "model change requires --replaces prior run ID")
     run_id = "run-" + uuid.uuid4().hex[:12]
     run = {"id": run_id, "role": args.role, "agent": args.agent, "harness": "current-collaboration",
+           "attempt": candidate(data)["attempt"] if args.role in {"Review", "Verify"} else None,
            "requested_model": args.model, "requested_reasoning": args.reasoning,
            "reported_model": None, "selection_reason": args.reason, "replaces": args.replaces,
            "started_at": now(), "ended_at": None, "duration_seconds": None, "status": "RUNNING",
@@ -272,6 +315,8 @@ def cmd_report(args):
     stage = {"Triage": "TRIAGE", "Spec": "PLANNING", "Implement": "BUILDING",
              "Review": "REVIEWING", "Verify": "VERIFYING"}[role]
     need(data["state"] == stage, f"report requires {stage}")
+    if role in {"Implement", "Review", "Verify"}:
+        need(spec_ready(data), "current Spec approval or skip required")
     if role == "Implement":
         report["attempt"] = 1 + sum(r["role"] == "Implement" for r in data["reports"])
     validate_report(role, report, data, run)
@@ -281,9 +326,6 @@ def cmd_report(args):
         resolved = subprocess.run(["git", "cat-file", "-t", report["candidate_commit"]],
                                   cwd=ROOT, capture_output=True, text=True)
         need(resolved.returncode == 0 and resolved.stdout.strip() == "commit", "candidate commit missing from Git")
-    if role in {"Review", "Verify"}:
-        need(not any(r["role"] == role and r.get("attempt") == report["attempt"] for r in data["reports"]),
-             "attempt already has this role report; create a new implementation attempt")
     record = {**report, "role": role, "run_id": run["id"], "agent": run["agent"], "at": now()}
     data["reports"].append(record)
     run["status"] = "FINISHED"
@@ -348,6 +390,13 @@ def cmd_advance(args):
     old, target = data["state"], args.state
     need(target in NEXT[old], f"illegal transition {old} -> {target}")
     need(not any(r["status"] == "RUNNING" for r in data["runs"]), "close running agent before transition")
+    if old in {"BUILDING", "REVIEWING", "VERIFYING", "READY_FOR_HANDOFF"} and target == "WAITING_FOR_SPEC_APPROVAL":
+        need(data["spec"]["mode"] == "approved" and not spec_ready(data),
+             "reapproval route requires changed approved Spec")
+        data["handoff"] = None
+        data["final_result"] = None
+    elif old in {"REVIEWING", "VERIFYING", "READY_FOR_HANDOFF"} and target != "CANCELLED":
+        need(spec_ready(data), "current Spec approval invalid; return to WAITING_FOR_SPEC_APPROVAL")
     if old == "TRIAGE":
         triage = latest(data, "Triage")
         need(triage is not None, "triage report required")
@@ -362,8 +411,8 @@ def cmd_advance(args):
         need(spec_ready(data), "exact current Spec revision approval required")
     if old == "BUILDING" and target == "REVIEWING":
         need(spec_ready(data), "current Spec approval or skip required")
-        need(candidate(data) is not None, "implementation report required")
-    if old == "REVIEWING":
+        need(candidate(data) is not None, "fresh implementation report required for this BUILDING entry")
+    if old == "REVIEWING" and target != "WAITING_FOR_SPEC_APPROVAL":
         review = current_review(data)
         need(review is not None, "current candidate review required")
         if target == "VERIFYING":
@@ -372,16 +421,21 @@ def cmd_advance(args):
             need(review["recommendation"] == "REVISE", "review must request revision")
         elif target == "WAITING_FOR_HUMAN":
             need(review["recommendation"] == "HUMAN_DECISION", "review must ask human")
-    if old == "VERIFYING":
+    if old == "VERIFYING" and target != "WAITING_FOR_SPEC_APPROVAL":
         verify = current_verify(data)
-        need(verify is not None, "current candidate verification required")
+        failed_unreported = (target == "BUILDING" and last_run(data, "Verify") is not None
+                             and last_run(data, "Verify")["status"] == "FINISHED"
+                             and last_run(data, "Verify")["result"] == "FAIL"
+                             and candidate(data) is not None
+                             and last_run(data, "Verify").get("attempt") == candidate(data)["attempt"])
+        need(verify is not None or failed_unreported, "current candidate verification required")
         if target == "READY_FOR_HANDOFF":
             if verify["overall"] == "FAIL":
                 nonempty(args.terminal_failure_reason, "terminal failure reason")
             else:
                 need(verify["overall"] in {"PASS", "BLOCKED"}, "invalid verification result")
         elif target == "BUILDING":
-            need(verify["overall"] == "FAIL", "revision requires failed verification")
+            need(failed_unreported or verify["overall"] == "FAIL", "revision requires failed verification")
     if target == "WAITING_FOR_HUMAN":
         data["resume_stage"] = old
     if old == "WAITING_FOR_HUMAN" and target != "CANCELLED":
@@ -390,6 +444,8 @@ def cmd_advance(args):
         data["resume_stage"] = None
     if old == "READY_FOR_HANDOFF" and target == "COMPLETE":
         need(data["handoff"] is not None, "handoff artifact required")
+        need((JOURNAL / f"{data['id']}.md").is_file() and
+             (item_dir(data["id"]) / "PUBLIC_NOTES.md").is_file(), "required handoff artifacts missing")
     data["state"] = target
     event(data, "advanced", from_state=old, to_state=target,
           terminal_failure_reason=args.terminal_failure_reason if old == "VERIFYING" and target == "READY_FOR_HANDOFF" else None)
@@ -429,26 +485,49 @@ def metrics(data):
             "usage_unavailable_reason": "collaboration harness does not expose per-worker usage or billing"}
 
 
+def handoff_documents(data):
+    handoff = data["handoff"]
+    need(handoff is not None, "handoff missing")
+    verify = next((r for r in data["reports"] if r["run_id"] == handoff["verification_run"]), None)
+    need(verify is not None, "handoff verification report missing")
+    result, summary = handoff["result"], handoff["summary"]
+    m = metrics(data)
+    roles = ", ".join(f"{r['role']} {r['agent']} ({r['requested_model']}/{r['requested_reasoning']})" for r in data["runs"])
+    interventions = "\n".join(f"- {i['stage']}: {i['reason']} — {i['human_response']}" for i in data["interventions"]) or "None"
+    findings = "\n".join(f"- {f}" for r in data["reports"] if r["role"] == "Review" for f in r["findings"]) or "None"
+    journal = f"# {data['id']}: {data['title']}\n\nObjective: {data['objective']}\n\nRoute: " + " → ".join(e["to_state"] for e in data["events"] if e["kind"] == "advanced") + f"\n\nAgents: {roles}\n\nInterventions:\n{interventions}\n\nReview findings:\n{findings}\n\nResult: **{result}** — {summary}\n\nCandidate: {handoff['candidate_commit']}\n\nCost/usage: unavailable; {m['usage_unavailable_reason']}.\nCycle time: {m['intake_to_handoff_seconds']} seconds; human wait: {m['human_wait_seconds']} seconds.\n\nWhat worked: recorded reports and gates.\n\nWhat failed or remains blocked: {summary if result != 'PASS' else 'No known acceptance failure.'}\n\nImprovements: review intervention records and propose changes under factory/improvements/.\n"
+    public = f"# {data['id']}: {data['title']}\n\n{summary}\n\nResult: **{result}**\n\nCandidate commit: {handoff['candidate_commit']}\n\nVerification evidence: see reports/{verify['run_id']}.json.\n\nThis note is for human review; it has not been published.\n"
+    return {JOURNAL / f"{data['id']}.md": journal,
+            item_dir(data["id"]) / "PUBLIC_NOTES.md": public}
+
+
+def ensure_handoff_artifacts(data):
+    for path, content in handoff_documents(data).items():
+        if not path.exists() or path.read_text(encoding="utf-8") != content:
+            atomic(path, content)
+
+
 def cmd_handoff(args):
     data = load(args.id)
     need(data["state"] == "READY_FOR_HANDOFF", "handoff requires READY_FOR_HANDOFF")
+    need(spec_ready(data), "current Spec approval invalid; return to WAITING_FOR_SPEC_APPROVAL")
+    need(current_review(data) is not None and current_review(data)["recommendation"] == "ACCEPT", "current accepted review required")
     verify = current_verify(data)
     need(verify is not None, "current verification required")
     need(args.result == verify["overall"], "handoff result must match verification")
     nonempty(args.summary, "handoff summary")
+    if data["handoff"] is not None:
+        need(data["handoff"]["result"] == args.result and data["handoff"]["summary"] == args.summary,
+             "existing handoff differs")
+        ensure_handoff_artifacts(data)
+        print(args.result)
+        return
     data["final_result"] = args.result
     data["handoff"] = {"at": now(), "result": args.result, "summary": args.summary,
                        "candidate_commit": candidate(data)["candidate_commit"], "verification_run": verify["run_id"]}
     event(data, "handoff", **data["handoff"])
     save(data)
-    m = metrics(data)
-    roles = ", ".join(f"{r['role']} {r['agent']} ({r['requested_model']}/{r['requested_reasoning']})" for r in data["runs"])
-    interventions = "\n".join(f"- {i['stage']}: {i['reason']} — {i['human_response']}" for i in data["interventions"]) or "None"
-    findings = "\n".join(f"- {f}" for r in data["reports"] if r["role"] == "Review" for f in r["findings"]) or "None"
-    journal = f"# {args.id}: {data['title']}\n\nObjective: {data['objective']}\n\nRoute: " + " → ".join(e["to_state"] for e in data["events"] if e["kind"] == "advanced") + f"\n\nAgents: {roles}\n\nInterventions:\n{interventions}\n\nReview findings:\n{findings}\n\nResult: **{args.result}** — {args.summary}\n\nCandidate: {candidate(data)['candidate_commit']}\n\nCost/usage: unavailable; {m['usage_unavailable_reason']}.\nCycle time: {m['intake_to_handoff_seconds']} seconds; human wait: {m['human_wait_seconds']} seconds.\n\nWhat worked: recorded reports and gates.\n\nWhat failed or remains blocked: {args.summary if args.result != 'PASS' else 'No known acceptance failure.'}\n\nImprovements: review intervention records and propose changes under factory/improvements/.\n"
-    public = f"# {args.id}: {data['title']}\n\n{args.summary}\n\nResult: **{args.result}**\n\nCandidate commit: {candidate(data)['candidate_commit']}\n\nVerification evidence: see reports/{verify['run_id']}.json.\n\nThis note is for human review; it has not been published.\n"
-    atomic(JOURNAL / f"{args.id}.md", journal)
-    atomic(item_dir(args.id) / "PUBLIC_NOTES.md", public)
+    ensure_handoff_artifacts(data)
     print(args.result)
 
 

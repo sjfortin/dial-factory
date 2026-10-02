@@ -5,6 +5,7 @@ import json
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 import sys
 
@@ -75,6 +76,27 @@ class FactoryTest(unittest.TestCase):
                           "ambiguities": [], "blockers": []})
         self.advance("REVIEWING")
 
+    def spec_build(self):
+        self.triage("SPEC")
+        self.advance("PLANNING")
+        directory = f.item_dir("TEST-1")
+        (directory / "PRODUCT.md").write_text("product v1")
+        (directory / "TECH.md").write_text("tech v1")
+        run = self.dispatch("Spec")
+        self.report(run, {"agent": "spec", "documents": ["PRODUCT.md", "TECH.md"]})
+        self.advance("WAITING_FOR_SPEC_APPROVAL")
+        self.call(f.cmd_approve_spec, id="TEST-1", by="human")
+        self.advance("BUILDING")
+        self.implement_report()
+        self.advance("REVIEWING")
+
+    def implement_report(self):
+        run = self.dispatch("Implement", "implementer")
+        self.report(run, {"agent": "implementer", "change_summary": "candidate or revision", "decisions": [],
+                          "candidate_commit": self.commit, "tests": ["real test passed"],
+                          "ambiguities": [], "blockers": []})
+        return run
+
     def review(self, recommendation="ACCEPT", agent="reviewer", commit=None, attempt=1):
         run = self.dispatch("Review", agent)
         payload = {"agent": agent, "candidate_commit": commit or self.commit, "attempt": attempt,
@@ -134,6 +156,8 @@ class FactoryTest(unittest.TestCase):
         payload["candidate_commit"] = self.commit
         payload["recommendation"] = "REVISE"
         self.report(run, payload)
+        with self.assertRaisesRegex(f.Invalid, "review requested revision"):
+            self.dispatch("Review")
         with self.assertRaisesRegex(f.Invalid, "review must ACCEPT"):
             self.advance("VERIFYING")
         self.advance("BUILDING")
@@ -198,6 +222,200 @@ class FactoryTest(unittest.TestCase):
         self.call(f.cmd_handoff, id="TEST-1", result="FAIL", summary="Experiment failed")
         self.advance("COMPLETE")
         self.assertEqual(self.state()["final_result"], "FAIL")
+
+    def test_latest_runs_invalidate_old_evidence(self):
+        self.triage()
+        self.call(f.cmd_skip_spec, id="TEST-1", by="foreman", reason="bounded")
+        self.advance("BUILDING")
+        self.implement_report()
+        run = self.dispatch("Implement", "implementer")
+        with self.assertRaisesRegex(f.Invalid, "running agent"):
+            self.advance("REVIEWING")
+        self.call(f.cmd_close_run, id="TEST-1", run=run, result="FAIL", reason="rerun failed")
+        # A closed failed run supersedes the previous candidate.
+        with self.assertRaisesRegex(f.Invalid, "fresh implementation report"):
+            self.advance("REVIEWING")
+        self.implement_report()
+        self.advance("REVIEWING")
+        run, payload = self.review(attempt=2)
+        self.report(run, payload)
+        rerun = self.dispatch("Review")
+        with self.assertRaisesRegex(f.Invalid, "running agent"):
+            self.advance("VERIFYING")
+        self.call(f.cmd_close_run, id="TEST-1", run=rerun, result="FAIL", reason="review rerun failed")
+        with self.assertRaisesRegex(f.Invalid, "current candidate review"):
+            self.advance("VERIFYING")
+        run, payload = self.review(attempt=2)
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run, payload = self.verify(attempt=2)
+        self.report(run, payload)
+        rerun = self.dispatch("Verify")
+        with self.assertRaisesRegex(f.Invalid, "running agent"):
+            self.advance("READY_FOR_HANDOFF")
+        self.call(f.cmd_close_run, id="TEST-1", run=rerun, result="BLOCKED", reason="new check inaccessible")
+        with self.assertRaisesRegex(f.Invalid, "current candidate verification"):
+            self.advance("READY_FOR_HANDOFF")
+        run, payload = self.verify(overall="BLOCKED", attempt=2)
+        self.report(run, payload)
+        self.advance("READY_FOR_HANDOFF")
+
+    def test_verify_failure_requires_fresh_implement_and_review(self):
+        self.build()
+        run, payload = self.review()
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run, payload = self.verify(overall="FAIL")
+        self.report(run, payload)
+        with self.assertRaisesRegex(f.Invalid, "failed verification requires"):
+            self.dispatch("Verify")
+        self.advance("BUILDING")
+        with self.assertRaisesRegex(f.Invalid, "fresh implementation report"):
+            self.advance("REVIEWING")
+        self.implement_report()
+        self.advance("REVIEWING")
+        with self.assertRaisesRegex(f.Invalid, "current candidate review"):
+            self.advance("VERIFYING")
+        run, payload = self.review(attempt=2)
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run, payload = self.verify(attempt=2)
+        self.report(run, payload)
+        self.advance("READY_FOR_HANDOFF")
+
+    def test_closed_failed_verify_can_enter_revision_path(self):
+        self.build()
+        run, payload = self.review()
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run = self.dispatch("Verify")
+        self.call(f.cmd_close_run, id="TEST-1", run=run, result="FAIL", reason="check failed before report")
+        with self.assertRaisesRegex(f.Invalid, "failed verification requires"):
+            self.dispatch("Verify")
+        with self.assertRaisesRegex(f.Invalid, "current candidate verification"):
+            self.advance("READY_FOR_HANDOFF")
+        self.advance("BUILDING")
+        self.implement_report()
+        self.advance("REVIEWING")
+        run, payload = self.review(attempt=2)
+        self.report(run, payload)
+        self.advance("VERIFYING")
+
+    def test_spec_change_requires_reapproval_and_fresh_attempt(self):
+        self.spec_build()
+        directory = f.item_dir("TEST-1")
+        (directory / "PRODUCT.md").write_text("product v2")
+        with self.assertRaisesRegex(f.Invalid, "Spec approval invalid"):
+            self.advance("VERIFYING")
+        self.advance("WAITING_FOR_SPEC_APPROVAL")
+        with self.assertRaisesRegex(f.Invalid, "approval"):
+            self.advance("BUILDING")
+        self.call(f.cmd_approve_spec, id="TEST-1", by="human")
+        self.advance("BUILDING")
+        with self.assertRaisesRegex(f.Invalid, "fresh implementation report"):
+            self.advance("REVIEWING")
+        self.implement_report()
+        self.advance("REVIEWING")
+        run, payload = self.review(attempt=2)
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        (directory / "TECH.md").write_text("tech v2")
+        with self.assertRaisesRegex(f.Invalid, "Spec approval"):
+            self.dispatch("Verify")
+        self.advance("WAITING_FOR_SPEC_APPROVAL")
+        self.call(f.cmd_approve_spec, id="TEST-1", by="human")
+        self.advance("BUILDING")
+        self.implement_report()
+        self.advance("REVIEWING")
+        run, payload = self.review(attempt=3)
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run, payload = self.verify(attempt=3)
+        self.report(run, payload)
+        self.advance("READY_FOR_HANDOFF")
+        (directory / "PRODUCT.md").write_text("product v3")
+        with self.assertRaisesRegex(f.Invalid, "Spec approval invalid"):
+            self.call(f.cmd_handoff, id="TEST-1", result="PASS", summary="done")
+        self.advance("WAITING_FOR_SPEC_APPROVAL")
+        self.assertIsNone(self.state()["handoff"])
+
+    def test_spec_change_during_build_has_reapproval_route(self):
+        self.triage("SPEC")
+        self.advance("PLANNING")
+        directory = f.item_dir("TEST-1")
+        (directory / "PRODUCT.md").write_text("product v1")
+        (directory / "TECH.md").write_text("tech v1")
+        run = self.dispatch("Spec")
+        self.report(run, {"agent": "spec", "documents": ["PRODUCT.md", "TECH.md"]})
+        self.advance("WAITING_FOR_SPEC_APPROVAL")
+        self.call(f.cmd_approve_spec, id="TEST-1", by="human")
+        self.advance("BUILDING")
+        self.implement_report()
+        (directory / "PRODUCT.md").write_text("product v2")
+        self.advance("WAITING_FOR_SPEC_APPROVAL")
+        self.call(f.cmd_approve_spec, id="TEST-1", by="human")
+        self.advance("BUILDING")
+        with self.assertRaisesRegex(f.Invalid, "fresh implementation report"):
+            self.advance("REVIEWING")
+
+    def test_interrupted_handoff_artifacts_recover(self):
+        self.build()
+        run, payload = self.review()
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run, payload = self.verify()
+        self.report(run, payload)
+        self.advance("READY_FOR_HANDOFF")
+        real_atomic = f.atomic
+
+        def fail_journal(path, content):
+            if path == f.JOURNAL / "TEST-1.md":
+                raise OSError("injected journal failure")
+            return real_atomic(path, content)
+
+        with mock.patch.object(f, "atomic", side_effect=fail_journal):
+            with self.assertRaisesRegex(OSError, "injected journal failure"):
+                self.call(f.cmd_handoff, id="TEST-1", result="PASS", summary="done")
+            with self.assertRaisesRegex(OSError, "injected journal failure"):
+                self.advance("COMPLETE")
+        self.assertEqual(json.loads((f.item_dir("TEST-1") / "state.json").read_text())["handoff"]["result"], "PASS")
+        f.load("TEST-1")
+        journal = f.JOURNAL / "TEST-1.md"
+        public = f.item_dir("TEST-1") / "PUBLIC_NOTES.md"
+        self.assertTrue(journal.is_file() and public.is_file())
+        public.unlink()
+        f.load("TEST-1")
+        self.assertTrue(public.is_file())
+        report_mirror = f.item_dir("TEST-1") / "reports" / f"{run}.json"
+        report_mirror.unlink()
+        f.load("TEST-1")
+        self.assertTrue(report_mirror.is_file())
+        self.advance("COMPLETE")
+
+    def test_interrupted_public_note_write_recovers(self):
+        self.build()
+        run, payload = self.review()
+        self.report(run, payload)
+        self.advance("VERIFYING")
+        run, payload = self.verify()
+        self.report(run, payload)
+        self.advance("READY_FOR_HANDOFF")
+        real_atomic = f.atomic
+
+        def fail_public(path, content):
+            if path == f.item_dir("TEST-1") / "PUBLIC_NOTES.md":
+                raise OSError("injected public note failure")
+            return real_atomic(path, content)
+
+        with mock.patch.object(f, "atomic", side_effect=fail_public):
+            with self.assertRaisesRegex(OSError, "injected public note failure"):
+                self.call(f.cmd_handoff, id="TEST-1", result="PASS", summary="done")
+            with self.assertRaisesRegex(OSError, "injected public note failure"):
+                self.advance("COMPLETE")
+        self.assertEqual(json.loads((f.item_dir("TEST-1") / "state.json").read_text())["state"], "READY_FOR_HANDOFF")
+        f.load("TEST-1")
+        self.advance("COMPLETE")
+        self.assertTrue((f.item_dir("TEST-1") / "PUBLIC_NOTES.md").is_file())
 
 
 if __name__ == "__main__":
