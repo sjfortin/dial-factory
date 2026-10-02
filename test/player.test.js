@@ -16,8 +16,11 @@ function setup() {
   const status = new ElementDouble();
   audio.playCalls = 0;
   audio.pauseCalls = 0;
+  audio.loadCalls = 0;
+  audio.error = null;
   audio.play = () => { audio.playCalls++; return Promise.resolve(); };
   audio.pause = () => { audio.pauseCalls++; audio.fire('pause'); };
+  audio.load = () => { audio.loadCalls++; audio.error = null; };
   installPlayer(audio, toggle, status);
   return { audio, toggle, status };
 }
@@ -34,26 +37,41 @@ test('Play, Pause while buffering, and resume use direct audio controls', () => 
   toggle.fire('click');
   audio.fire('playing');
   assert.equal(audio.playCalls, 2);
+  assert.equal(audio.loadCalls, 0);
   assert.equal(status.dataset.state, 'playing');
   assert.equal(toggle.textContent, 'Pause');
   toggle.fire('click');
   assert.equal(status.dataset.state, 'paused');
 });
 
-test('play rejection and media error expose retryable errors', async () => {
+test('play rejection exposes a retryable error', async () => {
   const { audio, toggle, status } = setup();
   audio.play = () => Promise.reject(new Error('blocked'));
   toggle.fire('click');
   await Promise.resolve();
   assert.equal(status.dataset.state, 'error');
   assert.equal(toggle.textContent, 'Play');
-
-  audio.play = () => Promise.resolve();
   toggle.fire('click');
+  assert.equal(audio.loadCalls, 0);
+});
+
+test('retry resets a retained media source error before playing', async () => {
+  const { audio, toggle, status } = setup();
+  audio.play = () => {
+    audio.playCalls++;
+    return audio.error ? Promise.reject(new Error('source unsupported')) : Promise.resolve();
+  };
+  toggle.fire('click');
+  audio.error = { code: 4 };
   audio.fire('error');
   assert.equal(status.dataset.state, 'error');
-  assert.equal(toggle.textContent, 'Play');
+  assert.equal(audio.error.code, 4);
   toggle.fire('click');
+  await Promise.resolve();
+  assert.equal(audio.loadCalls, 1);
+  assert.equal(audio.error, null);
+  assert.equal(audio.playCalls, 2);
+  assert.equal(status.dataset.state, 'buffering');
   audio.fire('playing');
   assert.equal(status.dataset.state, 'playing');
 });
