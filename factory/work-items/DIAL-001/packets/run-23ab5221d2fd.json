@@ -1,0 +1,33 @@
+{
+  "agent": "/root/dial_001_resume",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "TypeScript MCP server runs.",
+    "MCP Inspector connects successfully.",
+    "Test tool returns one known station.",
+    "UI resource renders inside ChatGPT.",
+    "Play initiates audio.",
+    "Pause stops audio.",
+    "Playback can resume.",
+    "Failure produces a clean error state.",
+    "CSP/network behavior is documented.",
+    "Persistence behavior is documented.",
+    "PiP feasibility is investigated.",
+    "Verification evidence is captured."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Determine whether Dial can reliably play an HTTPS internet-radio stream from an MCP Apps UI rendered inside ChatGPT.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-23ab5221d2fd",
+  "spec": {
+    "at": "2026-10-02T05:48:17+00:00",
+    "by": "FOREMAN",
+    "mode": "skipped",
+    "reason": "The owner supplied twelve observable acceptance criteria and explicit non-goals; Triage found no product ambiguity. Build only one-station proof. ChatGPT access is a verification blocker, not an unresolved requirement."
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-001"
+}
