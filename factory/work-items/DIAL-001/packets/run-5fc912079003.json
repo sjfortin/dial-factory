@@ -1,0 +1,30 @@
+{
+  "agent": "/root/dial_001_triage",
+  "candidate": null,
+  "contract": "factory/agents/triage/agent.md",
+  "criteria": [
+    "TypeScript MCP server runs.",
+    "MCP Inspector connects successfully.",
+    "Test tool returns one known station.",
+    "UI resource renders inside ChatGPT.",
+    "Play initiates audio.",
+    "Pause stops audio.",
+    "Playback can resume.",
+    "Failure produces a clean error state.",
+    "CSP/network behavior is documented.",
+    "Persistence behavior is documented.",
+    "PiP feasibility is investigated.",
+    "Verification evidence is captured."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Determine whether Dial can reliably play an HTTPS internet-radio stream from an MCP Apps UI rendered inside ChatGPT.",
+  "requested_model": "gpt-6-luna",
+  "requested_reasoning": "medium",
+  "role": "Triage",
+  "run_id": "run-5fc912079003",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "work_item": "DIAL-001"
+}

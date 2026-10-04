@@ -1,0 +1,20 @@
+{
+  "name": "dial-one-station-proof",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && esbuild src/player.ts --bundle --format=iife --platform=browser --outfile=dist/player.js",
+    "start": "node dist/server.js",
+    "test": "npm run build && node --test test/*.test.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^1.0.0",
+    "@modelcontextprotocol/sdk": "1.31.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "esbuild": "^0.25.12",
+    "typescript": "^5.9.0"
+  }
+}

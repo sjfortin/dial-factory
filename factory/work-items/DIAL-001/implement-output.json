@@ -1,0 +1,25 @@
+{
+  "work_item": "DIAL-001",
+  "run_id": "run-d7771bdbdc1b",
+  "agent": "/root/dial_001_resume",
+  "change_summary": "Built a one-station TypeScript Streamable HTTP MCP server with an MCP Apps radio UI for Radio Paradise, explicit Play/Pause/resume and retryable error states, focused tests, and reproducible host verification notes.",
+  "decisions": [
+    "Used Radio Paradise's HTTPS 128 kbps MP3 stream as the sole station; an HTTPS HEAD probe on 2026-10-03 returned 200 OK, audio/mpeg, Access-Control-Allow-Origin: *, and no redirect.",
+    "The audio element fetches the station stream directly. The UI resource declares the stream origin in resourceDomains and no connectDomains; host media CSP still requires live verification.",
+    "Player state is per UI instance and resets on remount. Resume rejoins the live stream; no durable state or background playback behavior is claimed.",
+    "Used the MCP Apps App bridge and versioned ui://dial/radio-v2.html for the bundled UI."
+  ],
+  "candidate_commit": "366a0e03ec2aaa402228530330a3b128aa68df67",
+  "tests": [
+    "npm test passed 4/4 on 2026-10-03 with localhost socket access: Play/Pause while buffering/resume, rejected play/media error retry, late rejection after Pause, and HTTP MCP connect/list/call/resource integration.",
+    "MCP Inspector CLI connected to http://127.0.0.1:8787/mcp; tools/list returned open_radio with ui://dial/radio-v2.html; tools/call returned Radio Paradise with https://stream.radioparadise.com/mp3-128.",
+    "npm run build compiled TypeScript and bundled the browser UI; git diff --check passed before commit.",
+    "HTTPS HEAD probe of https://stream.radioparadise.com/mp3-128 returned HTTP 200, Content-Type audio/mpeg, and Access-Control-Allow-Origin: *; this is network evidence, not audible playback evidence."
+  ],
+  "ambiguities": [
+    "ChatGPT iframe media CSP behavior, audible playback reliability, and PiP availability/audio continuity cannot be inferred from local tests or endpoint headers."
+  ],
+  "blockers": [
+    "No connected ChatGPT test host or publicly reachable HTTPS development endpoint is available, so UI rendering in ChatGPT, audible Play/Pause/resume, media error presentation in the host, and PiP behavior remain unobserved. README.md gives exact manual checks for Verify."
+  ]
+}

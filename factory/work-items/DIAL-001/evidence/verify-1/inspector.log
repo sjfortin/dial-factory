@@ -1,0 +1,16 @@
+Independent MCP Inspector CLI checks against local server at http://127.0.0.1:8787/mcp
+
+1. Command: npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/list
+Exit: 0
+Observed: tools array contains open_radio; resourceUri is ui://dial/radio-v2.html.
+
+2. Command: npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/call --tool-name open_radio
+Exit: 0
+Observed content: One known station: Radio Paradise (Radio Paradise), MP3 128 kbps. Source: https://radioparadise.com/listen/stream-links.
+Observed structuredContent: name=Radio Paradise; streamUrl=https://stream.radioparadise.com/mp3-128; format=MP3 128 kbps.
+
+3. Command: npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method resources/read --uri ui://dial/radio-v2.html
+Exit: 0
+Observed: resource URI ui://dial/radio-v2.html; MIME text/html;profile=mcp-app; connectDomains=[]; resourceDomains=[https://stream.radioparadise.com]. Resource HTML includes the player and bundled app bridge initialization. The resource body is intentionally summarized here because Inspector prints the entire bundled JavaScript resource.
+
+The local HTTP endpoint and resource result do not demonstrate ChatGPT host rendering or audible playback.

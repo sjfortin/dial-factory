@@ -1,0 +1,10 @@
+Candidate ac6ae0299532960c0ceea24e71b127889be19ab1
+Command: npm test
+Build: TypeScript and esbuild succeeded; dist/player.js 978.6kb.
+Tests: 5 passed, 0 failed.
+  Play, Pause while buffering, and resume use direct audio controls: passed
+  play rejection exposes a retryable error: passed
+  retry resets a retained media source error before playing: passed
+  late rejection after Pause cannot overwrite paused state: passed
+  HTTP MCP tool returns the station and its renderable UI resource: passed
+The first sandboxed attempt could not open its local listener. This successful rerun used approved localhost socket access.

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dial radio proof</title>
+  <style>
+    body { font: 16px system-ui, sans-serif; margin: 0; color: #17201c; background: #f4f8f3; }
+    main { max-width: 26rem; padding: 1.25rem; }
+    h1 { font-size: 1.25rem; margin: 0 0 .25rem; }
+    p { margin: .35rem 0 1rem; }
+    button { font: inherit; padding: .65rem 1.25rem; border: 0; border-radius: .5rem; color: white; background: #165c40; cursor: pointer; }
+    button:disabled { opacity: .6; cursor: wait; }
+    button:focus-visible { outline: 3px solid #e0a821; outline-offset: 3px; }
+    #status { min-height: 1.5rem; }
+    #status[data-state="error"] { color: #a02020; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Radio Paradise</h1>
+    <p>Live eclectic radio</p>
+    <button id="toggle" type="button">Play</button>
+    <p id="status" role="status" aria-live="polite" data-state="idle">Ready to play</p>
+    <audio id="radio" preload="none" src="https://stream.radioparadise.com/mp3-128"></audio>
+  </main>
+  <script>/* PLAYER_SCRIPT */</script>
+</body>
+</html>
