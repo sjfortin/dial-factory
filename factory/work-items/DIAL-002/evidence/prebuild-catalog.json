@@ -1,0 +1,72 @@
+{
+  "observed_at": "2026-10-04T07:41:56.228583+00:00",
+  "source": "de1.api.radio-browser.info",
+  "query": "order=votes&reverse=true&offset=0&limit=50&hidebroken=true",
+  "evidence_limit": "catalog metadata only; no host/audio claim",
+  "countries": {
+    "FR": {
+      "provider_rows": 50,
+      "eligible": [
+        {
+          "id": "7a3a3989-8f26-44f7-9ae5-fa91e5cf4f9d",
+          "name": "RMC FR",
+          "streamUrl": "https://audio.bfmtv.com/rmcradio_128.mp3",
+          "origin": "https://audio.bfmtv.com"
+        },
+        {
+          "id": "3e6e3252-dd81-4b07-baba-b61bf96cd457",
+          "name": "BFM radio",
+          "streamUrl": "https://audio.bfmtv.com/bfmradio_128.mp3",
+          "origin": "https://audio.bfmtv.com"
+        },
+        {
+          "id": "12e68964-5928-4623-b82e-4bf9a4963780",
+          "name": "RMC Info Talk Sport ",
+          "streamUrl": "https://audio.bfmtv.com/rmcradio_128.mp3?aw_0_1st.playerId=RMC_audio_web&aggregator=RMC_audio_web",
+          "origin": "https://audio.bfmtv.com"
+        }
+      ]
+    },
+    "GB": {
+      "provider_rows": 50,
+      "eligible": [
+        {
+          "id": "c4077677-dc2f-11e9-a8ba-52543be04c81",
+          "name": "Heart 80s",
+          "streamUrl": "https://media-ssl.musicradio.com/Heart80sMP3",
+          "origin": "https://media-ssl.musicradio.com"
+        },
+        {
+          "id": "e7205cd4-dc30-11e9-a8ba-52543be04c81",
+          "name": "Heart 70s",
+          "streamUrl": "https://media-ssl.musicradio.com/Heart70sMP3",
+          "origin": "https://media-ssl.musicradio.com"
+        },
+        {
+          "id": "0a1e0bb0-dc37-11e9-a8ba-52543be04c81",
+          "name": "Gold",
+          "streamUrl": "https://media-ssl.musicradio.com/GoldMP3",
+          "origin": "https://media-ssl.musicradio.com"
+        },
+        {
+          "id": "478fd7f4-dc36-11e9-a8ba-52543be04c81",
+          "name": "Smooth Chill",
+          "streamUrl": "https://media-ssl.musicradio.com/ChillMP3",
+          "origin": "https://media-ssl.musicradio.com"
+        },
+        {
+          "id": "fa76f16f-dc31-11e9-a8ba-52543be04c81",
+          "name": "Heart Dance",
+          "streamUrl": "https://media-ssl.musicradio.com/HeartDanceMP3",
+          "origin": "https://media-ssl.musicradio.com"
+        },
+        {
+          "id": "52bb00fe-dc31-11e9-a8ba-52543be04c81",
+          "name": "Heart 90s",
+          "streamUrl": "https://media-ssl.musicradio.com/Heart90sMP3",
+          "origin": "https://media-ssl.musicradio.com"
+        }
+      ]
+    }
+  }
+}

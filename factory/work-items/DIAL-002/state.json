@@ -104,6 +104,25 @@
       "seq": 10,
       "stage": "WAITING_FOR_SPEC_APPROVAL",
       "work_item": "DIAL-002"
+    },
+    {
+      "at": "2026-10-04T07:42:06+00:00",
+      "from_state": "WAITING_FOR_SPEC_APPROVAL",
+      "kind": "advanced",
+      "seq": 11,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial_002_implement",
+      "at": "2026-10-04T07:42:06+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-ee1871d24212",
+      "seq": 12
     }
   ],
   "final_result": null,
@@ -223,6 +242,28 @@
       "started_at": "2026-10-04T06:51:25+00:00",
       "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": null,
+      "ended_at": null,
+      "harness": "current-collaboration",
+      "id": "run-ee1871d24212",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": null,
+      "retry_of": null,
+      "role": "Implement",
+      "selection_reason": "Owner approved exact specs; merged baseline synchronized and fresh FR/GB catalog gate passed.",
+      "started_at": "2026-10-04T07:42:06+00:00",
+      "status": "RUNNING",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
@@ -234,7 +275,7 @@
     },
     "mode": "approved"
   },
-  "state": "WAITING_FOR_SPEC_APPROVAL",
+  "state": "BUILDING",
   "title": "Find stations by country and play a selected station",
-  "updated_at": "2026-10-04T07:40:24+00:00"
+  "updated_at": "2026-10-04T07:42:06+00:00"
 }
