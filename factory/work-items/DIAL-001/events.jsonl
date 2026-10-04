@@ -34,3 +34,5 @@
 {"at": "2026-10-04T06:32:57+00:00", "attempt": 3, "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1", "kind": "reported", "result": "ACCEPT", "role": "Review", "run_id": "run-777c2f877977", "seq": 34}
 {"at": "2026-10-04T06:32:57+00:00", "from_state": "REVIEWING", "kind": "advanced", "seq": 35, "terminal_failure_reason": null, "to_state": "VERIFYING"}
 {"agent": "/root/dial_host_verify", "at": "2026-10-04T06:32:58+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-luna", "requested_reasoning": "medium", "role": "Verify", "run_id": "run-b3bbcb9b8a81", "seq": 36}
+{"at": "2026-10-04T06:37:40+00:00", "attempt": 3, "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1", "kind": "reported", "result": "BLOCKED", "role": "Verify", "run_id": "run-b3bbcb9b8a81", "seq": 37}
+{"at": "2026-10-04T06:37:41+00:00", "from_state": "VERIFYING", "kind": "advanced", "seq": 38, "terminal_failure_reason": null, "to_state": "WAITING_FOR_HUMAN"}

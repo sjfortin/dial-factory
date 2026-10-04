@@ -1,0 +1,12 @@
+Candidate ac6ae0299532960c0ceea24e71b127889be19ab1
+Endpoint: http://127.0.0.1:8787/mcp
+
+Command: npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/list
+Exit: 0
+Observed: open_radio listed with resourceUri ui://dial/radio-v2.html.
+
+Command: npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/call --tool-name open_radio
+Exit: 0
+Observed: structuredContent returned station Radio Paradise, streamUrl https://stream.radioparadise.com/mp3-128, format MP3 128 kbps.
+
+Separately, evidence/verify-3/resource-http.json records a direct SDK MCP client read of the actual served UI resource, exact script/bundle equality, and successful syntax parsing. Local HTTP evidence does not establish ChatGPT host rendering or audible playback.

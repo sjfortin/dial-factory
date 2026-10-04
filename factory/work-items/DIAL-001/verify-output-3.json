@@ -1,0 +1,82 @@
+{
+  "work_item": "DIAL-001",
+  "run_id": "run-b3bbcb9b8a81",
+  "agent": "/root/dial_host_verify",
+  "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+  "attempt": 3,
+  "criteria": [
+    {
+      "criterion": "TypeScript MCP server runs.",
+      "method": "Ran npm test, which built the TypeScript server and browser bundle and passed the HTTP integration test; separately started the candidate with npm start on localhost.",
+      "result": "PASS",
+      "evidence": "evidence/verify-3/npm-test.log records successful build and 5/5 tests. The independent MCP HTTP fetch recorded in evidence/verify-3/resource-http.json confirms the server was listening and serving requests."
+    },
+    {
+      "criterion": "MCP Inspector connects successfully.",
+      "method": "Ran MCP Inspector CLI tools/list against the candidate's live local HTTP endpoint.",
+      "result": "PASS",
+      "evidence": "evidence/verify-3/inspector.log records exit 0 and open_radio with resourceUri ui://dial/radio-v2.html."
+    },
+    {
+      "criterion": "Test tool returns one known station.",
+      "method": "Called open_radio through MCP Inspector and independently through an SDK HTTP client.",
+      "result": "PASS",
+      "evidence": "Inspector output in evidence/verify-3/inspector.log and the independent response in evidence/verify-3/resource-http.json return Radio Paradise at https://stream.radioparadise.com/mp3-128."
+    },
+    {
+      "criterion": "UI resource renders inside ChatGPT.",
+      "method": "Fetched the actual resource over local MCP HTTP and verified its inline script, but no connected ChatGPT host is available for a post-repair rendering check.",
+      "result": "BLOCKED",
+      "evidence": "The resource script equals the bundle byte-for-byte and parses, per evidence/verify-3/resource-http.json. The owner's earlier blank UI observation concerned the prior candidate; it does not establish rendering behavior for this repaired candidate."
+    },
+    {
+      "criterion": "Play initiates audio.",
+      "method": "The local controller test uses audio controls/test doubles; no post-repair ChatGPT host was available to confirm audible playback.",
+      "result": "BLOCKED",
+      "evidence": "evidence/verify-3/npm-test.log records the local Play/controller test passing. Audible playback in the repaired host UI remains unobserved."
+    },
+    {
+      "criterion": "Pause stops audio.",
+      "method": "The local controller test covers Pause while buffering; no post-repair host was available to confirm silence.",
+      "result": "BLOCKED",
+      "evidence": "evidence/verify-3/npm-test.log records the local Pause/controller test passing. Audible silence in ChatGPT remains unobserved."
+    },
+    {
+      "criterion": "Playback can resume.",
+      "method": "The local controller test covers same-element resume; no post-repair host was available to confirm audible resumption.",
+      "result": "BLOCKED",
+      "evidence": "evidence/verify-3/npm-test.log records the local resume/controller test passing. Audible resume in ChatGPT remains unobserved."
+    },
+    {
+      "criterion": "Failure produces a clean error state.",
+      "method": "Local tests cover play rejection and retained-source-error retry, but no post-repair ChatGPT host was available to inspect a rendered failure state.",
+      "result": "BLOCKED",
+      "evidence": "evidence/verify-3/npm-test.log records both retryable error tests passing. Rendered host error state remains unobserved."
+    },
+    {
+      "criterion": "CSP/network behavior is documented.",
+      "method": "Reviewed README.md and inspected the actual served resource's CSP metadata.",
+      "result": "PASS",
+      "evidence": "README.md separates the local HTTPS probe from unobserved host enforcement. evidence/verify-3/resource-http.json records connectDomains=[] and resourceDomains=[https://stream.radioparadise.com]."
+    },
+    {
+      "criterion": "Persistence behavior is documented.",
+      "method": "Reviewed README.md state and lifecycle documentation.",
+      "result": "PASS",
+      "evidence": "README.md documents per-instance state, reset to idle after remount/reload/new conversation, and no storage or background playback guarantee."
+    },
+    {
+      "criterion": "PiP feasibility is investigated.",
+      "method": "Reviewed the documented PiP discussion and proposed host observation procedure.",
+      "result": "PASS",
+      "evidence": "README.md cites OpenAI UI guidance on PiP for ongoing activities, distinguishes browser-native video PiP from this audio player, and leaves account availability and audio continuity as unobserved host questions."
+    },
+    {
+      "criterion": "Verification evidence is captured.",
+      "method": "Saved this full per-criterion report, test summary, Inspector results, and independent actual-resource HTTP verification for the exact candidate.",
+      "result": "PASS",
+      "evidence": "verify-output-3.json, evidence/verify-3/npm-test.log, evidence/verify-3/inspector.log, and evidence/verify-3/resource-http.json bind the results to candidate ac6ae0299532960c0ceea24e71b127889be19ab1."
+    }
+  ],
+  "overall": "BLOCKED"
+}

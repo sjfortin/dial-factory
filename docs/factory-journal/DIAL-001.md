@@ -1,5 +1,7 @@
 # DIAL-001 — verification checkpoint, not final handoff
 
+Later host observation: owner created a custom MCP connection, but saw a blank indefinitely opening player. Verify independently found assembled script corruption caused by dollar substitutions in String.replace. This produced a genuine Verify -> Implement loop. Attempt 3 at ac6ae029 repaired literal bundle insertion and added exact served-script equality/syntax checks. Independent Review accepted. Post-repair host rendering/audio remain unobserved. FI-002 records the verification gap; previous lack-of-access notes below describe the earlier checkpoint.
+
 Objective: prove live HTTPS radio playback inside a ChatGPT MCP Apps UI.
 
 Route: Intake -> Triage -> Spec skipped (owner criteria already bounded) -> Implement -> Review REVISE -> Implement repair -> Review ACCEPT -> Verify BLOCKED -> WAITING_FOR_HUMAN.

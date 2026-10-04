@@ -2,6 +2,8 @@
 
 Not a final result or automatically published post.
 
+Later finding: the first actual host test showed a blank, indefinitely opening UI. Independent Verify reproduced a JavaScript corruption defect in the delivered HTML. The factory routed it through Implement, independent Review and Verify. The accepted repair inserts the bundle literally and tests the actual served script. One verification repair loop is now recorded; post-repair host/audio retest is pending. FI-002 proposes strengthening delivered-artifact checks. Earlier checkpoint metrics below are historical.
+
 What we tried: one HTTPS internet-radio station in an MCP Apps UI, built by real specialized workers.
 
 Factory route: Luna Triage -> Sol Implement -> Astra Review -> Sol repair -> Astra ACCEPT -> Luna Verify BLOCKED. Foreman coordinated and recorded the lifecycle.

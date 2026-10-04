@@ -1,0 +1,18 @@
+{
+  "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+  "method": "Started npm start at http://127.0.0.1:8787/mcp, connected with the MCP SDK StreamableHTTPClientTransport, listed tools, called open_radio, and read the advertised resource URI. Compared the extracted inline script to dist/player.js and parsed it with node:vm.Script.",
+  "uri": "ui://dial/radio-v2.html",
+  "mimeType": "text/html;profile=mcp-app",
+  "htmlBytes": 1003265,
+  "inlineScriptBytes": 1002127,
+  "bundleBytes": 1002127,
+  "scriptByteEqualBundle": true,
+  "scriptParses": true,
+  "templateMarkerAbsent": true,
+  "toolStation": "Radio Paradise",
+  "toolStreamUrl": "https://stream.radioparadise.com/mp3-128",
+  "csp": {
+    "connectDomains": [],
+    "resourceDomains": ["https://stream.radioparadise.com"]
+  }
+}

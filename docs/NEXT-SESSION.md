@@ -1,5 +1,7 @@
 # Resume Dial Factory
 
+Latest host repair: owner connected through Plugins and reported blank UI with indefinite opening text. Verify run run-9211b8b34599 reproduced server replacement-string corruption in delivered JavaScript, overall FAIL. Implement repaired it at `ac6ae0299532960c0ceea24e71b127889be19ab1` (attempt 3), independent Review ACCEPT at run-777c2f877977. Verify run run-b3bbcb9b8a81 checks the actual repaired resource; inspect ledger for current result. Owner must restart/rebuild server, refresh MCP connection and retest host rendering/audio. Earlier access-unavailable notes below are historical; the custom MCP connection is available. No deployed version or post-repair host pass has been confirmed. FI-002 proposes delivered-artifact checks without silently changing factory policy.
+
 Factory scaffold is COMPLETE/PASS at accepted candidate 3652c7e5958e8552892805996740b8d5e3e32760. Independent review-2.json and verify-2.json are under factory/work-items/FACTORY-BOOTSTRAP, with durable evidence and metrics. Initial failed reports remain as history. One revision fixed R1–R4.
 
 Current objective: run DIAL-001 through Triage -> optional Spec -> Implement -> Review -> Verify. Inspect its actual ledger state and Git status before continuing; do not repeat bootstrap. Read AGENTS.md and docs/BOOTSTRAP-CONTRACT.md. Owner approval persists, including appropriate per-worker models and public repository pushes. Never merge/deploy automatically.
