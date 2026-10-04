@@ -9,7 +9,7 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 test('HTTP MCP tool returns the station and its renderable UI resource', async (t) => {
   const port = 20000 + Math.floor(Math.random() * 30000);
   const child = spawn(process.execPath, ['dist/server.js'], {
-    env: { ...process.env, PORT: String(port), HOST: '127.0.0.1' },
+    env: { ...process.env, PORT: String(port), HOST: '127.0.0.1', RADIO_BROWSER_API_ORIGIN: 'http://unavailable.test' },
     stdio: ['ignore', 'pipe', 'pipe']
   });
   t.after(() => child.kill());
@@ -51,4 +51,20 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.equal(inlineScript, readFileSync('dist/player.js', 'utf8'), 'MCP resource preserves the complete player bundle');
   assert.doesNotThrow(() => new Script(inlineScript), 'delivered player script parses as JavaScript');
   assert.deepEqual(resource.contents[0]._meta.ui.csp.resourceDomains, ['https://stream.radioparadise.com']);
+  const findTool = tools.tools.find((entry) => entry.name === 'find_stations_by_country');
+  assert.ok(findTool);
+  const invalid = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'ZZ' } });
+  assert.equal(invalid.structuredContent.status, 'invalid_country');
+  const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
+  assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
+  const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
+  assert.deepEqual(countryResource.contents[0]._meta.ui.csp, {
+    connectDomains: [],
+    resourceDomains: ['https://stream.radioparadise.com', 'https://audio.bfmtv.com', 'https://media-ssl.musicradio.com']
+  });
+  assert.match(countryResource.contents[0].text, /Select a station to listen/);
+  assert.doesNotMatch(countryResource.contents[0].text, /http:\/\/unavailable\.test/);
+  const countryScript = countryResource.contents[0].text.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.equal(countryScript, readFileSync('dist/player.js', 'utf8'));
+  assert.doesNotThrow(() => new Script(countryScript));
 });

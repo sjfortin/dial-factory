@@ -4,8 +4,11 @@ import { fileURLToPath } from 'node:url';
 import { registerAppResource, registerAppTool, RESOURCE_MIME_TYPE } from '@modelcontextprotocol/ext-apps/server';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
+import { z } from 'zod';
+import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
 const UI_URI = 'ui://dial/radio-v2.html';
+const DISCOVERY_URI = 'ui://dial/country-v1.html';
 const STATION = {
   name: 'Radio Paradise',
   provider: 'Radio Paradise',
@@ -16,6 +19,8 @@ const STATION = {
 const playerPath = fileURLToPath(new URL('../public/player.html', import.meta.url));
 const scriptPath = fileURLToPath(new URL('./player.js', import.meta.url));
 const html = readFileSync(playerPath, 'utf8').replace('/* PLAYER_SCRIPT */', () => readFileSync(scriptPath, 'utf8'));
+const discoveryHtml = readFileSync(fileURLToPath(new URL('../public/discovery.html', import.meta.url)), 'utf8').replace('/* PLAYER_SCRIPT */', () => readFileSync(scriptPath, 'utf8'));
+const providerOrigin = process.env.RADIO_BROWSER_API_ORIGIN ?? 'https://de1.api.radio-browser.info';
 
 function makeServer() {
   const server = new McpServer({ name: 'dial-radio-proof', version: '0.1.0' });
@@ -35,6 +40,10 @@ function makeServer() {
       }
     }]
   }));
+  registerAppResource(server, 'Country radio player', DISCOVERY_URI, {}, async () => ({
+    contents: [{ uri: DISCOVERY_URI, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
+      _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS] } } } }]
+  }));
   registerAppTool(server, 'open_radio', {
     title: 'Open one live radio station',
     description: 'Show the Radio Paradise live player. Playback starts only when the user presses Play.',
@@ -44,6 +53,29 @@ function makeServer() {
     content: [{ type: 'text', text: `One known station: ${STATION.name} (${STATION.provider}), ${STATION.format}. Source: ${STATION.sourceUrl}.` }],
     structuredContent: { station: STATION }
   }));
+  registerAppTool(server, 'find_stations_by_country', {
+    title: 'Find radio stations by country',
+    description: 'Find up to 10 playable MP3 stations among the first 50 Radio Browser results for an ISO alpha-2 country code, such as FR.',
+    inputSchema: { countryCode: z.string().optional() },
+    _meta: { ui: { resourceUri: DISCOVERY_URI } }
+  }, async ({ countryCode }) => {
+    const result = await discover(countryCode, { providerOrigin });
+    const message = result.status === 'invalid_country' ? 'Invalid country code. Use an assigned ISO alpha-2 code such as FR.'
+      : result.status === 'provider_unavailable' ? 'Radio Browser is unavailable. Try again.'
+      : result.status === 'no_stations' ? `No stations in the first 50 results for ${result.countryCode}.`
+      : result.status === 'no_supported_stations' ? `No supported stations in the first 50 results for ${result.countryCode}.`
+      : `${result.stations.length} supported stations for ${result.countryCode} from the first 50 results: ${result.stations.map(s => `${s.name} (${s.id}, ${s.codec}${s.bitrate ? ` ${s.bitrate} kbps` : ''})`).join('; ')}. Select one in the player.`;
+    return { content: [{ type: 'text', text: `${message} Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser.` }], structuredContent: result };
+  });
+  registerAppTool(server, 'report_station_click', {
+    title: 'Report a radio play', description: 'Best-effort Radio Browser play count after user playback starts.',
+    inputSchema: { clickToken: z.string() },
+    _meta: { ui: { resourceUri: DISCOVERY_URI, visibility: ['app'] } }
+  }, async ({ clickToken }) => {
+    const counted = await reportClick(clickToken, { providerOrigin });
+    if (!counted) console.warn('Radio Browser click report failed');
+    return { content: [{ type: 'text', text: counted ? 'Play counted.' : 'Play count unavailable; audio is unaffected.' }], structuredContent: { counted } };
+  });
   return server;
 }
 
