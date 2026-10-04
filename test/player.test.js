@@ -130,3 +130,39 @@ function setupWithReports(reports) {
   const player = installPlayer(audio, toggle, status, { onPlaying: (token) => { reports.push(token); throw new Error('reporting unavailable'); } });
   return { audio, toggle, status, player };
 }
+
+test('playing events report once per play attempt, and resume reports again', async () => {
+  const reports = [];
+  const { audio, toggle, status, player } = setupWithReports(reports);
+  player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://audio.bfmtv.com/a.mp3', clickToken: 'a-token' });
+  toggle.fire('click');
+  audio.fire('playing');
+  await Promise.resolve();
+  audio.fire('playing');
+  assert.equal(status.dataset.state, 'playing');
+  assert.deepEqual(reports, ['a-token']);
+  toggle.fire('click');
+  toggle.fire('click');
+  await Promise.resolve();
+  audio.fire('playing');
+  assert.deepEqual(reports, ['a-token', 'a-token']);
+});
+
+test('late old-source events and rejection cannot change a new idle selection', async () => {
+  const reports = [];
+  const { audio, toggle, status, player } = setupWithReports(reports);
+  player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://audio.bfmtv.com/a.mp3', clickToken: 'a-token' });
+  let rejectOld;
+  audio.play = () => new Promise((_resolve, reject) => { rejectOld = reject; });
+  toggle.fire('click');
+  player.selectStation({ id: 'b', name: 'B', streamUrl: 'https://media-ssl.musicradio.com/b', clickToken: 'b-token' });
+  rejectOld(new Error('late old source'));
+  audio.fire('playing');
+  audio.fire('waiting');
+  audio.fire('stalled');
+  audio.fire('error');
+  await Promise.resolve();
+  assert.equal(status.dataset.state, 'idle');
+  assert.equal(audio.src, 'https://media-ssl.musicradio.com/b');
+  assert.deepEqual(reports, []);
+});

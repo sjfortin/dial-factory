@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { Script } from 'node:vm';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+import { exerciseDeliveredScript } from './ui-harness.js';
 
 test('HTTP MCP tool returns the station and its renderable UI resource', async (t) => {
   const port = 20000 + Math.floor(Math.random() * 30000);
@@ -67,4 +68,6 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const countryScript = countryResource.contents[0].text.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.equal(countryScript, readFileSync('dist/player.js', 'utf8'));
   assert.doesNotThrow(() => new Script(countryScript));
+  await exerciseDeliveredScript(countryScript);
+  assert.deepEqual(tools.tools.find((entry) => entry.name === 'report_station_click')?._meta?.ui?.visibility, ['app']);
 });

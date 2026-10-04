@@ -56,23 +56,32 @@ export function tokenStationId(token: unknown, now = Date.now()): string | null 
 async function boundedJson(url: string, fetcher: Fetch, timeoutMs: number): Promise<unknown> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
+  let response: Response | undefined;
+  let reader: ReadableStreamDefaultReader<Uint8Array> | undefined;
   try {
-    const response = await fetcher(url, { signal: controller.signal, headers: { 'user-agent': 'DialRadioProof/0.2 (MCP country discovery)', accept: 'application/json' } });
+    response = await fetcher(url, { signal: controller.signal, redirect: 'error', headers: { 'user-agent': 'DialRadioProof/0.2 (MCP country discovery)', accept: 'application/json' } });
     if (!response.ok || !response.body) throw new Error('Provider HTTP failure');
     const declared = Number(response.headers.get('content-length'));
     if (declared > MAX_BYTES) throw new Error('Provider response too large');
-    const reader = response.body.getReader();
+    reader = response.body.getReader();
     const chunks: Uint8Array[] = [];
     let size = 0;
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
       size += value.length;
-      if (size > MAX_BYTES) { await reader.cancel(); throw new Error('Provider response too large'); }
+      if (size > MAX_BYTES) throw new Error('Provider response too large');
       chunks.push(value);
     }
     return JSON.parse(Buffer.concat(chunks).toString('utf8'));
-  } finally { clearTimeout(timer); }
+  } finally {
+    clearTimeout(timer);
+    controller.abort();
+    // Start cancellation without letting a stalled provider's cancel promise
+    // extend the request beyond its deadline.
+    if (reader) void reader.cancel().catch(() => {});
+    else if (response?.body) void response.body.cancel().catch(() => {});
+  }
 }
 
 export async function discover(input: unknown, options: { fetcher?: Fetch; providerOrigin?: string; timeoutMs?: number; now?: number } = {}): Promise<Discovery> {
@@ -91,14 +100,15 @@ export async function discover(input: unknown, options: { fetcher?: Fetch; provi
     for (const row of rows) {
       if (!row || typeof row !== 'object') continue;
       const item = row as Record<string, unknown>;
-      const id = item.stationuuid;
+      const rawId = item.stationuuid;
       const name = item.name;
       const code = typeof item.countrycode === 'string' ? item.countrycode.trim().toUpperCase() : '';
       const codec = typeof item.codec === 'string' ? item.codec.trim().toUpperCase() : '';
       const resolved = typeof item.url_resolved === 'string' && item.url_resolved.trim() ? item.url_resolved : item.url;
       const media = streamUrl(resolved);
-      if (typeof id !== 'string' || !UUID.test(id) || typeof name !== 'string' || !name.trim() || code !== countryCode || codec !== 'MP3' || !media || ids.has(id.toLowerCase())) continue;
-      ids.add(id.toLowerCase());
+      if (typeof rawId !== 'string' || !UUID.test(rawId) || typeof name !== 'string' || !name.trim() || code !== countryCode || codec !== 'MP3' || !media || ids.has(rawId.toLowerCase())) continue;
+      const id = rawId.toLowerCase();
+      ids.add(id);
       const station: Station = { id, name: name.trim().slice(0, 120), countryCode, streamUrl: media.href, origin: media.origin, codec: 'MP3', clickToken: tokenFor(id, (options.now ?? Date.now()) + 5 * 60_000) };
       if (typeof item.bitrate === 'number' && Number.isInteger(item.bitrate) && item.bitrate > 0 && item.bitrate <= 1000) station.bitrate = item.bitrate;
       stations.push(station);
@@ -116,9 +126,9 @@ export async function reportClick(token: unknown, options: { fetcher?: Fetch; pr
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), options.timeoutMs ?? 1500);
     try {
-      const response = await (options.fetcher ?? fetch)(`${origin}/json/url/${id}`, { signal: controller.signal, headers: { 'user-agent': 'DialRadioProof/0.2 (MCP playback count)' } });
-      await response.body?.cancel();
+      const response = await (options.fetcher ?? fetch)(`${origin}/json/url/${id}`, { signal: controller.signal, redirect: 'error', headers: { 'user-agent': 'DialRadioProof/0.2 (MCP playback count)' } });
+      if (response.body) void response.body.cancel().catch(() => {});
       return response.ok;
-    } finally { clearTimeout(timer); }
+    } finally { clearTimeout(timer); controller.abort(); }
   } catch { return false; }
 }

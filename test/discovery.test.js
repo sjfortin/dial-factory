@@ -63,3 +63,55 @@ test('click token is signed, expires, and only forwards derived UUID', async () 
   assert.equal(await reportClick('not-a-token', { fetcher: async () => { throw new Error('must not call'); } }), false);
   assert.equal(await reportClick(token, { fetcher: async () => new Response('failure', { status: 500 }) }), false);
 });
+
+test('uppercase provider UUID is canonical in the row and usable click token', async () => {
+  const uppercase = 'ABCDEFAB-1234-4000-8000-ABCDEFABCDEF';
+  const result = await discover('FR', { fetcher: async () => json([row(1, { stationuuid: uppercase })]) });
+  assert.equal(result.status, 'ok');
+  assert.equal(result.stations[0].id, uppercase.toLowerCase());
+  assert.equal(tokenStationId(result.stations[0].clickToken), uppercase.toLowerCase());
+});
+
+test('discovery and click requests reject redirects at the fetch boundary', async () => {
+  const result = await discover('FR', { fetcher: async (_url, init) => {
+    assert.equal(init.redirect, 'error');
+    throw new TypeError('redirect blocked');
+  } });
+  assert.equal(result.status, 'provider_unavailable');
+  const token = (await discover('FR', { fetcher: async () => json([row(1)]) })).stations[0].clickToken;
+  assert.equal(await reportClick(token, { fetcher: async (_url, init) => {
+    assert.equal(init.redirect, 'error');
+    throw new TypeError('redirect blocked');
+  } }), false);
+});
+
+test('HTTP and declared-oversize early exits abort and cancel response bodies', async () => {
+  for (const { status, headers } of [{ status: 503, headers: {} }, { status: 200, headers: { 'content-length': '512001' } }]) {
+    let signal;
+    let cancellations = 0;
+    const result = await discover('FR', { fetcher: async (_url, init) => {
+      signal = init.signal;
+      return new Response(new ReadableStream({ cancel() { cancellations++; } }), { status, headers });
+    } });
+    assert.equal(result.status, 'provider_unavailable');
+    assert.equal(signal.aborted, true);
+    assert.equal(cancellations, 1);
+  }
+});
+
+test('slow provider fetch and slow body terminate at the discovery timeout', async () => {
+  const timeoutMs = 20;
+  const slowFetch = await discover('FR', { timeoutMs, fetcher: async (_url, init) => new Promise((_resolve, reject) => {
+    init.signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true });
+  }) });
+  assert.equal(slowFetch.status, 'provider_unavailable');
+  let bodyAborted = false;
+  const slowBody = await discover('FR', { timeoutMs, fetcher: async (_url, init) => {
+    const body = new ReadableStream({ start(controller) {
+      init.signal.addEventListener('abort', () => { bodyAborted = true; controller.error(new Error('aborted')); }, { once: true });
+    } });
+    return new Response(body);
+  } });
+  assert.equal(slowBody.status, 'provider_unavailable');
+  assert.equal(bodyAborted, true);
+});

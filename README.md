@@ -4,11 +4,14 @@ Dial has two local proof tools. `open_radio` preserves the DIAL-001 Radio Paradi
 
 ## Run and inspect locally
 
-Requires Node 20 or newer. Run `npm ci`, `npm test`, then `npm start`. The default MCP endpoint is `http://127.0.0.1:8787/mcp`; `PORT` and `HOST` can be set for local tests. With a second terminal:
+Requires Node 20 or newer. Run `npm ci`, `npm test`, then `npm start`. The default MCP endpoint is `http://127.0.0.1:8787/mcp`; `PORT` and `HOST` can be set for local tests.
+
+`npm start` uses Node's supported `--dns-result-order=ipv4first` and `--no-network-family-autoselection` flags for this server process. On the tested machine, Node's default family selection timed out against Radio Browser while this bounded IPv4-first mode completed. This changes only Dial's Node process, not the host network or media policy. With a second terminal:
 
 ```sh
 npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/list
 npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/call --tool-name find_stations_by_country --tool-arg countryCode=FR
+npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/call --tool-name find_stations_by_country --tool-arg countryCode=GB
 npx --yes @modelcontextprotocol/inspector --cli http://127.0.0.1:8787/mcp --transport http --method tools/call --tool-name find_stations_by_country --tool-arg countryCode=ZZ
 ```
 
@@ -16,7 +19,7 @@ The country resource is `ui://dial/country-v1.html` (`text/html;profile=mcp-app`
 
 ## Provider, media, and CSP
 
-The server queries one Radio Browser HTTPS origin, `https://de1.api.radio-browser.info`, or `RADIO_BROWSER_API_ORIGIN` if set to another HTTPS origin. It requests `/json/stations/bycountrycodeexact/{code}?order=votes&reverse=true&offset=0&limit=50&hidebroken=true`, sends an identifying User-Agent, aborts after 5 seconds, and rejects responses above 512 KB. There is no retry cascade. Provider documentation: [Radio Browser API](https://docs.radio-browser.info/).
+The server queries one Radio Browser HTTPS origin, `https://de1.api.radio-browser.info`, or `RADIO_BROWSER_API_ORIGIN` if set to another HTTPS origin. It requests `/json/stations/bycountrycodeexact/{code}?order=votes&reverse=true&offset=0&limit=50&hidebroken=true`, sends an identifying User-Agent, aborts after 5 seconds, rejects redirects, and rejects responses above 512 KB. There is no retry cascade. Provider documentation: [Radio Browser API](https://docs.radio-browser.info/).
 
 Rows require a UUID, matching country, nonempty name, MP3 codec, and direct HTTPS URL without credentials, custom port, fragment, or playlist suffix. Duplicate IDs are removed in provider order. Only these exact stream origins are playable and appear in the resource's `resourceDomains`: `https://stream.radioparadise.com`, `https://audio.bfmtv.com`, `https://media-ssl.musicradio.com`. The allowlist is fixed in the build; catalog data cannot expand it. `connectDomains` is empty because Radio Browser requests occur on the server. The iframe audio element requests media directly. Dial does not proxy or fetch the stream URL on the server. A redirect to an unlisted origin can be blocked by host CSP and shows a retryable selected-stream error. MP3 metadata and HTTPS do not guarantee stream availability or ChatGPT compatibility.
 
@@ -26,4 +29,4 @@ Dynamic provider names and metadata enter the UI through text nodes only. No pro
 
 Automated tests exercise provider limits/filtering, input and failure states, UI text rendering and selection, audio state transitions, and MCP tool/resource delivery. MCP Inspector establishes the protocol behavior, not audible media playback. A ChatGPT host tester must connect an authorized HTTPS `/mcp` endpoint, refresh the connection for the new resource version, and record visible selection plus audible Play/Pause/resume on two distinct stations in each of FR and GB. Record time, station IDs, URLs, codecs, and origin/redirect observations. A catalog snapshot and local tests do not establish host playback. If live catalog or host media behavior prevents a criterion, report it as blocked with the observed evidence.
 
-The original `open_radio` resource remains `ui://dial/radio-v2.html` with its one-origin CSP. This implementation does not deploy a public endpoint.
+The `open_radio` proof remains available at versioned resource `ui://dial/radio-v3.html` with its one-origin CSP. Its new URI reflects the updated shared player script. This implementation does not deploy a public endpoint.
