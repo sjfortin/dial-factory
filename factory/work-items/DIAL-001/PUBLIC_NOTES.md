@@ -2,6 +2,8 @@
 
 Not a final result or automatically published post.
 
+Latest result: owner manually confirmed rendering and audible Play/Pause/resume in ChatGPT after repair. Verification now records 11 PASS / 1 BLOCKED (controlled rendered failure still pending). Human observations are explicitly attributed; no claim of automated audio verification or final PASS.
+
 Later finding: the first actual host test showed a blank, indefinitely opening UI. Independent Verify reproduced a JavaScript corruption defect in the delivered HTML. The factory routed it through Implement, independent Review and Verify. The accepted repair inserts the bundle literally and tests the actual served script. One verification repair loop is now recorded; post-repair host/audio retest is pending. FI-002 proposes strengthening delivered-artifact checks. Earlier checkpoint metrics below are historical.
 
 What we tried: one HTTPS internet-radio station in an MCP Apps UI, built by real specialized workers.
