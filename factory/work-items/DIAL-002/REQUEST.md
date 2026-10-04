@@ -1,5 +1,7 @@
 # DIAL-002 — next-phase proposal
 
+Integration update: owner explicitly requested PR #1 merge; GitHub confirms merged into factory/bootstrap at 487e865ab0fcc0684b1f01c7cf8e8d8e0ab92f97 on 2026-10-04. The original pending dependency below is resolved remotely. Synchronize the local baseline before BUILDING; exact DIAL-002 spec approval is still required.
+
 Owner approved preparing the DIAL-001 PR and a bounded next-phase proposal. This does not approve implementation of a specification not yet written.
 
 Proposed objective: find stations for a country and play a selected station in the ChatGPT MCP Apps UI. Draft criteria in state.json are an intake proposal; PRODUCT.md and TECH.md should turn them into a reviewable contract before BUILDING.
