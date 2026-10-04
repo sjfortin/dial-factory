@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { Script } from 'node:vm';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 
@@ -43,5 +45,10 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.equal(resource.contents[0].mimeType, 'text/html;profile=mcp-app');
   assert.match(resource.contents[0].text, /<audio[^>]+https:\/\/stream\.radioparadise\.com\/mp3-128/);
   assert.match(resource.contents[0].text, /ui\/initialize/);
+  assert.doesNotMatch(resource.contents[0].text, /\/\* PLAYER_SCRIPT \*\//);
+  const inlineScript = resource.contents[0].text.match(/<script>([\s\S]*?)<\/script>/)?.[1];
+  assert.ok(inlineScript, 'UI resource contains an inline player script');
+  assert.equal(inlineScript, readFileSync('dist/player.js', 'utf8'), 'MCP resource preserves the complete player bundle');
+  assert.doesNotThrow(() => new Script(inlineScript), 'delivered player script parses as JavaScript');
   assert.deepEqual(resource.contents[0]._meta.ui.csp.resourceDomains, ['https://stream.radioparadise.com']);
 });

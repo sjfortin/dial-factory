@@ -15,7 +15,7 @@ const STATION = {
 };
 const playerPath = fileURLToPath(new URL('../public/player.html', import.meta.url));
 const scriptPath = fileURLToPath(new URL('./player.js', import.meta.url));
-const html = readFileSync(playerPath, 'utf8').replace('/* PLAYER_SCRIPT */', readFileSync(scriptPath, 'utf8'));
+const html = readFileSync(playerPath, 'utf8').replace('/* PLAYER_SCRIPT */', () => readFileSync(scriptPath, 'utf8'));
 
 function makeServer() {
   const server = new McpServer({ name: 'dial-radio-proof', version: '0.1.0' });
