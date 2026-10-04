@@ -1,0 +1,8 @@
+{"at": "2026-10-04T06:48:37+00:00", "kind": "created", "seq": 1, "title": "Find stations by country and play a selected station"}
+{"at": "2026-10-04T06:48:37+00:00", "from_state": "INTAKE", "kind": "advanced", "seq": 2, "terminal_failure_reason": null, "to_state": "TRIAGE"}
+{"agent": "/root/dial_002_triage", "at": "2026-10-04T06:48:38+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-luna", "requested_reasoning": "medium", "role": "Triage", "run_id": "run-49542809020c", "seq": 3}
+{"at": "2026-10-04T06:51:25+00:00", "attempt": null, "candidate_commit": null, "kind": "reported", "result": "SPEC", "role": "Triage", "run_id": "run-49542809020c", "seq": 4}
+{"at": "2026-10-04T06:51:25+00:00", "from_state": "TRIAGE", "kind": "advanced", "seq": 5, "terminal_failure_reason": null, "to_state": "PLANNING"}
+{"agent": "/root/dial_002_spec", "at": "2026-10-04T06:51:25+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-sol", "requested_reasoning": "high", "role": "Spec", "run_id": "run-09551a3082fa", "seq": 6}
+{"at": "2026-10-04T07:02:07+00:00", "attempt": null, "candidate_commit": null, "kind": "reported", "result": "REPORTED", "role": "Spec", "run_id": "run-09551a3082fa", "seq": 7}
+{"at": "2026-10-04T07:02:08+00:00", "from_state": "PLANNING", "kind": "advanced", "seq": 8, "terminal_failure_reason": null, "to_state": "WAITING_FOR_SPEC_APPROVAL"}
