@@ -241,6 +241,125 @@
       "seq": 24,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-10-04T06:24:02+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Owner can create a custom MCP connection through Plugins. open_radio says Radio Paradise live player is open, but the player box is empty with indefinite Opening Open one live radio station text. Audible playback has not been reached.",
+      "kind": "intervention",
+      "possible_improvement": "Validate delivered UI JavaScript and host initialization, beyond resource metadata and controller doubles.",
+      "question": "What happened when opening Dial in ChatGPT?",
+      "reason": "Owner supplied actual ChatGPT host observation; tool result succeeds but UI never opens.",
+      "seq": 25,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-001"
+    },
+    {
+      "at": "2026-10-04T06:24:02+00:00",
+      "from_state": "WAITING_FOR_HUMAN",
+      "kind": "advanced",
+      "seq": 26,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial_host_verify",
+      "at": "2026-10-04T06:24:02+00:00",
+      "kind": "dispatched",
+      "replaces": "run-66e3d0d7a50b",
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-9211b8b34599",
+      "seq": 27
+    },
+    {
+      "at": "2026-10-04T06:27:41+00:00",
+      "attempt": 2,
+      "candidate_commit": "c4122ec7c71d745f656510a52c790a272a26c214",
+      "kind": "reported",
+      "result": "FAIL",
+      "role": "Verify",
+      "run_id": "run-9211b8b34599",
+      "seq": 28
+    },
+    {
+      "at": "2026-10-04T06:27:41+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 29,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial_ui_repair",
+      "at": "2026-10-04T06:27:42+00:00",
+      "kind": "dispatched",
+      "replaces": "run-23ab5221d2fd",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-af693e49d5b3",
+      "seq": 30
+    },
+    {
+      "at": "2026-10-04T06:30:02+00:00",
+      "attempt": 3,
+      "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-af693e49d5b3",
+      "seq": 31
+    },
+    {
+      "at": "2026-10-04T06:30:03+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 32,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial_ui_review",
+      "at": "2026-10-04T06:30:03+00:00",
+      "kind": "dispatched",
+      "replaces": "run-9fce6e5dbeaa",
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-777c2f877977",
+      "seq": 33
+    },
+    {
+      "at": "2026-10-04T06:32:57+00:00",
+      "attempt": 3,
+      "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-777c2f877977",
+      "seq": 34
+    },
+    {
+      "at": "2026-10-04T06:32:57+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 35,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial_host_verify",
+      "at": "2026-10-04T06:32:58+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-b3bbcb9b8a81",
+      "seq": 36
     }
   ],
   "final_result": null,
@@ -256,6 +375,17 @@
       "question": "Is a reachable HTTPS development endpoint and ChatGPT custom MCP app access available? Share endpoint URL and access availability only.",
       "reason": "Host verification requires missing ChatGPT access and a reachable HTTPS endpoint.",
       "stage": "VERIFYING",
+      "work_item": "DIAL-001"
+    },
+    {
+      "at": "2026-10-04T06:24:02+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Owner can create a custom MCP connection through Plugins. open_radio says Radio Paradise live player is open, but the player box is empty with indefinite Opening Open one live radio station text. Audible playback has not been reached.",
+      "possible_improvement": "Validate delivered UI JavaScript and host initialization, beyond resource metadata and controller doubles.",
+      "question": "What happened when opening Dial in ChatGPT?",
+      "reason": "Owner supplied actual ChatGPT host observation; tool result succeeds but UI never opens.",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-001"
     }
   ],
@@ -602,9 +732,192 @@
       "role": "Verify",
       "run_id": "run-66e3d0d7a50b",
       "work_item": "DIAL-001"
+    },
+    {
+      "agent": "/root/dial_host_verify",
+      "at": "2026-10-04T06:27:41+00:00",
+      "attempt": 2,
+      "candidate_commit": "c4122ec7c71d745f656510a52c790a272a26c214",
+      "criteria": [
+        {
+          "criterion": "TypeScript MCP server runs.",
+          "evidence": "This run's build succeeded; node --check dist/server.js passed. Prior exact-candidate evidence is evidence/verify-1/npm-test.log, which records the server listening at http://127.0.0.1:8787/mcp. Starting a second listener in this run was denied by the managed sandbox with EPERM, so this run did not independently re-establish the socket.",
+          "method": "Built the exact candidate with npm run build and checked compiled server syntax. The prior candidate-bound local Verify run also started the server successfully.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "MCP Inspector connects successfully.",
+          "evidence": "evidence/verify-1/inspector.log from the previous Verify run records Inspector exit code 0 and a successful tools/list for this same candidate commit.",
+          "method": "Use the prior candidate-bound Inspector connection evidence; this run focused on the newly reported host rendering failure and local resource assembly.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Test tool returns one known station.",
+          "evidence": "evidence/verify-1/inspector.log records open_radio returning Radio Paradise and https://stream.radioparadise.com/mp3-128 for candidate c4122ec7c71d745f656510a52c790a272a26c214.",
+          "method": "Use the prior candidate-bound open_radio Inspector result.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "UI resource renders inside ChatGPT.",
+          "evidence": "Owner reports the custom MCP result shows a blank UI and remains indefinitely at 'Opening Open one live radio station.' The deployed version is unconfirmed. Independent candidate reproduction at evidence/verify-9211b8b34599/resource-assembly.json shows the actual String.replace call injects 19 HTML doctypes into the inline JavaScript, which fails syntax parsing. This is a candidate defect consistent with the host symptom, but does not prove the owner's host used this commit.",
+          "method": "Considered the owner's direct host observation and independently reconstructed the candidate's exact HTML resource assembly from its source and built browser bundle.",
+          "result": "FAIL"
+        },
+        {
+          "criterion": "Play initiates audio.",
+          "evidence": "Owner reports controls unavailable; local reproduction shows malformed inline script. No audible Play result was observed.",
+          "method": "Could not exercise the control because the owner's reported host UI is blank and local resource assembly fails before controls initialize.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Pause stops audio.",
+          "evidence": "Owner reports a blank host UI. No audio or Pause behavior was observed in the host.",
+          "method": "Could not exercise Pause in the host UI because controls are unavailable.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Playback can resume.",
+          "evidence": "Owner reports a blank host UI. No audible resume behavior was observed.",
+          "method": "Could not pause and resume in the host UI because controls are unavailable.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Failure produces a clean error state.",
+          "evidence": "Owner reports controls unavailable. README.md provides the manual iframe failure procedure; this run could not execute it in ChatGPT.",
+          "method": "Could not induce or observe a rendered host stream failure because the UI does not render; prior local controller tests are not host rendering evidence.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "CSP/network behavior is documented.",
+          "evidence": "README.md distinguishes local HTTPS probe results from unobserved host enforcement and documents resourceDomains for stream.radioparadise.com with empty connectDomains. The prior Inspector evidence records those resource metadata values.",
+          "method": "Inspected README.md and prior candidate-bound Inspector resource metadata.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Persistence behavior is documented.",
+          "evidence": "README.md documents per-instance state, idle reset after remount/reload/new conversation, and no storage or background playback guarantee.",
+          "method": "Inspected README.md state and lifecycle documentation.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "PiP feasibility is investigated.",
+          "evidence": "README.md cites OpenAI UI guidance on PiP for ongoing activities, distinguishes audio from browser-native video PiP, and records that account-level availability/audio continuity remain unobserved.",
+          "method": "Reviewed the documented PiP feasibility discussion and proposed host observation procedure.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Verification evidence is captured.",
+          "evidence": "verify-output-9211b8b34599.json and evidence/verify-9211b8b34599/resource-assembly.json; previous same-candidate records are cited per criterion.",
+          "method": "Captured candidate-bound resource assembly reproduction, build and syntax results, host observation attribution, and all criterion dispositions in this run's artifacts.",
+          "result": "PASS"
+        }
+      ],
+      "overall": "FAIL",
+      "role": "Verify",
+      "run_id": "run-9211b8b34599",
+      "work_item": "DIAL-001"
+    },
+    {
+      "agent": "/root/dial_ui_repair",
+      "ambiguities": [
+        "The owner's blank ChatGPT UI was consistent with the reproduced prior candidate defect, but the deployed host version was not confirmed."
+      ],
+      "at": "2026-10-04T06:30:02+00:00",
+      "attempt": 3,
+      "blockers": [
+        "No connected ChatGPT host test was available to observe UI rendering or audible Play/Pause/resume and error behavior after this fix. Host CSP, persistence, and PiP outcomes remain as documented in README.md."
+      ],
+      "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+      "change_summary": "Fixed MCP UI resource assembly so replacement tokens inside the built player bundle remain literal, and added a regression that parses the exact inline script delivered by readResource.",
+      "decisions": [
+        "Use a String.replace callback to insert the built bundle literally; replacement-string metasequences such as $` and $& previously expanded into HTML inside JavaScript.",
+        "Read the UI resource through the MCP client in the integration test, assert the marker is gone and its inline script equals dist/player.js byte for byte, then parse that extracted script with node:vm.Script. The earlier metadata and substring assertions did not detect malformed delivered JavaScript."
+      ],
+      "role": "Implement",
+      "run_id": "run-af693e49d5b3",
+      "tests": [
+        "npm test passed 5/5 on 2026-10-04 with localhost socket access; the HTTP MCP integration test read the actual UI resource, found the complete bundle, and parsed the delivered inline script successfully.",
+        "git diff --check passed before the product commit."
+      ],
+      "work_item": "DIAL-001"
+    },
+    {
+      "agent": "/root/dial_ui_review",
+      "architecture": "Exact candidate changes only src/server.ts and test/server.test.js. Production files in the working tree matched the candidate. The existing one-station architecture, resource registration and host bridge remain unchanged.",
+      "at": "2026-10-04T06:32:57+00:00",
+      "attempt": 3,
+      "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+      "complexity": "One-line production repair and focused integration assertions are proportionate to the defect; no scope expansion.",
+      "correctness": "The String.replace callback inserts the bundle literally, preventing replacement-string metasequences from expanding template HTML into JavaScript. Independent reconstruction with the built bundle demonstrated that the prior string replacement yields a nonidentical script with a syntax error, while the candidate callback yields an exact bundle that parses. No blocking correctness findings in this bounded fix. The prior owner host failure is consistent with the reproduced defect, but neither that deployment's commit nor repaired host behavior is established.",
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": [
+        {
+          "criterion": 1,
+          "review": "Independent npm test built TypeScript and started the HTTP MCP server successfully with approved localhost socket access."
+        },
+        {
+          "criterion": 2,
+          "review": "Actual SDK MCP client connected in integration test. Inspector itself was not rerun by Review; Verify must assess current-candidate evidence."
+        },
+        {
+          "criterion": 3,
+          "review": "Actual HTTP MCP open_radio response returned the expected Radio Paradise station and stream."
+        },
+        {
+          "criterion": 4,
+          "review": "Delivered resource now preserves its full inline script and parses successfully. ChatGPT rendering after repair remains unobserved and is not passed by this review."
+        },
+        {
+          "criterion": 5,
+          "review": "User-click playback controller test passes; audible host playback remains unobserved."
+        },
+        {
+          "criterion": 6,
+          "review": "Pause while buffering and local controller transitions pass; host silence remains unobserved."
+        },
+        {
+          "criterion": 7,
+          "review": "Same-element resume test passes; audible host resume remains unobserved."
+        },
+        {
+          "criterion": 8,
+          "review": "Local retry and retained-error reset tests pass; host error rendering remains unobserved."
+        },
+        {
+          "criterion": 9,
+          "review": "README accurately separates resource CSP declaration and prior endpoint probe from unobserved host enforcement."
+        },
+        {
+          "criterion": 10,
+          "review": "README documents per-instance state, idle reset and unobserved resume timing without a background playback guarantee."
+        },
+        {
+          "criterion": 11,
+          "review": "Documentary PiP investigation remains present; host availability and continuity remain unobserved."
+        },
+        {
+          "criterion": 12,
+          "review": "Independent candidate-bound local evidence is recorded here; Verify must account for missing host evidence explicitly."
+        }
+      ],
+      "role": "Review",
+      "run_id": "run-777c2f877977",
+      "security": "The callback introduces no external input, new endpoint or privilege. Fixed public station, narrow declared media origin and loopback default are unchanged. This review does not approve deployment or infer actual host CSP enforcement.",
+      "tests": {
+        "assessment": "Regression checks the actual served artifact and catches the reproduced failure that metadata/substring assertions missed. It is meaningful transport and syntax coverage, not browser execution or host/audio evidence.",
+        "executed": [
+          "Initial sandbox npm test built successfully but the HTTP test failed under restricted listener access; reran with approved escalation.",
+          "Escalated npm test completed successfully: all five controller and actual HTTP MCP integration tests passed.",
+          "Integration test reads the resource through client.readResource, verifies absence of the template marker, extracts the delivered inline script, compares it byte for byte with dist/player.js and parses it using node:vm.Script.",
+          "Independent prior/candidate assembly reproduction: prior exactBundle=false and parses=false (missing closing parenthesis error); candidate exactBundle=true and parses=true.",
+          "git diff --check passed."
+        ]
+      },
+      "work_item": "DIAL-001"
     }
   ],
-  "resume_stage": "VERIFYING",
+  "resume_stage": null,
   "runs": [
     {
       "agent": "/root/dial_001_triage",
@@ -759,6 +1072,94 @@
       "started_at": "2026-10-02T23:05:17+00:00",
       "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_host_verify",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 219,
+      "ended_at": "2026-10-04T06:27:41+00:00",
+      "harness": "current-collaboration",
+      "id": "run-9211b8b34599",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-66e3d0d7a50b",
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "FAIL",
+      "retry_of": "run-66e3d0d7a50b",
+      "role": "Verify",
+      "selection_reason": "Assess owner-observed blank indefinitely opening ChatGPT UI and diagnose delivered resource without production edits.",
+      "started_at": "2026-10-04T06:24:02+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_ui_repair",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 140,
+      "ended_at": "2026-10-04T06:30:02+00:00",
+      "harness": "current-collaboration",
+      "id": "run-af693e49d5b3",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-23ab5221d2fd",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": "run-23ab5221d2fd",
+      "role": "Implement",
+      "selection_reason": "Repair Verify-proven bundled-script replacement corruption and add actual delivered-resource syntax regression.",
+      "started_at": "2026-10-04T06:27:42+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_ui_review",
+      "attempt": 3,
+      "cost": null,
+      "duration_seconds": 174,
+      "ended_at": "2026-10-04T06:32:57+00:00",
+      "harness": "current-collaboration",
+      "id": "run-777c2f877977",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-9fce6e5dbeaa",
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": "run-9fce6e5dbeaa",
+      "role": "Review",
+      "selection_reason": "Independent review of delivered-script corruption fix and actual-resource regression.",
+      "started_at": "2026-10-04T06:30:03+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_host_verify",
+      "attempt": 3,
+      "cost": null,
+      "duration_seconds": null,
+      "ended_at": null,
+      "harness": "current-collaboration",
+      "id": "run-b3bbcb9b8a81",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": null,
+      "retry_of": "run-9211b8b34599",
+      "role": "Verify",
+      "selection_reason": "Verify actual served script integrity after accepted repair; host retest remains required.",
+      "started_at": "2026-10-04T06:32:58+00:00",
+      "status": "RUNNING",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
@@ -767,7 +1168,7 @@
     "mode": "skipped",
     "reason": "The owner supplied twelve observable acceptance criteria and explicit non-goals; Triage found no product ambiguity. Build only one-station proof. ChatGPT access is a verification blocker, not an unresolved requirement."
   },
-  "state": "WAITING_FOR_HUMAN",
+  "state": "VERIFYING",
   "title": "Prove live internet-radio playback inside ChatGPT MCP Apps UI",
-  "updated_at": "2026-10-02T23:12:41+00:00"
+  "updated_at": "2026-10-04T06:32:58+00:00"
 }

@@ -1,0 +1,24 @@
+{
+  "candidate_commit": "c4122ec7c71d745f656510a52c790a272a26c214",
+  "method": "Built the candidate and reproduced the exact server assembly expression from src/server.ts with public/player.html and dist/player.js. Compared the current String.replace(replacementString) behavior with a callback replacement, and parsed each resulting inline script using Node's Function parser.",
+  "build": "npm run build passed; dist/server.js and dist/player.js pass node --check.",
+  "bundle_bytes": 1002127,
+  "replacement_string_special_sequences": {
+    "$&": 1,
+    "$`": 18,
+    "$'": 0
+  },
+  "actual_server_expression": {
+    "assembled_html_bytes": 1023262,
+    "doctype_copies_in_inline_script": 19,
+    "inline_script_parse": "SyntaxError: missing ) after argument list"
+  },
+  "callback_control": {
+    "expression": "replace(marker, () => bundle)",
+    "assembled_html_bytes": 1003265,
+    "doctype_copies_in_inline_script": 0,
+    "inline_script_parse": "valid",
+    "player_controls_present": true
+  },
+  "conclusion": "The candidate's HTML assembly is malformed because String.replace interprets replacement metasequences in the bundled JavaScript. This independently reproduces a broken UI resource and plausibly explains a blank host UI with an indefinitely opening tool result. The owner reports that the live host displayed that symptom, but has not confirmed which candidate version was deployed."
+}

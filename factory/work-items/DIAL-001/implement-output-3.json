@@ -1,0 +1,21 @@
+{
+  "work_item": "DIAL-001",
+  "run_id": "run-af693e49d5b3",
+  "agent": "/root/dial_ui_repair",
+  "change_summary": "Fixed MCP UI resource assembly so replacement tokens inside the built player bundle remain literal, and added a regression that parses the exact inline script delivered by readResource.",
+  "decisions": [
+    "Use a String.replace callback to insert the built bundle literally; replacement-string metasequences such as $` and $& previously expanded into HTML inside JavaScript.",
+    "Read the UI resource through the MCP client in the integration test, assert the marker is gone and its inline script equals dist/player.js byte for byte, then parse that extracted script with node:vm.Script. The earlier metadata and substring assertions did not detect malformed delivered JavaScript."
+  ],
+  "candidate_commit": "ac6ae0299532960c0ceea24e71b127889be19ab1",
+  "tests": [
+    "npm test passed 5/5 on 2026-10-04 with localhost socket access; the HTTP MCP integration test read the actual UI resource, found the complete bundle, and parsed the delivered inline script successfully.",
+    "git diff --check passed before the product commit."
+  ],
+  "ambiguities": [
+    "The owner's blank ChatGPT UI was consistent with the reproduced prior candidate defect, but the deployed host version was not confirmed."
+  ],
+  "blockers": [
+    "No connected ChatGPT host test was available to observe UI rendering or audible Play/Pause/resume and error behavior after this fix. Host CSP, persistence, and PiP outcomes remain as documented in README.md."
+  ]
+}
