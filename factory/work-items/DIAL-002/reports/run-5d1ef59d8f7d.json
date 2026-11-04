@@ -1,0 +1,54 @@
+{
+  "agent": "/root/dial_002_verify_recover",
+  "at": "2026-11-04T22:21:37+00:00",
+  "attempt": 2,
+  "candidate_commit": "542a2b3",
+  "criteria": [
+    {
+      "criterion": "A user can request stations for a country using an ISO 3166-1 alpha-2 country code.",
+      "evidence": "Prior Verify worker's saved Inspector outputs in evidence/verify-finish/fr.json and gb.json show normalized FR and GB with status ok; zz.json shows invalid_country and no stations. Candidate src/discovery.ts checks assigned codes before fetching; test/discovery.test.js covers lowercase normalization and rejection without a request. These Inspector calls were made by the interrupted run-cfb0b5079830 worker, not repeated in this recovery run.",
+      "method": "Assess preserved independent MCP Inspector tool calls for FR, GB and invalid ZZ against the candidate tool contract and country-validation tests.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "The MCP tool returns a bounded list of stations matching the requested country with enough information to identify and select one.",
+      "evidence": "Saved fr.json reports searchedCount 50, limit 50, and 3 FR MP3 rows; gb.json reports searchedCount 50, limit 50, and 6 GB MP3 rows. Every row has a UUID, name, matching countryCode, HTTPS streamUrl, exact origin, codec, bitrate and clickToken. tools-list.json binds find_stations_by_country to ui://dial/country-v1.html. Candidate test/discovery.test.js covers the 50-result request, 10-row cap, filtering and order. Live counts can change with the provider.",
+      "method": "Inspect saved live structuredContent and tool metadata, then compare with the candidate's bounds and filtering tests.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Selecting a station in the ChatGPT MCP Apps UI updates the player and allows audible playback of a compatible HTTPS stream.",
+      "evidence": "The accepted candidate's delivered-script fixture (test/ui-harness.js and test/server.test.js) exercises selection, source assignment and no autoplay, but neither it nor the preserved Inspector calls observe selection or sound in ChatGPT. No authorized host session or dated audible observation was available. See evidence/verify-finish/host-checklist.md for two FR and two GB stations.",
+      "method": "Inspect delivered-bundle fixture and saved Inspector data; require separate actual ChatGPT host selection and audible output observations.",
+      "result": "BLOCKED"
+    },
+    {
+      "criterion": "Play, Pause and resume remain available for the selected station.",
+      "evidence": "Candidate test/player.test.js and test/ui-harness.js cover controls, switch during buffering, stale events, retry and resume in fixtures; independent Review's escalated npm test passed all 19 tests. Actual ChatGPT Play/Pause/resume and audibility were not observed. The host checklist records the needed observations for two distinct stations in each of FR and GB.",
+      "method": "Assess controller and delivered-script automated coverage, then require actual ChatGPT host Play, silence on Pause, and audible resume for selected stations.",
+      "result": "BLOCKED"
+    },
+    {
+      "criterion": "Invalid country input, no results and provider request failure have clear distinct outcomes.",
+      "evidence": "Saved zz.json returns invalid_country with a two-letter-code example. Candidate src/discovery.ts returns separate no_stations, no_supported_stations and provider_unavailable statuses; src/server.ts and src/station-list.ts give distinct messages, including first-50 scope and retry guidance. test/discovery.test.js covers empty, unsupported, HTTP, malformed, oversized and timeout outcomes; test/station-list.test.js covers rendering of each. Independent Review's escalated npm test passed all 19 tests. No live provider-failure or empty-country Inspector call is claimed.",
+      "method": "Inspect saved ZZ Inspector response and candidate discovery, server and renderer tests for distinct status and messages.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Dynamic station content is rendered safely and network/CSP constraints are documented.",
+      "evidence": "Saved resource-country.json has text/html;profile=mcp-app for ui://dial/country-v1.html, connectDomains [], and exactly the three approved resourceDomains: stream.radioparadise.com, audio.bfmtv.com and media-ssl.musicradio.com over HTTPS. Candidate src/station-list.ts uses textContent; test/station-list.test.js covers hostile text and unsafe URLs. src/discovery.ts rejects redirects and unapproved stream origins. README.md documents provider request, fixed media origins, CSP, direct iframe media requests, click reporting and redirect limitations. Host enforcement of media requests remains unobserved.",
+      "method": "Inspect saved delivered resource metadata, candidate rendering/network paths, README and automated tests.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Appropriate automated tests and MCP Inspector checks pass, and actual ChatGPT selection/playback evidence is recorded separately.",
+      "evidence": "Independent Review run-2bcbd8849cb6 recorded an escalated npm test pass of 19 tests, including HTTP MCP delivery and delivered registered script execution. Prior Verify run-cfb0b5079830 saved tools-list.json, resource-country.json, fr.json, gb.json and zz.json from Inspector; this recovery run assessed those artifacts without rerunning the network checks. Actual ChatGPT selection and audible playback evidence is absent and explicitly separated in evidence/verify-finish/host-checklist.md.",
+      "method": "Reconcile exact-candidate test and saved Inspector evidence; require separately recorded ChatGPT selection and audible playback.",
+      "result": "BLOCKED"
+    }
+  ],
+  "overall": "BLOCKED",
+  "role": "Verify",
+  "run_id": "run-5d1ef59d8f7d",
+  "work_item": "DIAL-002"
+}

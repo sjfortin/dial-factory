@@ -1,0 +1,27 @@
+{
+  "work_item": "DIAL-002",
+  "run_id": "run-6ef2ab0bf305",
+  "agent": "/root/dial_002_repair",
+  "change_summary": "Repaired provider redirect policy, response cleanup and UUID token consistency; versioned the updated open_radio resource; selected a working bounded IPv4-first startup mode; added delivered-bundle bridge and player/provider regressions.",
+  "decisions": [
+    "Both Radio Browser fetch paths use redirect:error, preserving one configured HTTPS provider origin.",
+    "Provider response cleanup aborts the controller and starts body cancellation on early exits without waiting on a potentially stalled cancellation promise.",
+    "Accepted provider UUIDs are canonicalized to lowercase before rendering and signing.",
+    "The changed shared player bundle uses ui://dial/radio-v3.html for open_radio; country-v1 remains its existing resource identity because that delivered script did not change during this repair.",
+    "npm start scopes Node IPv4-first and disabled family autoselection flags to this process."
+  ],
+  "candidate_commit": "542a2b3",
+  "tests": [
+    "npm run build: PASS; TypeScript compile and esbuild bundle completed.",
+    "node --test test/discovery.test.js test/player.test.js test/station-list.test.js test/ui-harness.test.js: PASS; all four test files passed, including executable delivered-bundle bridge and selection fixture.",
+    "Standalone exerciseDeliveredScript(dist/player.js): PASS; the SDK initialized, accepted the tool-result notification, rendered two rows, selected A/B, and sent click calls.",
+    "git diff --check: PASS; approved PRODUCT.md and TECH.md SHA-256 hashes unchanged.",
+    "Sandbox npm test: HTTP server test process failed without assertion details; the other test files passed. Full loopback test outside sandbox remains pending independent execution."
+  ],
+  "ambiguities": [
+    "Actual ChatGPT host visible selection and audible playback across two stations each in FR and GB remain unobserved and require separate Verify/owner evidence."
+  ],
+  "blockers": [
+    "Live full FR/GB Inspector outcomes via default npm start and full local-socket npm test were not available to this sandboxed run; they remain required validation, not claimed passes."
+  ]
+}

@@ -1,0 +1,11 @@
+Candidate: 542a2b3
+Command: npm test
+Environment: Node v24.21.0, npm 11.19.0
+Result: exit 1
+
+Build passed (tsc and esbuild).
+Passed test files: test/discovery.test.js, test/player.test.js,
+test/station-list.test.js, test/ui-harness.test.js.
+Failed test file: test/server.test.js. Node reported "test failed" at
+test/server.test.js:1:1 after about 1.15s; the runner gave no assertion detail.
+Summary: 5 test files, 4 pass, 1 fail.

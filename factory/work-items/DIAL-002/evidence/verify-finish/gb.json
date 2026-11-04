@@ -1,0 +1,76 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "6 supported stations for GB from the first 50 results: Heart 80s (c4077677-dc2f-11e9-a8ba-52543be04c81, MP3 128 kbps); Gold (0a1e0bb0-dc37-11e9-a8ba-52543be04c81, MP3 128 kbps); Heart 70s (e7205cd4-dc30-11e9-a8ba-52543be04c81, MP3 128 kbps); Smooth Chill (478fd7f4-dc36-11e9-a8ba-52543be04c81, MP3 128 kbps); Heart Dance (fa76f16f-dc31-11e9-a8ba-52543be04c81, MP3 128 kbps); Heart 90s (52bb00fe-dc31-11e9-a8ba-52543be04c81, MP3 128 kbps). Select one in the player. Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser."
+    }
+  ],
+  "structuredContent": {
+    "status": "ok",
+    "countryCode": "GB",
+    "searchedCount": 50,
+    "limit": 50,
+    "stations": [
+      {
+        "id": "c4077677-dc2f-11e9-a8ba-52543be04c81",
+        "name": "Heart 80s",
+        "countryCode": "GB",
+        "streamUrl": "https://media-ssl.musicradio.com/Heart80sMP3",
+        "origin": "https://media-ssl.musicradio.com",
+        "codec": "MP3",
+        "clickToken": "c4077677-dc2f-11e9-a8ba-52543be04c81.1793831022900.oEHhrQtOPkQy5buK17E1us0czb6FWhE-CUIxYoQVuO0",
+        "bitrate": 128
+      },
+      {
+        "id": "0a1e0bb0-dc37-11e9-a8ba-52543be04c81",
+        "name": "Gold",
+        "countryCode": "GB",
+        "streamUrl": "https://media-ssl.musicradio.com/GoldMP3",
+        "origin": "https://media-ssl.musicradio.com",
+        "codec": "MP3",
+        "clickToken": "0a1e0bb0-dc37-11e9-a8ba-52543be04c81.1793831022900.vBy-YGomjtglIo4h7aasXKk6U672n3zgCaBlXGwKOHs",
+        "bitrate": 128
+      },
+      {
+        "id": "e7205cd4-dc30-11e9-a8ba-52543be04c81",
+        "name": "Heart 70s",
+        "countryCode": "GB",
+        "streamUrl": "https://media-ssl.musicradio.com/Heart70sMP3",
+        "origin": "https://media-ssl.musicradio.com",
+        "codec": "MP3",
+        "clickToken": "e7205cd4-dc30-11e9-a8ba-52543be04c81.1793831022900.vwtSLd2ChmAhO-9_QdAckzXW3WNdnAcPmpGi8N7Y8rM",
+        "bitrate": 128
+      },
+      {
+        "id": "478fd7f4-dc36-11e9-a8ba-52543be04c81",
+        "name": "Smooth Chill",
+        "countryCode": "GB",
+        "streamUrl": "https://media-ssl.musicradio.com/ChillMP3",
+        "origin": "https://media-ssl.musicradio.com",
+        "codec": "MP3",
+        "clickToken": "478fd7f4-dc36-11e9-a8ba-52543be04c81.1793831022901.RjrPu_dbZOfCoD1jIuPCPeCmTwS0zttWOXjRkP4LeP4",
+        "bitrate": 128
+      },
+      {
+        "id": "fa76f16f-dc31-11e9-a8ba-52543be04c81",
+        "name": "Heart Dance",
+        "countryCode": "GB",
+        "streamUrl": "https://media-ssl.musicradio.com/HeartDanceMP3",
+        "origin": "https://media-ssl.musicradio.com",
+        "codec": "MP3",
+        "clickToken": "fa76f16f-dc31-11e9-a8ba-52543be04c81.1793831022901.oK2TCXlhFGC8fgTHz-Vu7E5ZRFGj2GxoYXf3zmzgl6Y",
+        "bitrate": 128
+      },
+      {
+        "id": "52bb00fe-dc31-11e9-a8ba-52543be04c81",
+        "name": "Heart 90s",
+        "countryCode": "GB",
+        "streamUrl": "https://media-ssl.musicradio.com/Heart90sMP3",
+        "origin": "https://media-ssl.musicradio.com",
+        "codec": "MP3",
+        "clickToken": "52bb00fe-dc31-11e9-a8ba-52543be04c81.1793831022901.sp1LC8ooRlW4E7n0HCLLCIEOQlAX9sUzcLjEFzwL6Jk",
+        "bitrate": 128
+      }
+    ]
+  }
+}

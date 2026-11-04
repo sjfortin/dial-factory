@@ -1,0 +1,15 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Invalid country code. Use an assigned ISO alpha-2 code such as FR. Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser."
+    }
+  ],
+  "structuredContent": {
+    "status": "invalid_country",
+    "countryCode": "",
+    "searchedCount": 0,
+    "limit": 50,
+    "stations": []
+  }
+}

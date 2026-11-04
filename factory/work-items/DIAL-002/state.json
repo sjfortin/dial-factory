@@ -181,6 +181,202 @@
       "role": "Implement",
       "run_id": "run-b8c3acb7545b",
       "seq": 18
+    },
+    {
+      "at": "2026-10-04T08:29:55+00:00",
+      "kind": "run_closed",
+      "reason": "Repeated loss of timely progress during delivered-bundle fixture diagnosis after preserved-context interruption/resume. Preserve partial repairs; escalate replacement to higher reasoning for focused completion.",
+      "result": "BLOCKED",
+      "run_id": "run-b8c3acb7545b",
+      "seq": 19
+    },
+    {
+      "agent": "/root/dial_002_repair",
+      "at": "2026-10-04T08:29:55+00:00",
+      "kind": "dispatched",
+      "replaces": "run-b8c3acb7545b",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Implement",
+      "run_id": "run-6ef2ab0bf305",
+      "seq": 20
+    },
+    {
+      "at": "2026-11-04T21:48:11+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-6ef2ab0bf305",
+      "seq": 21
+    },
+    {
+      "at": "2026-11-04T21:48:11+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 22,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial_002_review_resume",
+      "at": "2026-11-04T21:48:20+00:00",
+      "kind": "dispatched",
+      "replaces": "run-ceffd5154bab",
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-2bcbd8849cb6",
+      "seq": 23
+    },
+    {
+      "at": "2026-11-04T21:51:29+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-2bcbd8849cb6",
+      "seq": 24
+    },
+    {
+      "at": "2026-11-04T21:51:29+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 25,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial_002_verify_resume",
+      "at": "2026-11-04T21:51:29+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-c6aaf171bb07",
+      "seq": 26
+    },
+    {
+      "at": "2026-11-04T22:05:05+00:00",
+      "kind": "run_closed",
+      "reason": "Repeated coordination failures: worker completed tests and tools/list but did not provide timely pending-tool status; interruptions aborted active work. Preserve partial evidence and replace with Sol for focused evidence reconciliation and remaining calls.",
+      "result": "BLOCKED",
+      "run_id": "run-c6aaf171bb07",
+      "seq": 27
+    },
+    {
+      "agent": "/root/dial_002_verify_finish",
+      "at": "2026-11-04T22:05:17+00:00",
+      "kind": "dispatched",
+      "replaces": "run-c6aaf171bb07",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-cfb0b5079830",
+      "seq": 28
+    },
+    {
+      "at": "2026-11-04T22:19:51+00:00",
+      "kind": "run_closed",
+      "reason": "Daemon restart lost verifier context before report; live Inspector FR GB ZZ tools-list and resource outputs survive under evidence/verify-finish. Replacement will assess preserved evidence.",
+      "result": "BLOCKED",
+      "run_id": "run-cfb0b5079830",
+      "seq": 29
+    },
+    {
+      "agent": "/root/dial_002_verify_recover",
+      "at": "2026-11-04T22:19:52+00:00",
+      "kind": "dispatched",
+      "replaces": "run-cfb0b5079830",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-5d1ef59d8f7d",
+      "seq": 30
+    },
+    {
+      "at": "2026-11-04T22:21:30+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Pending; no DIAL-002 host observations received.",
+      "kind": "intervention",
+      "possible_improvement": "Keep a reusable authorized host verification endpoint and a concise station checklist; do not infer audio from protocol tests.",
+      "question": "On the repaired candidate, test two FR and two GB stations in ChatGPT: visible selection, no autoplay on switching, audible Play, silence on Pause, and audible resume; report station names, date/time and any errors. Is the existing authorized HTTPS MCP endpoint available for this candidate?",
+      "reason": "Actual ChatGPT selection and audible playback require owner observation; local and Inspector evidence is complete.",
+      "seq": 31,
+      "stage": "VERIFYING",
+      "work_item": "DIAL-002"
+    },
+    {
+      "at": "2026-11-04T22:21:37+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-5d1ef59d8f7d",
+      "seq": 32
+    },
+    {
+      "at": "2026-11-04T22:21:37+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 33,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-04T23:46:02+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Okay it is all working. Let us commit this, push this up, and get it on the repo. Owner also requested cross-thread playback coordination as next phase; detailed station IDs/time/browser not supplied.",
+      "kind": "intervention",
+      "possible_improvement": "Collect a compact per-station QA form rather than requiring unstructured chat reports.",
+      "question": "Test two FR and two GB stations for selection, Play/Pause/resume and stopping old stream on switching; report results.",
+      "reason": "Owner reports completion of requested ChatGPT playback QA and authorizes commit/push.",
+      "seq": 34,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-002"
+    },
+    {
+      "at": "2026-11-04T23:46:02+00:00",
+      "from_state": "WAITING_FOR_HUMAN",
+      "kind": "advanced",
+      "seq": 35,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial_002_verify_recover",
+      "at": "2026-11-04T23:46:08+00:00",
+      "kind": "dispatched",
+      "replaces": "run-5d1ef59d8f7d",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-b71604a6bf99",
+      "seq": 36
+    },
+    {
+      "at": "2026-11-04T23:47:57+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-b71604a6bf99",
+      "seq": 37
+    },
+    {
+      "at": "2026-11-04T23:47:57+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 38,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
     }
   ],
   "final_result": null,
@@ -196,6 +392,28 @@
       "question": "Approve the nine-item DIAL-002 specification and authorize implementation?",
       "reason": "Exact DIAL-002 specification approval.",
       "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-002"
+    },
+    {
+      "at": "2026-11-04T22:21:30+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Pending; no DIAL-002 host observations received.",
+      "possible_improvement": "Keep a reusable authorized host verification endpoint and a concise station checklist; do not infer audio from protocol tests.",
+      "question": "On the repaired candidate, test two FR and two GB stations in ChatGPT: visible selection, no autoplay on switching, audible Play, silence on Pause, and audible resume; report station names, date/time and any errors. Is the existing authorized HTTPS MCP endpoint available for this candidate?",
+      "reason": "Actual ChatGPT selection and audible playback require owner observation; local and Inspector evidence is complete.",
+      "stage": "VERIFYING",
+      "work_item": "DIAL-002"
+    },
+    {
+      "at": "2026-11-04T23:46:02+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Okay it is all working. Let us commit this, push this up, and get it on the repo. Owner also requested cross-thread playback coordination as next phase; detailed station IDs/time/browser not supplied.",
+      "possible_improvement": "Collect a compact per-station QA form rather than requiring unstructured chat reports.",
+      "question": "Test two FR and two GB stations for selection, Play/Pause/resume and stopping old stream on switching; report results.",
+      "reason": "Owner reports completion of requested ChatGPT playback QA and authorizes commit/push.",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-002"
     }
   ],
@@ -350,9 +568,171 @@
         "No ChatGPT host/audio evidence claimed; prior Inspector results were read as implementer evidence, not independently repeated."
       ],
       "work_item": "DIAL-002"
+    },
+    {
+      "agent": "/root/dial_002_repair",
+      "ambiguities": [
+        "Actual ChatGPT host visible selection and audible playback across two stations each in FR and GB remain unobserved and require separate Verify/owner evidence."
+      ],
+      "at": "2026-11-04T21:48:11+00:00",
+      "attempt": 2,
+      "blockers": [
+        "Live full FR/GB Inspector outcomes via default npm start and full local-socket npm test were not available to this sandboxed run; they remain required validation, not claimed passes."
+      ],
+      "candidate_commit": "542a2b3",
+      "change_summary": "Repaired provider redirect policy, response cleanup and UUID token consistency; versioned the updated open_radio resource; selected a working bounded IPv4-first startup mode; added delivered-bundle bridge and player/provider regressions.",
+      "decisions": [
+        "Both Radio Browser fetch paths use redirect:error, preserving one configured HTTPS provider origin.",
+        "Provider response cleanup aborts the controller and starts body cancellation on early exits without waiting on a potentially stalled cancellation promise.",
+        "Accepted provider UUIDs are canonicalized to lowercase before rendering and signing.",
+        "The changed shared player bundle uses ui://dial/radio-v3.html for open_radio; country-v1 remains its existing resource identity because that delivered script did not change during this repair.",
+        "npm start scopes Node IPv4-first and disabled family autoselection flags to this process."
+      ],
+      "role": "Implement",
+      "run_id": "run-6ef2ab0bf305",
+      "tests": [
+        "npm run build: PASS; TypeScript compile and esbuild bundle completed.",
+        "node --test test/discovery.test.js test/player.test.js test/station-list.test.js test/ui-harness.test.js: PASS; all four test files passed, including executable delivered-bundle bridge and selection fixture.",
+        "Standalone exerciseDeliveredScript(dist/player.js): PASS; the SDK initialized, accepted the tool-result notification, rendered two rows, selected A/B, and sent click calls.",
+        "git diff --check: PASS; approved PRODUCT.md and TECH.md SHA-256 hashes unchanged.",
+        "Sandbox npm test: HTTP server test process failed without assertion details; the other test files passed. Full loopback test outside sandbox remains pending independent execution."
+      ],
+      "work_item": "DIAL-002"
+    },
+    {
+      "agent": "/root/dial_002_review_resume",
+      "architecture": "Provider normalization/token signing, text-only row rendering, player controller, and MCP delivery remain separated and appropriately bounded. Same normalized row supplies selection URL and token. Server never fetches stream URLs. R1 now enforces redirect:error for both provider paths; no mirror retry or proxy was introduced.",
+      "at": "2026-11-04T21:51:29+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "complexity": "Targeted repairs with no added runtime dependencies or framework. Fixture simulates host messaging and DOM behavior; it is appropriately automated regression evidence, not actual host/browser/media evidence.",
+      "correctness": "R2 aborts controllers and initiates body/reader cancellation on completion and early exits without awaiting potentially stalled cancellation. R6 canonicalizes accepted UUIDs to lowercase before deduplication, return, and token signing. R4 versions baseline resource as radio-v3; country-v1 script was unchanged by the repair. Selection invalidates pending play promises, resets source, and does not autoplay. R5 adds process-scoped IPv4-first and disabled family autoselection in npm start; full live efficacy is reserved for Verify as instructed by Foreman.",
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": "Recorded candidate identifier 542a2b3 resolves to full SHA 542a2b32d4e7ac3cfec69657667567994af04aec; both identify the same exact reviewed commit. Reviewed exact candidate and approved PRODUCT/TECH. SHA256 hashes match packet: PRODUCT 4536279f8881ae982d54ac4207121f59d44c6935159243cd1ef5118dc2d2a7c7; TECH 0a81d0e9a5c22bd3fae3ab6244d08b85abb06bf265822e554f9e8a1383476839. Country validation, bounded 50/10 discovery, distinct outcomes, selection with explicit Play, and fixed-origin policy are implemented. ACCEPT permits independent Verify; it does not establish live catalog, Inspector, or ChatGPT playback acceptance.",
+      "role": "Review",
+      "run_id": "run-2bcbd8849cb6",
+      "security": "Exact origin validation and CSP remain fixed to approved origins. Credentials, nonstandard ports, fragments, unsupported formats and playlists are filtered. Dynamic values use textContent. App-only report metadata is asserted through tools/list; signed expiring process-local tokens derive the forwarded UUID. Provider redirects are rejected and request abort cleanup is present.",
+      "tests": [
+        "Independently ran npm test in sandbox: build succeeded, discovery/player/station-list/ui-harness files passed, server test failed in restricted socket environment.",
+        "Authorized outside-sandbox npm test passed: 19 tests, 0 failures, including HTTP MCP server/tool/resource delivery.",
+        "R3 delivered registered inline script is extracted from MCP resource, compared against built output, and executed in controlled DOM/host bridge fixture. Tests initialize SDK, deliver tool result, render rows as text, select A/B, operate Play/Pause, assert respective click tokens and clear source/rows on failed new result.",
+        "Additional regressions passed for redirect rejection, response cancellation, slow fetch/body timeout, uppercase UUID tokens, stale old-source events/rejections, click deduplication and resume reporting.",
+        "Inspected candidate source, repair diff, tests, HTML, README and package startup command. git diff --check passed; production source/test/package/README working tree matches candidate.",
+        "Did not run live FR/GB Inspector calls or observe ChatGPT UI/audibility in this review. Foreman explicitly assigned those checks to independent Verify."
+      ],
+      "work_item": "DIAL-002"
+    },
+    {
+      "agent": "/root/dial_002_verify_recover",
+      "at": "2026-11-04T22:21:37+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "criteria": [
+        {
+          "criterion": "A user can request stations for a country using an ISO 3166-1 alpha-2 country code.",
+          "evidence": "Prior Verify worker's saved Inspector outputs in evidence/verify-finish/fr.json and gb.json show normalized FR and GB with status ok; zz.json shows invalid_country and no stations. Candidate src/discovery.ts checks assigned codes before fetching; test/discovery.test.js covers lowercase normalization and rejection without a request. These Inspector calls were made by the interrupted run-cfb0b5079830 worker, not repeated in this recovery run.",
+          "method": "Assess preserved independent MCP Inspector tool calls for FR, GB and invalid ZZ against the candidate tool contract and country-validation tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "The MCP tool returns a bounded list of stations matching the requested country with enough information to identify and select one.",
+          "evidence": "Saved fr.json reports searchedCount 50, limit 50, and 3 FR MP3 rows; gb.json reports searchedCount 50, limit 50, and 6 GB MP3 rows. Every row has a UUID, name, matching countryCode, HTTPS streamUrl, exact origin, codec, bitrate and clickToken. tools-list.json binds find_stations_by_country to ui://dial/country-v1.html. Candidate test/discovery.test.js covers the 50-result request, 10-row cap, filtering and order. Live counts can change with the provider.",
+          "method": "Inspect saved live structuredContent and tool metadata, then compare with the candidate's bounds and filtering tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Selecting a station in the ChatGPT MCP Apps UI updates the player and allows audible playback of a compatible HTTPS stream.",
+          "evidence": "The accepted candidate's delivered-script fixture (test/ui-harness.js and test/server.test.js) exercises selection, source assignment and no autoplay, but neither it nor the preserved Inspector calls observe selection or sound in ChatGPT. No authorized host session or dated audible observation was available. See evidence/verify-finish/host-checklist.md for two FR and two GB stations.",
+          "method": "Inspect delivered-bundle fixture and saved Inspector data; require separate actual ChatGPT host selection and audible output observations.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Play, Pause and resume remain available for the selected station.",
+          "evidence": "Candidate test/player.test.js and test/ui-harness.js cover controls, switch during buffering, stale events, retry and resume in fixtures; independent Review's escalated npm test passed all 19 tests. Actual ChatGPT Play/Pause/resume and audibility were not observed. The host checklist records the needed observations for two distinct stations in each of FR and GB.",
+          "method": "Assess controller and delivered-script automated coverage, then require actual ChatGPT host Play, silence on Pause, and audible resume for selected stations.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Invalid country input, no results and provider request failure have clear distinct outcomes.",
+          "evidence": "Saved zz.json returns invalid_country with a two-letter-code example. Candidate src/discovery.ts returns separate no_stations, no_supported_stations and provider_unavailable statuses; src/server.ts and src/station-list.ts give distinct messages, including first-50 scope and retry guidance. test/discovery.test.js covers empty, unsupported, HTTP, malformed, oversized and timeout outcomes; test/station-list.test.js covers rendering of each. Independent Review's escalated npm test passed all 19 tests. No live provider-failure or empty-country Inspector call is claimed.",
+          "method": "Inspect saved ZZ Inspector response and candidate discovery, server and renderer tests for distinct status and messages.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Dynamic station content is rendered safely and network/CSP constraints are documented.",
+          "evidence": "Saved resource-country.json has text/html;profile=mcp-app for ui://dial/country-v1.html, connectDomains [], and exactly the three approved resourceDomains: stream.radioparadise.com, audio.bfmtv.com and media-ssl.musicradio.com over HTTPS. Candidate src/station-list.ts uses textContent; test/station-list.test.js covers hostile text and unsafe URLs. src/discovery.ts rejects redirects and unapproved stream origins. README.md documents provider request, fixed media origins, CSP, direct iframe media requests, click reporting and redirect limitations. Host enforcement of media requests remains unobserved.",
+          "method": "Inspect saved delivered resource metadata, candidate rendering/network paths, README and automated tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Appropriate automated tests and MCP Inspector checks pass, and actual ChatGPT selection/playback evidence is recorded separately.",
+          "evidence": "Independent Review run-2bcbd8849cb6 recorded an escalated npm test pass of 19 tests, including HTTP MCP delivery and delivered registered script execution. Prior Verify run-cfb0b5079830 saved tools-list.json, resource-country.json, fr.json, gb.json and zz.json from Inspector; this recovery run assessed those artifacts without rerunning the network checks. Actual ChatGPT selection and audible playback evidence is absent and explicitly separated in evidence/verify-finish/host-checklist.md.",
+          "method": "Reconcile exact-candidate test and saved Inspector evidence; require separately recorded ChatGPT selection and audible playback.",
+          "result": "BLOCKED"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-5d1ef59d8f7d",
+      "work_item": "DIAL-002"
+    },
+    {
+      "agent": "/root/dial_002_verify_recover",
+      "at": "2026-11-04T23:47:57+00:00",
+      "attempt": 2,
+      "candidate_commit": "542a2b3",
+      "criteria": [
+        {
+          "criterion": "A user can request stations for a country using an ISO 3166-1 alpha-2 country code.",
+          "evidence": "Prior Verify worker's saved Inspector outputs in evidence/verify-finish/fr.json and gb.json show normalized FR and GB with status ok; zz.json shows invalid_country and no stations. Candidate src/discovery.ts checks assigned codes before fetching; test/discovery.test.js covers lowercase normalization and rejection without a request. These Inspector calls were made by the interrupted run-cfb0b5079830 worker, not repeated in this recovery run.",
+          "method": "Assess preserved independent MCP Inspector tool calls for FR, GB and invalid ZZ against the candidate tool contract and country-validation tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "The MCP tool returns a bounded list of stations matching the requested country with enough information to identify and select one.",
+          "evidence": "Saved fr.json reports searchedCount 50, limit 50, and 3 FR MP3 rows; gb.json reports searchedCount 50, limit 50, and 6 GB MP3 rows. Every row has a UUID, name, matching countryCode, HTTPS streamUrl, exact origin, codec, bitrate and clickToken. tools-list.json binds find_stations_by_country to ui://dial/country-v1.html. Candidate test/discovery.test.js covers the 50-result request, 10-row cap, filtering and order. Live counts can change with the provider.",
+          "method": "Inspect saved live structuredContent and tool metadata, then compare with the candidate's bounds and filtering tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Selecting a station in the ChatGPT MCP Apps UI updates the player and allows audible playback of a compatible HTTPS stream.",
+          "evidence": "After reinstalling Dial at the restored MCP endpoint, the owner replied \"Okay it's all working\" directly to Foreman's request to select two FR and two GB stations, verify visible selection, audible Play and station switching. This is owner-reported host behavior, not an observation by this Verify agent or an instrumented recording. The candidate delivered-script fixture exercises selection, source assignment and no autoplay; saved Inspector FR/GB results supply eligible HTTPS rows. The owner supplied no station names, UUIDs, origins, formats, individual results or exact test time.",
+          "method": "Reconcile exact-candidate automated/Inspector evidence with the owner's direct response to the requested ChatGPT host checklist; identify provenance and limits of the host attestation.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Play, Pause and resume remain available for the selected station.",
+          "evidence": "Foreman explicitly asked the owner to test audible Play, silence on Pause and audible resume on two FR and two GB stations; the owner replied \"Okay it's all working\" after reinstalling Dial. This is an uninstrumented owner attestation, not audio observed by this Verify agent. Candidate test/player.test.js and test/ui-harness.js cover the controls and switching; independent Review run-2bcbd8849cb6 reported 19/19 tests passing. Individual per-station observations and exact test time were not supplied.",
+          "method": "Reconcile the owner's response to the explicit Play/Pause/resume host checklist with exact-candidate player tests and prior independent Review evidence.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Invalid country input, no results and provider request failure have clear distinct outcomes.",
+          "evidence": "Saved zz.json returns invalid_country with a two-letter-code example. Candidate src/discovery.ts returns separate no_stations, no_supported_stations and provider_unavailable statuses; src/server.ts and src/station-list.ts give distinct messages, including first-50 scope and retry guidance. test/discovery.test.js covers empty, unsupported, HTTP, malformed, oversized and timeout outcomes; test/station-list.test.js covers rendering of each. Independent Review's escalated npm test passed all 19 tests. No live provider-failure or empty-country Inspector call is claimed.",
+          "method": "Inspect saved ZZ Inspector response and candidate discovery, server and renderer tests for distinct status and messages.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Dynamic station content is rendered safely and network/CSP constraints are documented.",
+          "evidence": "Saved resource-country.json has text/html;profile=mcp-app for ui://dial/country-v1.html, connectDomains [], and exactly the three approved resourceDomains: stream.radioparadise.com, audio.bfmtv.com and media-ssl.musicradio.com over HTTPS. Candidate src/station-list.ts uses textContent; test/station-list.test.js covers hostile text and unsafe URLs. src/discovery.ts rejects redirects and unapproved stream origins. README.md documents provider request, fixed media origins, CSP, direct iframe media requests, click reporting and redirect limitations. Host enforcement of media requests remains unobserved.",
+          "method": "Inspect saved delivered resource metadata, candidate rendering/network paths, README and automated tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Appropriate automated tests and MCP Inspector checks pass, and actual ChatGPT selection/playback evidence is recorded separately.",
+          "evidence": "Independent Review run-2bcbd8849cb6 recorded an escalated npm test pass of 19 tests. Interrupted Verify worker run-cfb0b5079830 saved Inspector tools-list.json, resource-country.json, fr.json, gb.json and zz.json; this worker did not repeat those calls. evidence/owner-host-qa.md separately records the owner's broad \"Okay it's all working\" response after the two-FR/two-GB audible Play/Pause/resume/switch checklist. Approved PRODUCT.md acceptance 5 and feasibility text require actual-host evidence naming tested countries, stations, URL origins, formats and dates. The owner note lacks station names/UUIDs, per-station outcomes, origins, formats, browser and exact test time, so that specific evidence contract remains incomplete. No waiver is recorded; no details are inferred.",
+          "method": "Reconcile exact-candidate test/Inspector records with separately recorded owner ChatGPT QA, then check the approved PRODUCT.md requirement for named station, origin, format and date evidence.",
+          "result": "BLOCKED"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-b71604a6bf99",
+      "work_item": "DIAL-002"
     }
   ],
-  "resume_stage": null,
+  "resume_stage": "VERIFYING",
   "runs": [
     {
       "agent": "/root/dial_002_triage",
@@ -446,8 +826,8 @@
       "agent": "/root/dial_002_implement",
       "attempt": null,
       "cost": null,
-      "duration_seconds": null,
-      "ended_at": null,
+      "duration_seconds": 1277,
+      "ended_at": "2026-10-04T08:29:55+00:00",
       "harness": "current-collaboration",
       "id": "run-b8c3acb7545b",
       "input_tokens": null,
@@ -456,12 +836,144 @@
       "reported_model": null,
       "requested_model": "gpt-6-sol",
       "requested_reasoning": "medium",
-      "result": null,
+      "result": "BLOCKED",
       "retry_of": "run-ee1871d24212",
       "role": "Implement",
       "selection_reason": "Repair independent Review findings R1-R6 including bounded network transport, resource version and regression evidence.",
       "started_at": "2026-10-04T08:08:38+00:00",
-      "status": "RUNNING",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_repair",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 2726296,
+      "ended_at": "2026-11-04T21:48:11+00:00",
+      "harness": "current-collaboration",
+      "id": "run-6ef2ab0bf305",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-b8c3acb7545b",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": "run-b8c3acb7545b",
+      "role": "Implement",
+      "selection_reason": "Focused escalation after stalled medium-reasoning repair; preserve files and diagnose actual bridge versus fixture defect, finish R1-R6 evidence.",
+      "started_at": "2026-10-04T08:29:55+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_review_resume",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 189,
+      "ended_at": "2026-11-04T21:51:29+00:00",
+      "harness": "current-collaboration",
+      "id": "run-2bcbd8849cb6",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-ceffd5154bab",
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": null,
+      "role": "Review",
+      "selection_reason": "Fresh independent review of repaired candidate 542a2b3; historical reviewer context unavailable",
+      "started_at": "2026-11-04T21:48:20+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_verify_resume",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 816,
+      "ended_at": "2026-11-04T22:05:05+00:00",
+      "harness": "current-collaboration",
+      "id": "run-c6aaf171bb07",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Independent exact-candidate tests and live Inspector FR/GB checks; separate host audio evidence",
+      "started_at": "2026-11-04T21:51:29+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_verify_finish",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 874,
+      "ended_at": "2026-11-04T22:19:51+00:00",
+      "harness": "current-collaboration",
+      "id": "run-cfb0b5079830",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-c6aaf171bb07",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Escalate repeated evidence/status coordination failures in Luna run; reconcile partial results and finish bounded live Inspector checks with fresh context",
+      "started_at": "2026-11-04T22:05:17+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_verify_recover",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 105,
+      "ended_at": "2026-11-04T22:21:37+00:00",
+      "harness": "current-collaboration",
+      "id": "run-5d1ef59d8f7d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-cfb0b5079830",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Recover lost Sol verifier context after daemon restart; assess preserved independent Inspector evidence and finalize report",
+      "started_at": "2026-11-04T22:19:52+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_002_verify_recover",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 109,
+      "ended_at": "2026-11-04T23:47:57+00:00",
+      "harness": "current-collaboration",
+      "id": "run-b71604a6bf99",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-5d1ef59d8f7d",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Assess owner host-QA attestation with preserved exact-candidate evidence; reuse Sol recovery context after prior documented Luna coordination escalation",
+      "started_at": "2026-11-04T23:46:08+00:00",
+      "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
@@ -474,7 +986,7 @@
     },
     "mode": "approved"
   },
-  "state": "BUILDING",
+  "state": "WAITING_FOR_HUMAN",
   "title": "Find stations by country and play a selected station",
-  "updated_at": "2026-10-04T08:08:38+00:00"
+  "updated_at": "2026-11-04T23:47:57+00:00"
 }
