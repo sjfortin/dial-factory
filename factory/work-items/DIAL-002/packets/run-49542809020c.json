@@ -1,0 +1,25 @@
+{
+  "agent": "/root/dial_002_triage",
+  "candidate": null,
+  "contract": "factory/agents/triage/agent.md",
+  "criteria": [
+    "A user can request stations for a country using an ISO 3166-1 alpha-2 country code.",
+    "The MCP tool returns a bounded list of stations matching the requested country with enough information to identify and select one.",
+    "Selecting a station in the ChatGPT MCP Apps UI updates the player and allows audible playback of a compatible HTTPS stream.",
+    "Play, Pause and resume remain available for the selected station.",
+    "Invalid country input, no results and provider request failure have clear distinct outcomes.",
+    "Dynamic station content is rendered safely and network/CSP constraints are documented.",
+    "Appropriate automated tests and MCP Inspector checks pass, and actual ChatGPT selection/playback evidence is recorded separately."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Prepare an approved bounded next phase that adds country-based station discovery and selection to the verified playback proof, without implementing before spec approval.",
+  "requested_model": "gpt-6-luna",
+  "requested_reasoning": "medium",
+  "role": "Triage",
+  "run_id": "run-49542809020c",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "work_item": "DIAL-002"
+}

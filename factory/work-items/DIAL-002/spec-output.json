@@ -1,0 +1,6 @@
+{
+  "work_item": "DIAL-002",
+  "run_id": "run-09551a3082fa",
+  "agent": "/root/dial_002_spec",
+  "documents": ["PRODUCT.md", "TECH.md"]
+}

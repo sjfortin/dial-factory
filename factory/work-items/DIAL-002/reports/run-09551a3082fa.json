@@ -1,0 +1,11 @@
+{
+  "agent": "/root/dial_002_spec",
+  "at": "2026-10-04T07:02:07+00:00",
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "role": "Spec",
+  "run_id": "run-09551a3082fa",
+  "work_item": "DIAL-002"
+}

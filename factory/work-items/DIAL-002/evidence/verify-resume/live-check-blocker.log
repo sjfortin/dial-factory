@@ -1,0 +1,10 @@
+Candidate: 542a2b3
+Command: npm start
+Result in sandbox: exit 1 before server startup.
+Error: listen EPERM: operation not permitted 127.0.0.1:8787.
+
+An escalation request to run npm start outside the sandbox was submitted so
+that the required local MCP Inspector/live provider probes could run. The tool
+call was aborted before it completed or returned an approval/result. No MCP
+Inspector tools/list, resource read, or live FR/GB calls were therefore made.
+No claim is made about current live catalog availability.

@@ -1,15 +1,25 @@
 import { App } from '@modelcontextprotocol/ext-apps';
 import { installPlayer } from './player-controller.js';
+import { renderStations } from './station-list.js';
 
-installPlayer(
-  document.querySelector<HTMLAudioElement>('#radio')!,
-  document.querySelector<HTMLButtonElement>('#toggle')!,
-  document.querySelector<HTMLElement>('#status')!
-);
-
-// Establish the standard MCP Apps ui/initialize bridge. This player has no
-// host tool data to consume; station and stream are fixed in this proof.
-const app = new App({ name: 'dial-radio-player', version: '0.1.0' });
+const audio = document.querySelector<HTMLAudioElement>('#radio')!;
+const toggle = document.querySelector<HTMLButtonElement>('#toggle')!;
+const status = document.querySelector<HTMLElement>('#status')!;
+const app = new App({ name: 'dial-radio-player', version: '0.2.0' });
+const list = document.querySelector<HTMLElement>('#stations');
+const summary = document.querySelector<HTMLElement>('#summary');
+const player = installPlayer(audio, toggle, status, {
+  onPlaying: (clickToken) => {
+    void app.callServerTool({ name: 'report_station_click', arguments: { clickToken } }).catch(() => {});
+  }
+});
+if (list && summary) {
+  app.ontoolresult = (params) => {
+    if (!params.structuredContent || typeof params.structuredContent !== 'object' || !('status' in params.structuredContent)) return;
+    player.clearSelection();
+    renderStations(params.structuredContent, list, summary, toggle, (row) => player.selectStation(row));
+  };
+}
 void app.connect().catch(() => {
-  // Playback remains user controlled if an unsupported host omits the bridge.
+  // The baseline fixed player stays manually operable in unsupported hosts.
 });

@@ -1,0 +1,54 @@
+{
+  "agent": "/root/dial_002_verify_recover",
+  "at": "2026-11-04T23:47:57+00:00",
+  "attempt": 2,
+  "candidate_commit": "542a2b3",
+  "criteria": [
+    {
+      "criterion": "A user can request stations for a country using an ISO 3166-1 alpha-2 country code.",
+      "evidence": "Prior Verify worker's saved Inspector outputs in evidence/verify-finish/fr.json and gb.json show normalized FR and GB with status ok; zz.json shows invalid_country and no stations. Candidate src/discovery.ts checks assigned codes before fetching; test/discovery.test.js covers lowercase normalization and rejection without a request. These Inspector calls were made by the interrupted run-cfb0b5079830 worker, not repeated in this recovery run.",
+      "method": "Assess preserved independent MCP Inspector tool calls for FR, GB and invalid ZZ against the candidate tool contract and country-validation tests.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "The MCP tool returns a bounded list of stations matching the requested country with enough information to identify and select one.",
+      "evidence": "Saved fr.json reports searchedCount 50, limit 50, and 3 FR MP3 rows; gb.json reports searchedCount 50, limit 50, and 6 GB MP3 rows. Every row has a UUID, name, matching countryCode, HTTPS streamUrl, exact origin, codec, bitrate and clickToken. tools-list.json binds find_stations_by_country to ui://dial/country-v1.html. Candidate test/discovery.test.js covers the 50-result request, 10-row cap, filtering and order. Live counts can change with the provider.",
+      "method": "Inspect saved live structuredContent and tool metadata, then compare with the candidate's bounds and filtering tests.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Selecting a station in the ChatGPT MCP Apps UI updates the player and allows audible playback of a compatible HTTPS stream.",
+      "evidence": "After reinstalling Dial at the restored MCP endpoint, the owner replied \"Okay it's all working\" directly to Foreman's request to select two FR and two GB stations, verify visible selection, audible Play and station switching. This is owner-reported host behavior, not an observation by this Verify agent or an instrumented recording. The candidate delivered-script fixture exercises selection, source assignment and no autoplay; saved Inspector FR/GB results supply eligible HTTPS rows. The owner supplied no station names, UUIDs, origins, formats, individual results or exact test time.",
+      "method": "Reconcile exact-candidate automated/Inspector evidence with the owner's direct response to the requested ChatGPT host checklist; identify provenance and limits of the host attestation.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Play, Pause and resume remain available for the selected station.",
+      "evidence": "Foreman explicitly asked the owner to test audible Play, silence on Pause and audible resume on two FR and two GB stations; the owner replied \"Okay it's all working\" after reinstalling Dial. This is an uninstrumented owner attestation, not audio observed by this Verify agent. Candidate test/player.test.js and test/ui-harness.js cover the controls and switching; independent Review run-2bcbd8849cb6 reported 19/19 tests passing. Individual per-station observations and exact test time were not supplied.",
+      "method": "Reconcile the owner's response to the explicit Play/Pause/resume host checklist with exact-candidate player tests and prior independent Review evidence.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Invalid country input, no results and provider request failure have clear distinct outcomes.",
+      "evidence": "Saved zz.json returns invalid_country with a two-letter-code example. Candidate src/discovery.ts returns separate no_stations, no_supported_stations and provider_unavailable statuses; src/server.ts and src/station-list.ts give distinct messages, including first-50 scope and retry guidance. test/discovery.test.js covers empty, unsupported, HTTP, malformed, oversized and timeout outcomes; test/station-list.test.js covers rendering of each. Independent Review's escalated npm test passed all 19 tests. No live provider-failure or empty-country Inspector call is claimed.",
+      "method": "Inspect saved ZZ Inspector response and candidate discovery, server and renderer tests for distinct status and messages.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Dynamic station content is rendered safely and network/CSP constraints are documented.",
+      "evidence": "Saved resource-country.json has text/html;profile=mcp-app for ui://dial/country-v1.html, connectDomains [], and exactly the three approved resourceDomains: stream.radioparadise.com, audio.bfmtv.com and media-ssl.musicradio.com over HTTPS. Candidate src/station-list.ts uses textContent; test/station-list.test.js covers hostile text and unsafe URLs. src/discovery.ts rejects redirects and unapproved stream origins. README.md documents provider request, fixed media origins, CSP, direct iframe media requests, click reporting and redirect limitations. Host enforcement of media requests remains unobserved.",
+      "method": "Inspect saved delivered resource metadata, candidate rendering/network paths, README and automated tests.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Appropriate automated tests and MCP Inspector checks pass, and actual ChatGPT selection/playback evidence is recorded separately.",
+      "evidence": "Independent Review run-2bcbd8849cb6 recorded an escalated npm test pass of 19 tests. Interrupted Verify worker run-cfb0b5079830 saved Inspector tools-list.json, resource-country.json, fr.json, gb.json and zz.json; this worker did not repeat those calls. evidence/owner-host-qa.md separately records the owner's broad \"Okay it's all working\" response after the two-FR/two-GB audible Play/Pause/resume/switch checklist. Approved PRODUCT.md acceptance 5 and feasibility text require actual-host evidence naming tested countries, stations, URL origins, formats and dates. The owner note lacks station names/UUIDs, per-station outcomes, origins, formats, browser and exact test time, so that specific evidence contract remains incomplete. No waiver is recorded; no details are inferred.",
+      "method": "Reconcile exact-candidate test/Inspector records with separately recorded owner ChatGPT QA, then check the approved PRODUCT.md requirement for named station, origin, format and date evidence.",
+      "result": "BLOCKED"
+    }
+  ],
+  "overall": "BLOCKED",
+  "role": "Verify",
+  "run_id": "run-b71604a6bf99",
+  "work_item": "DIAL-002"
+}

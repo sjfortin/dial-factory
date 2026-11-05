@@ -1,0 +1,24 @@
+{
+  "agent": "/root/dial_002_review_resume",
+  "architecture": "Provider normalization/token signing, text-only row rendering, player controller, and MCP delivery remain separated and appropriately bounded. Same normalized row supplies selection URL and token. Server never fetches stream URLs. R1 now enforces redirect:error for both provider paths; no mirror retry or proxy was introduced.",
+  "at": "2026-11-04T21:51:29+00:00",
+  "attempt": 2,
+  "candidate_commit": "542a2b3",
+  "complexity": "Targeted repairs with no added runtime dependencies or framework. Fixture simulates host messaging and DOM behavior; it is appropriately automated regression evidence, not actual host/browser/media evidence.",
+  "correctness": "R2 aborts controllers and initiates body/reader cancellation on completion and early exits without awaiting potentially stalled cancellation. R6 canonicalizes accepted UUIDs to lowercase before deduplication, return, and token signing. R4 versions baseline resource as radio-v3; country-v1 script was unchanged by the repair. Selection invalidates pending play promises, resets source, and does not autoplay. R5 adds process-scoped IPv4-first and disabled family autoselection in npm start; full live efficacy is reserved for Verify as instructed by Foreman.",
+  "findings": [],
+  "recommendation": "ACCEPT",
+  "requirements": "Recorded candidate identifier 542a2b3 resolves to full SHA 542a2b32d4e7ac3cfec69657667567994af04aec; both identify the same exact reviewed commit. Reviewed exact candidate and approved PRODUCT/TECH. SHA256 hashes match packet: PRODUCT 4536279f8881ae982d54ac4207121f59d44c6935159243cd1ef5118dc2d2a7c7; TECH 0a81d0e9a5c22bd3fae3ab6244d08b85abb06bf265822e554f9e8a1383476839. Country validation, bounded 50/10 discovery, distinct outcomes, selection with explicit Play, and fixed-origin policy are implemented. ACCEPT permits independent Verify; it does not establish live catalog, Inspector, or ChatGPT playback acceptance.",
+  "role": "Review",
+  "run_id": "run-2bcbd8849cb6",
+  "security": "Exact origin validation and CSP remain fixed to approved origins. Credentials, nonstandard ports, fragments, unsupported formats and playlists are filtered. Dynamic values use textContent. App-only report metadata is asserted through tools/list; signed expiring process-local tokens derive the forwarded UUID. Provider redirects are rejected and request abort cleanup is present.",
+  "tests": [
+    "Independently ran npm test in sandbox: build succeeded, discovery/player/station-list/ui-harness files passed, server test failed in restricted socket environment.",
+    "Authorized outside-sandbox npm test passed: 19 tests, 0 failures, including HTTP MCP server/tool/resource delivery.",
+    "R3 delivered registered inline script is extracted from MCP resource, compared against built output, and executed in controlled DOM/host bridge fixture. Tests initialize SDK, deliver tool result, render rows as text, select A/B, operate Play/Pause, assert respective click tokens and clear source/rows on failed new result.",
+    "Additional regressions passed for redirect rejection, response cancellation, slow fetch/body timeout, uppercase UUID tokens, stale old-source events/rejections, click deduplication and resume reporting.",
+    "Inspected candidate source, repair diff, tests, HTML, README and package startup command. git diff --check passed; production source/test/package/README working tree matches candidate.",
+    "Did not run live FR/GB Inspector calls or observe ChatGPT UI/audibility in this review. Foreman explicitly assigned those checks to independent Verify."
+  ],
+  "work_item": "DIAL-002"
+}
