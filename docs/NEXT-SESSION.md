@@ -1,3 +1,15 @@
+# Current checkpoint — DIAL-003 planning
+
+DIAL-003 is WAITING_FOR_SPEC_APPROVAL after real Luna Triage and Sol/high Spec. Branch work/DIAL-003. Read factory/work-items/DIAL-003/PRODUCT.md and TECH.md. Exact proposed hashes: PRODUCT 3dc151e49b28a8c555482db1cbe888b69c9b91b30e7044223ac8bf3a9970f19e; TECH 686e2f79f643581f8aa3aa0c88c05202d15baf88e8f97d94ce4ab7f3f74f12db. No production implementation started. Owner requested next phase and roadmap; that is not exact approval of these newly drafted design choices.
+
+Proposal: same browser profile/device, Play in another thread takes over, remote Pause can stop active playback, exclusive Web Lock plus BroadcastChannel, bounded fail-closed behavior. First build only the actual two-thread ChatGPT capability experiment. If message/lock scope or post-transfer playback fails, stop and revise/park; no silent server/identity fallback. Cannot establish coordination by testing a singleton or mocks alone. Pending approval intervention is recorded.
+
+Roadmap is docs/ROADMAP.md: cross-thread playback, then proposed reliability/recovery/operations, broader stations including FIP, and later favorites/state with explicit identity/storage decisions. Owner priority question remains optional/pending; sequence is a proposal.
+
+Existing DIAL-002 work was pushed at 2a6b449. User requested a PR to main: remote had no main, so main was created from existing factory/bootstrap 487e865. PR #2 https://github.com/sjfortin/dial-factory/pull/2 is OPEN, mergeable, targets main, and is not merged. The default branch remains factory/bootstrap; no default-branch change was requested or performed. Do not auto-merge. DIAL-002's dated station-specific evidence gap remains as recorded below; no invented waiver. New phase can be planned independently.
+
+Prior DIAL-002 records below are historical context; use canonical work-item ledgers for exact states.
+
 # Resume Dial Factory
 
 Updated 2026-11-05. DIAL-002 is WAITING_FOR_HUMAN (resume VERIFYING) on work/DIAL-002. Read its canonical state.json before resuming; older session instructions have been replaced by this checkpoint.
