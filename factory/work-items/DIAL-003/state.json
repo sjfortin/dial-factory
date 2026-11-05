@@ -281,6 +281,69 @@
       "seq": 28,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-05T23:00:59+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": true,
+      "human_response": "Owner supplied one probe-v2 log, instance 39c8efc1-2e6f-43d6-b6ad-f160dd00c8c7. It records messages and nonce acknowledgments with peer 90c093ab-61ae-4729-9033-156f756ee00b; transfer requests/acknowledgments; local lock acquisitions/releases; post-await play resolution; and audible-observation heard=true. The paired frame log and explicit two-way lock contention/close-remount results are not yet present.",
+      "kind": "intervention",
+      "possible_improvement": "Make collection of both frame logs easy and allow text paste, since screenshot transfer is unreliable in this remote setup.",
+      "question": "Please paste the second frame JSON log (the instance ID beginning 90c093ab), especially the periods when it checked contention while the first frame held the lock, received transfer acknowledgments, acquired/released the lock, and when you closed/remounted or backgrounded a frame.",
+      "reason": "Owner supplied first frame log showing bidirectional channel traffic, transfer/release events and audible playback. Cross-frame exclusive-lock corroboration and lifecycle evidence require paired log.",
+      "seq": 29,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-003"
+    },
+    {
+      "at": "2026-11-05T23:02:32+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": true,
+      "human_response": "Owner supplied paired JSON logs for frame IDs 39c8efc1-2e6f-43d6-b6ad-f160dd00c8c7 and 90c093ab-61ae-4729-9033-156f756ee00b. They show bidirectional nonce rounds, peer-held Web Lock contention reported unavailable, transfer pause/release/ack before new lock acquisition and play in both directions, and one explicit heard=true/playback=true observation. See evidence/owner-probe-results.md. Close/remount recovery was not recorded.",
+      "kind": "intervention",
+      "possible_improvement": "Require both paired logs and an explicit close/remount recovery result; the channel already timestamps and copies each frame log.",
+      "question": "Run the final recovery check: hold the lock in one probe frame, close its ChatGPT thread/frame, verify the peer sees lock release and becomes available, reopen the probe and confirm nonce messaging recovers. Please paste the new instance/peer log or summarize each observed step.",
+      "reason": "Owner supplied both probe-v2 frame logs; shared message delivery, lock contention and bidirectional transfers are evidenced. Controlled close/remount recovery remains unobserved.",
+      "seq": 30,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-003"
+    },
+    {
+      "at": "2026-11-05T23:02:40+00:00",
+      "from_state": "WAITING_FOR_HUMAN",
+      "kind": "advanced",
+      "seq": 31,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial_003_verify_probe",
+      "at": "2026-11-05T23:02:40+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-0d5f037eed14",
+      "seq": 32
+    },
+    {
+      "at": "2026-11-05T23:08:52+00:00",
+      "attempt": 2,
+      "candidate_commit": "7dd7db64ea51cfd601cffbe1bbff83468aa87118",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-0d5f037eed14",
+      "seq": 33
+    },
+    {
+      "at": "2026-11-05T23:08:52+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 34,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
     }
   ],
   "final_result": null,
@@ -318,6 +381,28 @@
       "question": "Refresh Dial, open open_capability_probe in two separate ChatGPT threads in the same browser profile, follow docs/DIAL-003-PROBE.md, and return both copied JSON logs plus audible yes/no observations.",
       "reason": "Reviewed probe delivery passes; approved capability gate requires two actual ChatGPT threads and owner audible observations before full feature build.",
       "stage": "VERIFYING",
+      "work_item": "DIAL-003"
+    },
+    {
+      "at": "2026-11-05T23:00:59+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": true,
+      "human_response": "Owner supplied one probe-v2 log, instance 39c8efc1-2e6f-43d6-b6ad-f160dd00c8c7. It records messages and nonce acknowledgments with peer 90c093ab-61ae-4729-9033-156f756ee00b; transfer requests/acknowledgments; local lock acquisitions/releases; post-await play resolution; and audible-observation heard=true. The paired frame log and explicit two-way lock contention/close-remount results are not yet present.",
+      "possible_improvement": "Make collection of both frame logs easy and allow text paste, since screenshot transfer is unreliable in this remote setup.",
+      "question": "Please paste the second frame JSON log (the instance ID beginning 90c093ab), especially the periods when it checked contention while the first frame held the lock, received transfer acknowledgments, acquired/released the lock, and when you closed/remounted or backgrounded a frame.",
+      "reason": "Owner supplied first frame log showing bidirectional channel traffic, transfer/release events and audible playback. Cross-frame exclusive-lock corroboration and lifecycle evidence require paired log.",
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-003"
+    },
+    {
+      "at": "2026-11-05T23:02:32+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": true,
+      "human_response": "Owner supplied paired JSON logs for frame IDs 39c8efc1-2e6f-43d6-b6ad-f160dd00c8c7 and 90c093ab-61ae-4729-9033-156f756ee00b. They show bidirectional nonce rounds, peer-held Web Lock contention reported unavailable, transfer pause/release/ack before new lock acquisition and play in both directions, and one explicit heard=true/playback=true observation. See evidence/owner-probe-results.md. Close/remount recovery was not recorded.",
+      "possible_improvement": "Require both paired logs and an explicit close/remount recovery result; the channel already timestamps and copies each frame log.",
+      "question": "Run the final recovery check: hold the lock in one probe frame, close its ChatGPT thread/frame, verify the peer sees lock release and becomes available, reopen the probe and confirm nonce messaging recovers. Please paste the new instance/peer log or summarize each observed step.",
+      "reason": "Owner supplied both probe-v2 frame logs; shared message delivery, lock contention and bidirectional transfers are evidenced. Controlled close/remount recovery remains unobserved.",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-003"
     }
   ],
@@ -529,6 +614,63 @@
       "role": "Verify",
       "run_id": "run-2e85cb9ca48c",
       "work_item": "DIAL-003"
+    },
+    {
+      "agent": "/root/dial_003_verify_probe",
+      "at": "2026-11-05T23:08:52+00:00",
+      "attempt": 2,
+      "candidate_commit": "7dd7db64ea51cfd601cffbe1bbff83468aa87118",
+      "capability_gate": {
+        "blocked_or_ambiguous": [
+          "Close/remount recovery and peer lock availability after closing a holder were not tested.",
+          "The second heard:true annotation has playback:false and does not count as a second audible success.",
+          "Background transfer evidence is incidental and does not fully characterize a controlled background test.",
+          "The full single-playback feature remains unimplemented; this candidate is a diagnostic probe."
+        ],
+        "supported": [
+          "Same reported origin and probe resource in both frames for this session.",
+          "Bidirectional BroadcastChannel nonce roundtrips.",
+          "Web Locks available in both frames; peer-held lock contention recorded as acquired:false.",
+          "Both transfer orders showed old-owner stop/release and acknowledgment before new-owner acquisition and post-await play.",
+          "One explicit audible success recorded with heard:true and playback:true."
+        ]
+      },
+      "criteria": [
+        {
+          "criterion": "Investigate cross-thread communication and playback ownership in actual ChatGPT MCP Apps instances, documenting platform and scope limits.",
+          "evidence": "Owner reports both frames on Chrome 156/macOS 10.15.7 with the same codex-sandbox MCP App origin and resource. Both report BroadcastChannel and navigator.locks available; bidirectional nonce roundtrips succeeded. Peer-held exclusive-lock checks recorded acquired:false. This documents observed behavior for that browser/profile session only, not a general ChatGPT platform guarantee. The paired JSON was pasted in conversation; only the attributed narrative is saved in evidence/owner-probe-results.md.",
+          "method": "Assess the owner's paired capability-probe-v2 event logs from two ChatGPT threads against the probe steps and recorded platform details.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Within the supported scope, starting playback in one Dial instance stops or pauses any previously playing Dial instance so two streams do not remain audible together.",
+          "evidence": "In both transfer orders, paired event order shows the prior owner stopped/released and acknowledged before the requester acquired the lock and called/resolved play(). One instance explicitly recorded heard:true with playback:true. This supports the probe's observed serialized handoff in this session; the other heard:true annotation had playback:false and is not counted as a second successful audible result. This does not establish a finished normal-player coordination feature, which was not built in this candidate.",
+          "method": "Check both owner-reported transfer directions for prior-owner stop/release and acknowledgment before requester lock acquisition and post-await play; assess audible annotations separately.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Play and Pause behavior in a second thread is defined explicitly, including whether its controls operate the active playback or transfer ownership.",
+          "evidence": "The logs show transfer requests in both directions and the prior owner pausing/releasing before ownership transfer. They do not establish the full normal-player Play/Pause control contract across threads; this candidate is a diagnostic probe and no full feature was implemented.",
+          "method": "Inspect owner-reported cross-frame transfer events for second-thread control semantics and require observations covering the relevant Play and Pause behaviors.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Playback ownership and visible player state recover predictably after rapid interactions, closed or remounted instances, and unavailable coordination.",
+          "evidence": "One transfer request was received and handled while the former holder was reported hidden, but this was not a controlled or fully characterized background-delivery test. Neither log records closing a lock-holding frame/thread, confirming peer lock availability, reopening, and confirming nonce recovery. That close/remount recovery step remains outstanding.",
+          "method": "Check owner logs for background/visibility events and the required close-holder, peer-lock-release, reopen, and messaging recovery sequence.",
+          "result": "BLOCKED"
+        },
+        {
+          "criterion": "Automated coordination tests and separate actual two-thread ChatGPT playback evidence cover the approved behavior.",
+          "evidence": "The accepted Implement report records 23 passing automated tests and passing targeted regressions. Owner-reported paired ChatGPT logs now supply real two-thread nonce, lock, handoff, and one audible-success evidence. However, the second audible annotation is paired with playback:false, close/remount recovery is absent, and full normal-player behavior is not implemented. The raw paired JSON was pasted in conversation and is not stored as raw evidence files; the saved evidence/owner-probe-results.md contains only the owner's attributed summary.",
+          "method": "Combine accepted-candidate automated test results recorded in the Implement report with the owner's actual paired ChatGPT probe observations; check coverage of all approved behavior and recovery steps.",
+          "result": "BLOCKED"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-0d5f037eed14",
+      "work_item": "DIAL-003"
     }
   ],
   "resume_stage": "VERIFYING",
@@ -686,6 +828,28 @@
       "started_at": "2026-11-05T01:23:05+00:00",
       "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial_003_verify_probe",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 372,
+      "ended_at": "2026-11-05T23:08:52+00:00",
+      "harness": "current-collaboration",
+      "id": "run-0d5f037eed14",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": "run-2e85cb9ca48c",
+      "role": "Verify",
+      "selection_reason": "Assess paired owner-reported ChatGPT probe logs; confirm evidenced capability points and close/remount gap",
+      "started_at": "2026-11-05T23:02:40+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
@@ -699,5 +863,5 @@
   },
   "state": "WAITING_FOR_HUMAN",
   "title": "Coordinate Dial playback across chat threads",
-  "updated_at": "2026-11-05T01:28:33+00:00"
+  "updated_at": "2026-11-05T23:08:52+00:00"
 }
