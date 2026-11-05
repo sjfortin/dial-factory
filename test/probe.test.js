@@ -96,3 +96,24 @@ test('holder teardown releases the simulated shared lock and permits recovery', 
   assert.ok(b.events().some(e => e.kind === 'contention-check' && e.acquired === true));
   b.close();
 });
+test('Pause immediately after queued transfer cancels the lock request and prevents play', async () => {
+  const { a, b } = createFrames(readFileSync('dist/probe.js', 'utf8'));
+  a.nodes.hold.click(); await tick();
+  b.nodes.transfer.click(); b.nodes.release.click();
+  await tick(); await tick();
+  assert.equal(b.nodes.radio.playCalls, 0);
+  assert.ok(b.events().some(e => e.kind === 'lock-request-failed'));
+  assert.doesNotMatch(b.nodes.state.textContent, /Transfer failed/);
+  a.close(); b.close();
+});
+test('self-held lock cannot be counted as cross-frame contention', async () => {
+  const { a, b } = createFrames(readFileSync('dist/probe.js', 'utf8'));
+  b.close();
+  a.nodes.hold.click(); await tick();
+  a.nodes.contend.click(); await tick();
+  assert.ok(a.events().some(e => e.kind === 'contention-self-skip'));
+  assert.ok(!a.events().some(e => e.kind === 'contention-check' && e.acquired === false));
+  assert.doesNotMatch(a.nodes.state.textContent, /Shared exclusion observed/);
+  assert.match(a.nodes.checks.textContent, /Exclusive contention: PENDING/);
+  a.close();
+});

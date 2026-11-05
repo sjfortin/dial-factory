@@ -9,7 +9,7 @@ import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
 const UI_URI = 'ui://dial/radio-v3.html';
 const DISCOVERY_URI = 'ui://dial/country-v1.html';
-const PROBE_URI = 'ui://dial/capability-probe-v1.html';
+const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',
   provider: 'Radio Paradise',
@@ -46,7 +46,7 @@ function makeServer() {
     contents: [{ uri: DISCOVERY_URI, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
       _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS] } } } }]
   }));
-  registerAppResource(server, 'Dial two-thread capability probe v1', PROBE_URI, {}, async () => ({
+  registerAppResource(server, 'Dial two-thread capability probe v2', PROBE_URI, {}, async () => ({
     contents: [{ uri: PROBE_URI, mimeType: RESOURCE_MIME_TYPE, text: probeHtml,
       _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: ['https://stream.radioparadise.com'] } } } }]
   }));

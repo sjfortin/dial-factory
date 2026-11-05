@@ -71,7 +71,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   await exerciseDeliveredScript(countryScript);
   const probeTool = tools.tools.find((entry) => entry.name === 'open_capability_probe');
   assert.ok(probeTool, 'dedicated host probe tool is registered');
-  assert.equal(probeTool._meta.ui.resourceUri, 'ui://dial/capability-probe-v1.html');
+  assert.equal(probeTool._meta.ui.resourceUri, 'ui://dial/capability-probe-v2.html');
   const probeResource = await client.readResource({ uri: probeTool._meta.ui.resourceUri });
   const delivered = probeResource.contents[0];
   assert.equal(delivered.mimeType, 'text/html;profile=mcp-app');
@@ -82,7 +82,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const probeScript = delivered.text.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.equal(probeScript, readFileSync('dist/probe.js', 'utf8'));
   assert.doesNotThrow(() => new Script(probeScript));
-  assert.match(probeScript, /dial-probe-channel-v1/);
+  assert.match(probeScript, /dial-probe-channel-v2/);
   assert.match(probeScript, /dial-playback-v1/);
   assert.deepEqual(tools.tools.find((entry) => entry.name === 'report_station_click')?._meta?.ui?.visibility, ['app']);
 });
