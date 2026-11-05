@@ -7,8 +7,8 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
-const UI_URI = 'ui://dial/radio-v3.html';
-const DISCOVERY_URI = 'ui://dial/country-v1.html';
+const UI_URI = 'ui://dial/radio-v4.html';
+const DISCOVERY_URI = 'ui://dial/country-v2.html';
 const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',

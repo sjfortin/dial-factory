@@ -36,7 +36,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const radioTool = tools.tools.find((entry) => entry.name === 'open_radio');
   assert.ok(radioTool);
   const uri = radioTool._meta?.ui?.resourceUri;
-  assert.match(uri, /^ui:\/\/dial\/radio-v\d+\.html$/);
+  assert.equal(uri, 'ui://dial/radio-v4.html');
 
   const result = await client.callTool({ name: 'open_radio', arguments: {} });
   assert.equal(result.structuredContent.station.name, 'Radio Paradise');
@@ -50,6 +50,8 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const inlineScript = resource.contents[0].text.match(/<script>([\s\S]*?)<\/script>/)?.[1];
   assert.ok(inlineScript, 'UI resource contains an inline player script');
   assert.equal(inlineScript, readFileSync('dist/player.js', 'utf8'), 'MCP resource preserves the complete player bundle');
+  assert.match(resource.contents[0].text, /id="remote-pause"/);
+  assert.match(inlineScript, /dial-playback-channel-v1/);
   assert.doesNotThrow(() => new Script(inlineScript), 'delivered player script parses as JavaScript');
   assert.deepEqual(resource.contents[0]._meta.ui.csp.resourceDomains, ['https://stream.radioparadise.com']);
   const findTool = tools.tools.find((entry) => entry.name === 'find_stations_by_country');
@@ -59,6 +61,8 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v2.html');
+  assert.match(countryResource.contents[0].text, /id="remote-pause"/);
   assert.deepEqual(countryResource.contents[0]._meta.ui.csp, {
     connectDomains: [],
     resourceDomains: ['https://stream.radioparadise.com', 'https://audio.bfmtv.com', 'https://media-ssl.musicradio.com']

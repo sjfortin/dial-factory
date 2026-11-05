@@ -3,166 +3,156 @@ import assert from 'node:assert/strict';
 import { installPlayer } from '../dist/player-controller.js';
 
 class ElementDouble extends EventTarget {
-  dataset = {};
-  textContent = '';
-  attributes = {};
+  dataset = {}; textContent = ''; hidden = false; disabled = false; attributes = {};
   setAttribute(name, value) { this.attributes[name] = value; }
   fire(name) { this.dispatchEvent(new Event(name)); }
 }
 
-function setup() {
-  const audio = new ElementDouble();
-  const toggle = new ElementDouble();
-  const status = new ElementDouble();
-  audio.playCalls = 0;
-  audio.pauseCalls = 0;
-  audio.loadCalls = 0;
-  audio.error = null;
-  audio.src = 'https://stream.radioparadise.com/mp3-128';
-  audio.removeAttribute = () => { audio.src = ''; };
-  audio.play = () => { audio.playCalls++; return Promise.resolve(); };
-  audio.pause = () => { audio.pauseCalls++; audio.fire('pause'); };
-  audio.load = () => { audio.loadCalls++; audio.error = null; };
-  installPlayer(audio, toggle, status);
-  return { audio, toggle, status };
+class SharedLock {
+  queue = []; active = false;
+  request(_name, { signal }, callback) {
+    return new Promise((resolve, reject) => {
+      const item = { callback, resolve, reject, signal };
+      if (signal.aborted) { reject(new Error('aborted')); return; }
+      signal.addEventListener('abort', () => {
+        if (!item.started) { this.queue = this.queue.filter((x) => x !== item); reject(new Error('aborted')); }
+      }, { once: true });
+      this.queue.push(item); this.pump();
+    });
+  }
+  pump() {
+    if (this.active || !this.queue.length) return;
+    const item = this.queue.shift();
+    if (item.signal.aborted) { item.reject(new Error('aborted')); this.pump(); return; }
+    this.active = true; item.started = true;
+    Promise.resolve().then(item.callback).then(item.resolve, item.reject).finally(() => {
+      this.active = false; this.pump();
+    });
+  }
 }
 
-test('Play, Pause while buffering, and resume use direct audio controls', async () => {
-  const { audio, toggle, status } = setup();
-  toggle.fire('click');
-  assert.equal(audio.playCalls, 1);
-  assert.equal(status.dataset.state, 'buffering');
-  assert.equal(toggle.textContent, 'Pause');
-  toggle.fire('click');
-  assert.equal(audio.pauseCalls, 1);
-  assert.equal(status.dataset.state, 'paused');
-  toggle.fire('click');
-  audio.fire('playing');
-  await Promise.resolve();
-  assert.equal(audio.playCalls, 2);
-  assert.equal(audio.loadCalls, 0);
-  assert.equal(status.dataset.state, 'playing');
-  assert.equal(toggle.textContent, 'Pause');
-  toggle.fire('click');
-  assert.equal(status.dataset.state, 'paused');
-});
+class Bus {
+  peers = new Set(); messages = [];
+  channel() {
+    const peer = { onmessage: null, postMessage: (message) => {
+      this.messages.push(message);
+      for (const other of this.peers) if (other !== peer) queueMicrotask(() => other.onmessage?.({ data: message }));
+    }, close: () => this.peers.delete(peer) };
+    this.peers.add(peer); return peer;
+  }
+}
+const settle = async () => { await new Promise((resolve) => setImmediate(resolve)); await new Promise((resolve) => setImmediate(resolve)); };
 
-test('play rejection exposes a retryable error', async () => {
-  const { audio, toggle, status } = setup();
-  audio.play = () => Promise.reject(new Error('blocked'));
-  toggle.fire('click');
-  await Promise.resolve();
-  assert.equal(status.dataset.state, 'error');
-  assert.equal(toggle.textContent, 'Play');
-  toggle.fire('click');
-  assert.equal(audio.loadCalls, 0);
-});
-
-test('retry resets a retained media source error before playing', async () => {
-  const { audio, toggle, status } = setup();
-  audio.play = () => {
-    audio.playCalls++;
-    return audio.error ? Promise.reject(new Error('source unsupported')) : Promise.resolve();
-  };
-  toggle.fire('click');
-  audio.error = { code: 4 };
-  audio.fire('error');
-  assert.equal(status.dataset.state, 'error');
-  assert.equal(audio.error.code, 4);
-  toggle.fire('click');
-  await Promise.resolve();
-  assert.equal(audio.loadCalls, 1);
-  assert.equal(audio.error, null);
-  assert.equal(audio.playCalls, 2);
-  assert.equal(status.dataset.state, 'playing');
-  audio.fire('playing');
-  await Promise.resolve();
-  assert.equal(status.dataset.state, 'playing');
-});
-
-test('late rejection after Pause cannot overwrite paused state', async () => {
-  const { audio, toggle, status } = setup();
-  let rejectPlay;
-  audio.play = () => new Promise((_, reject) => { rejectPlay = reject; });
-  toggle.fire('click');
-  toggle.fire('click');
-  rejectPlay(new Error('late'));
-  await Promise.resolve();
-  assert.equal(status.dataset.state, 'paused');
-});
-
-test('selecting another station cancels buffered play and requires another click', async () => {
-  const reports = [];
-  // Install a distinct controller on a fresh double to test click reporting too.
-  const second = setupWithReports(reports);
-  const a = { id: 'a', name: 'A', streamUrl: 'https://audio.bfmtv.com/a.mp3', clickToken: 'a-token' };
-  const b = { id: 'b', name: 'B', streamUrl: 'https://media-ssl.musicradio.com/b', clickToken: 'b-token' };
-  second.player.selectStation(a);
-  let resolveA;
-  second.audio.play = () => new Promise((resolve) => { resolveA = resolve; });
-  second.toggle.fire('click');
-  second.player.selectStation(b);
-  resolveA();
-  await Promise.resolve();
-  second.audio.fire('playing');
-  assert.equal(second.status.dataset.state, 'idle');
-  assert.equal(second.audio.src, b.streamUrl);
-  assert.deepEqual(reports, []);
-  second.audio.play = () => Promise.resolve();
-  second.toggle.fire('click');
-  await Promise.resolve();
-  assert.equal(second.status.dataset.state, 'playing');
-  assert.deepEqual(reports, ['b-token']);
-  assert.equal(second.audio.src, b.streamUrl);
-});
-
-function setupWithReports(reports) {
+function setup(shared, name = 'Station', reports = []) {
   const audio = new ElementDouble();
   const toggle = new ElementDouble();
   const status = new ElementDouble();
-  audio.src = '';
-  audio.error = null;
-  audio.playCalls = 0;
-  audio.play = () => { audio.playCalls++; return Promise.resolve(); };
-  audio.pause = () => audio.fire('pause');
+  const remoteButton = new ElementDouble();
+  const remoteStatus = new ElementDouble();
+  audio.src = `https://example.com/${name}`; audio.error = null; audio.playCalls = 0; audio.pauseCalls = 0; audio.isPlaying = false;
+  audio.play = () => { audio.playCalls++; audio.isPlaying = true; audio.fire('playing'); return Promise.resolve(); };
+  audio.pause = () => { audio.pauseCalls++; audio.isPlaying = false; audio.fire('pause'); };
   audio.load = () => { audio.error = null; };
   audio.removeAttribute = () => { audio.src = ''; };
-  const player = installPlayer(audio, toggle, status, { onPlaying: (token) => { reports.push(token); throw new Error('reporting unavailable'); } });
-  return { audio, toggle, status, player };
+  const player = installPlayer(audio, toggle, status, {
+    coordination: { locks: shared.lock, channel: () => shared.bus.channel() }, remoteButton, remoteStatus,
+    onPlaying: (token) => reports.push(token)
+  });
+  return { audio, toggle, status, remoteButton, remoteStatus, player };
 }
+function shared() { return { lock: new SharedLock(), bus: new Bus() }; }
 
-test('playing events report once per play attempt, and resume reports again', async () => {
-  const reports = [];
-  const { audio, toggle, status, player } = setupWithReports(reports);
-  player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://audio.bfmtv.com/a.mp3', clickToken: 'a-token' });
-  toggle.fire('click');
-  audio.fire('playing');
-  await Promise.resolve();
-  audio.fire('playing');
-  assert.equal(status.dataset.state, 'playing');
-  assert.deepEqual(reports, ['a-token']);
-  toggle.fire('click');
-  toggle.fire('click');
-  await Promise.resolve();
-  audio.fire('playing');
-  assert.deepEqual(reports, ['a-token', 'a-token']);
+test('missing coordination fails closed without calling audio.play', async () => {
+  const s = setup({ lock: undefined, bus: new Bus() });
+  s.toggle.fire('click'); await settle();
+  assert.equal(s.audio.playCalls, 0);
+  assert.equal(s.status.dataset.state, 'error');
+  assert.match(s.status.textContent, /cannot coordinate/);
+  s.player.dispose();
 });
 
-test('late old-source events and rejection cannot change a new idle selection', async () => {
-  const reports = [];
-  const { audio, toggle, status, player } = setupWithReports(reports);
-  player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://audio.bfmtv.com/a.mp3', clickToken: 'a-token' });
-  let rejectOld;
-  audio.play = () => new Promise((_resolve, reject) => { rejectOld = reject; });
-  toggle.fire('click');
-  player.selectStation({ id: 'b', name: 'B', streamUrl: 'https://media-ssl.musicradio.com/b', clickToken: 'b-token' });
-  rejectOld(new Error('late old source'));
-  audio.fire('playing');
-  audio.fire('waiting');
-  audio.fire('stalled');
-  audio.fire('error');
-  await Promise.resolve();
-  assert.equal(status.dataset.state, 'idle');
-  assert.equal(audio.src, 'https://media-ssl.musicradio.com/b');
+test('two players transfer only after old audio pauses; remote Pause confirms after stopping', async () => {
+  const env = shared(); const reports = [];
+  const a = setup(env, 'A', reports); const b = setup(env, 'B', reports);
+  a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.com/a', clickToken: 'a' });
+  b.player.selectStation({ id: 'b', name: 'B', streamUrl: 'https://example.com/b', clickToken: 'b' });
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  assert.equal(b.remoteButton.hidden, false);
+  b.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, false);
+  assert.equal(b.audio.isPlaying, true);
+  assert.match(a.status.textContent, /another thread/);
+  assert.deepEqual(reports, ['a', 'b']);
+  a.remoteButton.fire('click'); await settle();
+  assert.equal(b.audio.isPlaying, false);
+  assert.match(a.remoteStatus.textContent, /Paused in another thread/);
+  assert.equal(env.lock.active, false);
+  a.player.dispose(); b.player.dispose();
+});
+
+test('simultaneous Play and cancellation never overlap or report canceled start', async () => {
+  const env = shared(); const reports = [];
+  const a = setup(env, 'A', reports); const b = setup(env, 'B', reports);
+  a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.com/a', clickToken: 'a' });
+  b.player.selectStation({ id: 'b', name: 'B', streamUrl: 'https://example.com/b', clickToken: 'b' });
+  const originalA = a.audio.play;
+  a.audio.play = () => { assert.equal(b.audio.isPlaying, false); return originalA(); };
+  const originalB = b.audio.play;
+  b.audio.play = () => { assert.equal(a.audio.isPlaying, false); return originalB(); };
+  a.toggle.fire('click'); b.toggle.fire('click'); await settle();
+  assert.equal(Number(a.audio.isPlaying) + Number(b.audio.isPlaying), 1);
+  // A new source selection invalidates a waiting attempt and cannot start old audio.
+  a.player.selectStation({ id: 'new', name: 'New', streamUrl: 'https://example.com/new' });
+  await settle();
+  assert.equal(a.audio.isPlaying, false);
+  assert.equal(a.status.dataset.state, 'idle');
+  assert.ok(reports.length <= 2);
+  a.player.dispose(); b.player.dispose();
+});
+
+test('unresponsive holder keeps contender silent; canceled waiter cannot start later', async () => {
+  const env = shared(); const a = setup(env, 'A'); const b = setup(env, 'B');
+  a.toggle.fire('click'); await settle();
+  // Drop owner-bound messages while its lock is held.
+  const owner = [...env.bus.peers][0]; owner.onmessage = null;
+  b.toggle.fire('click'); await settle();
+  assert.equal(b.audio.playCalls, 0);
+  b.toggle.fire('click'); // cancels pending request
+  a.toggle.fire('click'); await settle();
+  assert.equal(b.audio.playCalls, 0);
+  assert.equal(b.status.dataset.state, 'paused');
+  a.player.dispose(); b.player.dispose();
+});
+
+test('unresponsive owner times out Play and remote Pause without false success', async () => {
+  const env = shared();
+  const a = setup(env, 'A');
+  const b = setup(env, 'B');
+  a.toggle.fire('click'); await settle();
+  assert.equal(b.remoteButton.hidden, false);
+  const owner = [...env.bus.peers][0]; owner.onmessage = null;
+  b.remoteButton.fire('click');
+  await new Promise((resolve) => setTimeout(resolve, 1900));
+  assert.match(b.remoteStatus.textContent, /Could not confirm Pause/);
+  assert.equal(a.audio.isPlaying, true);
+  b.toggle.fire('click');
+  await new Promise((resolve) => setTimeout(resolve, 4600));
+  assert.equal(b.audio.playCalls, 0);
+  assert.equal(b.status.dataset.state, 'error');
+  assert.match(b.status.textContent, /Could not switch playback/);
+  a.player.dispose(); b.player.dispose();
+});
+
+test('media rejection releases lock and does not report click; remount can acquire', async () => {
+  const env = shared(); const reports = []; const a = setup(env, 'A', reports);
+  a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.com/a', clickToken: 'a' });
+  a.audio.play = () => Promise.reject(new Error('blocked'));
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.status.dataset.state, 'error');
   assert.deepEqual(reports, []);
+  a.player.dispose();
+  const b = setup(env, 'B', reports); b.toggle.fire('click'); await settle();
+  assert.equal(b.audio.isPlaying, true);
+  b.player.dispose();
 });

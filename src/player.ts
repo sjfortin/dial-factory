@@ -5,10 +5,17 @@ import { renderStations } from './station-list.js';
 const audio = document.querySelector<HTMLAudioElement>('#radio')!;
 const toggle = document.querySelector<HTMLButtonElement>('#toggle')!;
 const status = document.querySelector<HTMLElement>('#status')!;
+const remoteButton = document.querySelector<HTMLButtonElement>('#remote-pause');
+const remoteStatus = document.querySelector<HTMLElement>('#remote-status');
 const app = new App({ name: 'dial-radio-player', version: '0.2.0' });
 const list = document.querySelector<HTMLElement>('#stations');
 const summary = document.querySelector<HTMLElement>('#summary');
 const player = installPlayer(audio, toggle, status, {
+  coordination: {
+    locks: navigator.locks,
+    channel: (name) => new BroadcastChannel(name)
+  },
+  remoteButton, remoteStatus,
   onPlaying: (clickToken) => {
     void app.callServerTool({ name: 'report_station_click', arguments: { clickToken } }).catch(() => {});
   }
