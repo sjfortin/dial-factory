@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dial two-thread capability probe v1</title>
+<style>
+body{font:15px system-ui,sans-serif;margin:0;background:#f4f8f3;color:#17201c}main{max-width:36rem;padding:1rem}h1{font-size:1.2rem}button{font:inherit;margin:.2rem;padding:.5rem .7rem;border:0;border-radius:.4rem;background:#165c40;color:white}button:disabled{opacity:.5}pre,textarea{width:100%;box-sizing:border-box;white-space:pre-wrap;overflow-wrap:anywhere;background:white;border:1px solid #b5c8b7;padding:.5rem}textarea{height:9rem}#state{font-weight:bold}p{margin:.5rem 0}
+</style>
+</head><body><main>
+<h1>Dial two-thread probe v1</h1>
+<p>Open this tool in two separate ChatGPT threads in the same browser profile. Keep both frames open. Copy results from each frame. This probe does not establish feature support on its own.</p>
+<p id="identity"></p><p id="state" role="status" aria-live="polite"></p><pre id="checks" aria-label="Probe check summary"></pre>
+<button id="nonce" type="button">Send nonce to other frame</button>
+<button id="hold" type="button">Hold exclusive lock</button>
+<button id="contend" type="button">Check lock contention</button>
+<button id="transfer" type="button">Click to transfer and play radio</button>
+<button id="release" type="button">Pause and release</button><button id="heard" type="button">I heard audio</button><button id="silent" type="button">I heard no audio</button>
+<p>Sequence: send nonce from both frames; hold in A and check contention in B; release and reverse; hold in A then click transfer in B, listening for Radio Paradise; reverse; repeat with A backgrounded. Close the lock holder frame, reopen this tool, then check the lock from the other frame.</p>
+<audio id="radio" preload="none" src="https://stream.radioparadise.com/mp3-128"></audio>
+<p>Results include UTC times, browser, frame origin and this resource version. Mark each audible outcome yourself when reviewing both logs.</p>
+<button id="copy" type="button">Copy results</button><textarea id="results" aria-label="Copyable probe results" readonly></textarea>
+<script>/* PROBE_SCRIPT */</script>
+</main></body></html>
