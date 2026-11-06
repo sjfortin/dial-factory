@@ -12,6 +12,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
   let selected: Selection | null = null;
   let reportedAttempt = -1;
   let playSettled = false;
+  let mediaStarted = false;
   let currentAbort: AbortController | undefined;
   const coordinator = new PlaybackCoordinator(options.coordination);
 
@@ -26,6 +27,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     wanted = false;
     attempt++;
     playSettled = false;
+    mediaStarted = false;
     currentAbort?.abort();
     currentAbort = undefined;
     audio.pause();
@@ -73,6 +75,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     if (!coordinator.available) { show('error', 'This environment cannot coordinate Dial playback.'); return; }
     wanted = true;
     playSettled = false;
+    mediaStarted = false;
     const currentAttempt = ++attempt;
     const abort = new AbortController();
     currentAbort = abort;
@@ -86,6 +89,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     show('buffering', 'Connecting to live stream…');
     try {
       if (audio.error) audio.load();
+      mediaStarted = true;
       await audio.play();
       // An older promise can settle after a newer attempt owns this element.
       if (!wanted || currentAttempt !== attempt) return;
@@ -104,8 +108,9 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
   audio.addEventListener('stalled', () => { if (wanted && playSettled) show('buffering', 'Stream stalled; waiting for data…'); });
   audio.addEventListener('pause', () => {
     if (wanted) {
-      // Queued old-source events must not stop a stream already playing again.
-      if (audio.paused === false) return;
+      // While waiting for ownership there is no current media to pause.
+      // Queued old-source events also must not stop an active new stream.
+      if (!mediaStarted || audio.paused === false) return;
       stop();
       show('paused', `Paused ${selected?.name ?? 'live radio'}`);
     } else if (state !== 'error' && state !== 'idle') show('paused', 'Paused');

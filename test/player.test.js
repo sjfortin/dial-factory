@@ -200,6 +200,23 @@ test('current media pause releases lock; queued old pause cannot interrupt resum
   a.player.dispose();
 });
 
+test('queued old pause during a new lock wait does not cancel the user Play', async () => {
+  const env = shared(); const a = setup(env, 'A'); const b = setup(env, 'B');
+  b.toggle.fire('click'); await settle();
+  b.toggle.fire('click'); // old pause may still have a queued event
+  a.toggle.fire('click'); await settle();
+  const owner = [...env.bus.peers][0]; owner.onmessage = null;
+  b.toggle.fire('click'); await settle();
+  assert.equal(b.audio.paused, true);
+  assert.equal(b.status.dataset.state, 'buffering');
+  b.audio.fire('pause'); // old event arrives during new ownership wait
+  assert.equal(b.status.dataset.state, 'buffering');
+  a.toggle.fire('click'); await settle();
+  assert.equal(b.audio.isPlaying, true);
+  assert.equal(b.status.dataset.state, 'playing');
+  a.player.dispose(); b.player.dispose();
+});
+
 test('retained media error retries through load and reports each confirmed resume once', async () => {
   const env = shared(); const reports = []; const a = setup(env, 'A', reports);
   a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.com/a', clickToken: 'a' });
