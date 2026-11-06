@@ -225,6 +225,27 @@
       "seq": 23,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-06T23:18:04+00:00",
+      "could_factory_have_avoided_this": true,
+      "human_implementation": false,
+      "human_response": "yes",
+      "kind": "intervention",
+      "possible_improvement": "Support an explicit Spec rework route after a review scope decision without losing prior evidence.",
+      "question": "Expand finite candidates rather than ship partial coverage?",
+      "reason": "Owner authorized pursuing expanded finite stream candidates; current factory cannot route a reviewed implementation back to Spec planning, so a successor work item will preserve the candidate and finish the same coverage objective",
+      "seq": 24,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-006"
+    },
+    {
+      "at": "2026-11-06T23:18:04+00:00",
+      "from_state": "WAITING_FOR_HUMAN",
+      "kind": "advanced",
+      "seq": 25,
+      "terminal_failure_reason": null,
+      "to_state": "CANCELLED"
     }
   ],
   "final_result": null,
@@ -240,6 +261,17 @@
       "question": "Expand the finite approved stream-host candidate set to pursue missing countries, or explicitly narrow this release to the measured partial coverage?",
       "reason": "Independent review resolves code defects but cannot waive the approved mandatory US coverage minimum; permitted SomaFM probes now return403",
       "stage": "REVIEWING",
+      "work_item": "DIAL-006"
+    },
+    {
+      "at": "2026-11-06T23:18:04+00:00",
+      "could_factory_have_avoided_this": true,
+      "human_implementation": false,
+      "human_response": "yes",
+      "possible_improvement": "Support an explicit Spec rework route after a review scope decision without losing prior evidence.",
+      "question": "Expand finite candidates rather than ship partial coverage?",
+      "reason": "Owner authorized pursuing expanded finite stream candidates; current factory cannot route a reviewed implementation back to Spec planning, so a successor work item will preserve the candidate and finish the same coverage objective",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-006"
     }
   ],
@@ -594,7 +626,7 @@
     },
     "mode": "approved"
   },
-  "state": "WAITING_FOR_HUMAN",
+  "state": "CANCELLED",
   "title": "Expand country and station coverage",
-  "updated_at": "2026-11-06T23:17:07+00:00"
+  "updated_at": "2026-11-06T23:18:04+00:00"
 }
