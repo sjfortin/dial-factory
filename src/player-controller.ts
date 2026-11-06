@@ -21,6 +21,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     status.dataset.state = next;
     status.textContent = message;
     toggle.textContent = wanted ? 'Pause' : 'Play';
+    toggle.dataset.action = wanted ? 'pause' : 'play';
     toggle.setAttribute('aria-label', `${wanted ? 'Pause' : 'Play'} ${selected?.name ?? 'live radio'}`);
   }
   function stop() {
