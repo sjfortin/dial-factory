@@ -1,0 +1,22 @@
+{
+  "agent": "/root/dial006_triage",
+  "candidate": null,
+  "contract": "factory/agents/triage/agent.md",
+  "criteria": [
+    "Expand documented compatible station coverage for France, UK, US, Canada, Germany, Japan, Spain and Italy, with explicit measured limitations.",
+    "Provide bounded more-stations browsing without duplicates or disrupting selected/playing station.",
+    "Preserve neutral Studio UI, playback coordination, safe stream handling, provider attribution and click-reporting semantics.",
+    "Independent Review and Verify assess the exact candidate with meaningful regression checks, live stream/provider evidence and owner host QA; missing evidence remains BLOCKED."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Expand the agreed eight-country coverage and bounded station browsing. Hosting is explicitly the following phase only after owner acceptance; no hosting or public launch changes in this phase.",
+  "requested_model": "gpt-6-luna",
+  "requested_reasoning": "medium",
+  "role": "Triage",
+  "run_id": "run-53e01ae20011",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "work_item": "DIAL-006"
+}

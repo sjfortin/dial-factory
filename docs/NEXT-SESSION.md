@@ -1,7 +1,5 @@
-# Dial resume checkpoint — DIAL-005 Studio host QA
+# Dial checkpoint — DIAL-006 coverage
 
-Studio candidate 6148c3720703f4d6e066d434b07a49641a4a9823 has independent Review ACCEPT and 28 passing tests. Additional independent Chromium review checked 320px/560px light/dark layouts and state fixtures without blocking visual defects. Two minor text repetition notes are in the polish evidence. Actual ChatGPT host visual/audio QA remains unobserved; DIAL-005 remains WAITING_FOR_HUMAN with Verify BLOCKED, not COMPLETE.
+Branch work/DIAL-006. Product candidate 164ed275bf510869410c1df8fcf42a460510e5e6. 33 tests pass. Independent Review attempt2 resolves stale pagination and range defects, but HUMAN_DECISION: required US coverage missing after approved SomaFM origin returned403. DIAL-006 WAITING_FOR_HUMAN, resume REVIEWING. No criteria waived. No independent Verify yet, no coverage rollout.
 
-Owner explicitly authorized merge/push and serving this version to see it in the plugin. Resources are radio-v8 and country-v6. After rollout, open a fresh player and country results in ChatGPT, check appearance and Play/Pause, takeover and remote Pause. Record actual owner observations before final Verify/handoff.
-
-Endpoint: https://macbook-air.tail10dbb3.ts.net/mcp via Tailscale Funnel to localhost8787. Foreman owns lifecycle; only Implement edits production. No future merge or deployment is automatic.
+See approved PRODUCT/TECH, docs/DIAL-006-COVERAGE.md, state and reports. More stations bounded to 3x50 provider rows, 30 choices; preserved selection/playback and generation guards. CA/IT/Meuh/Nova direct probes passed; US/ES gaps and DE/JP direct/host gaps remain. Need owner scope decision: research/approve expanded finite stream candidates to finish coverage (recommended), or explicitly narrow release. Any revised spec needs exact approval; do not silently expand origins. Hosting remains next only after owner accepts coverage. Production endpoint still serves merged DIAL-005 correction.
