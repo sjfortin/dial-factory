@@ -2,14 +2,14 @@
 
 ## Decision gate
 
-**Draft, design choice pending.** `PRODUCT.md` and this file require revision to name the owner-selected A/B/C direction and refinements. Foreman obtains exact revision approval before Implement edits production files. `design/player-directions.html` is a non-production visual reference, not an implementation source or verified host rendering.
+The owner selected **Studio** as the visual direction. Foreman must still obtain approval of the exact revisions of `PRODUCT.md` and this file before Implement edits production files. `design/player-directions.html` is an illustrative, non-production visual reference, not an implementation source or verified host rendering.
 
 ## Architecture and components
 
 - Update the two UI resources, `public/player.html` and `public/discovery.html`, as a coherent small component treatment. Preserve tool names, the script injection marker, semantic status/button/audio hooks, and delivery flow in `src/server.ts`. Version the delivered UI resource URIs when the HTML or injected script changes, following the DIAL-004 cache practice; update references and resource tests together.
 - Keep shared behavior in `src/player-controller.ts`, `src/playback-coordinator.ts`, `src/player.ts`, and `src/station-list.ts`. If markup or selected-row styling needs a small binding change, Implement may make it in those files without changing the coordination/discovery contract. Preserve text updates and state transitions as the source of truth; CSS should reflect state, not infer it from stale visual state.
 - Preserve the country result schema, validation, at-most-ten bound, provider attribution and reporting text. Escape or use text nodes for provider names. Do not introduce external fonts, assets, network fetches, new origins, or dependencies for styling.
-- Use scoped CSS and system appearance (`color-scheme`/`prefers-color-scheme`) in the delivered resources. Choose actual colors and spacing after the owner selects a direction; check real rendered contrast and focus visibility in both appearances.
+- Implement Studio's neutral opaque card, compact spacing, restrained green primary action, round Play/Pause button, in-card status, and subtle country-row divider/selection treatment with scoped CSS. The fixed resource omits the country section. Use system appearance (`color-scheme`/`prefers-color-scheme`) and equivalent light/dark values. Tune the mockup's approximate sizes only as needed for real host fit, readable contrast, and visible focus; retain the hierarchy and control shapes selected by the owner.
 
 ## Constraints
 
