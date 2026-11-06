@@ -87,7 +87,8 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     try {
       if (audio.error) audio.load();
       await audio.play();
-      if (!wanted || currentAttempt !== attempt) { audio.pause(); return; }
+      // An older promise can settle after a newer attempt owns this element.
+      if (!wanted || currentAttempt !== attempt) return;
       started(currentAttempt);
     } catch {
       if (wanted && currentAttempt === attempt) fail('Could not start audio. Check your connection or playback permission, then try Play again.');
@@ -101,7 +102,14 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
   audio.addEventListener('playing', () => { if (wanted && playSettled) show('playing', `Playing ${selected?.name ?? 'live'}`); });
   audio.addEventListener('waiting', () => { if (wanted && playSettled) show('buffering', 'Buffering live stream…'); });
   audio.addEventListener('stalled', () => { if (wanted && playSettled) show('buffering', 'Stream stalled; waiting for data…'); });
-  audio.addEventListener('pause', () => { if (!wanted && state !== 'error' && state !== 'idle') show('paused', 'Paused'); });
+  audio.addEventListener('pause', () => {
+    if (wanted) {
+      // Queued old-source events must not stop a stream already playing again.
+      if (audio.paused === false) return;
+      stop();
+      show('paused', `Paused ${selected?.name ?? 'live radio'}`);
+    } else if (state !== 'error' && state !== 'idle') show('paused', 'Paused');
+  });
   audio.addEventListener('error', () => { if (wanted && audio.error) fail('Stream unavailable or blocked. Try Play again.'); });
   const teardown = () => { stop(); coordinator.dispose(); };
   if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('pagehide', teardown, { once: true });

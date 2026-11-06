@@ -49,9 +49,9 @@ function setup(shared, name = 'Station', reports = []) {
   const status = new ElementDouble();
   const remoteButton = new ElementDouble();
   const remoteStatus = new ElementDouble();
-  audio.src = `https://example.com/${name}`; audio.error = null; audio.playCalls = 0; audio.pauseCalls = 0; audio.isPlaying = false;
-  audio.play = () => { audio.playCalls++; audio.isPlaying = true; audio.fire('playing'); return Promise.resolve(); };
-  audio.pause = () => { audio.pauseCalls++; audio.isPlaying = false; audio.fire('pause'); };
+  audio.src = `https://example.com/${name}`; audio.error = null; audio.playCalls = 0; audio.pauseCalls = 0; audio.isPlaying = false; audio.paused = true;
+  audio.play = () => { audio.playCalls++; audio.isPlaying = true; audio.paused = false; audio.fire('playing'); return Promise.resolve(); };
+  audio.pause = () => { audio.pauseCalls++; audio.isPlaying = false; audio.paused = true; audio.fire('pause'); };
   audio.load = () => { audio.error = null; };
   audio.removeAttribute = () => { audio.src = ''; };
   const player = installPlayer(audio, toggle, status, {
@@ -155,4 +155,83 @@ test('media rejection releases lock and does not report click; remount can acqui
   const b = setup(env, 'B', reports); b.toggle.fire('click'); await settle();
   assert.equal(b.audio.isPlaying, true);
   b.player.dispose();
+});
+
+test('late old play fulfillment and rejection cannot stop or relabel a newer playback', async () => {
+  const env = shared(); const a = setup(env);
+  const normalPlay = a.audio.play;
+  let resolveOld;
+  a.audio.play = () => new Promise((resolve) => { resolveOld = resolve; });
+  a.toggle.fire('click'); await settle();
+  a.toggle.fire('click');
+  a.audio.play = normalPlay;
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  resolveOld(); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  assert.equal(a.status.dataset.state, 'playing');
+
+  let rejectOld;
+  a.toggle.fire('click');
+  a.audio.play = () => new Promise((_resolve, reject) => { rejectOld = reject; });
+  a.toggle.fire('click'); await settle();
+  a.toggle.fire('click');
+  a.audio.play = normalPlay;
+  a.toggle.fire('click'); await settle();
+  rejectOld(new Error('late')); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  assert.equal(a.status.dataset.state, 'playing');
+  a.player.dispose();
+});
+
+test('current media pause releases lock; queued old pause cannot interrupt resumed audio', async () => {
+  const env = shared(); const a = setup(env);
+  a.toggle.fire('click'); await settle();
+  assert.equal(env.lock.active, true);
+  a.audio.pause(); await settle();
+  assert.equal(env.lock.active, false);
+  assert.equal(a.status.dataset.state, 'paused');
+  assert.equal(a.toggle.textContent, 'Play');
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  a.audio.fire('pause'); // late event from the previous stopped attempt
+  assert.equal(a.audio.isPlaying, true);
+  assert.equal(a.status.dataset.state, 'playing');
+  a.player.dispose();
+});
+
+test('retained media error retries through load and reports each confirmed resume once', async () => {
+  const env = shared(); const reports = []; const a = setup(env, 'A', reports);
+  a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.com/a', clickToken: 'a' });
+  const normalPlay = a.audio.play;
+  a.audio.play = () => a.audio.error ? Promise.reject(new Error('retained error')) : normalPlay();
+  a.toggle.fire('click'); await settle();
+  a.audio.error = { code: 4 };
+  a.audio.fire('error'); await settle();
+  assert.equal(a.status.dataset.state, 'error');
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.error, null);
+  assert.equal(a.status.dataset.state, 'playing');
+  a.audio.fire('playing');
+  assert.deepEqual(reports, ['a', 'a']);
+  a.toggle.fire('click'); a.toggle.fire('click'); await settle();
+  a.audio.fire('playing');
+  assert.deepEqual(reports, ['a', 'a', 'a']);
+  a.player.dispose();
+});
+
+test('late old-source events cannot turn a new idle selection into playback', async () => {
+  const env = shared(); const reports = []; const a = setup(env, 'A', reports);
+  a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.com/a', clickToken: 'a' });
+  let rejectOld;
+  a.audio.play = () => new Promise((_resolve, reject) => { rejectOld = reject; });
+  a.toggle.fire('click'); await settle();
+  a.player.selectStation({ id: 'b', name: 'B', streamUrl: 'https://example.com/b', clickToken: 'b' });
+  rejectOld(new Error('late old source'));
+  for (const event of ['playing', 'waiting', 'stalled', 'error']) a.audio.fire(event);
+  await settle();
+  assert.equal(a.status.dataset.state, 'idle');
+  assert.equal(a.audio.src, 'https://example.com/b');
+  assert.deepEqual(reports, []);
+  a.player.dispose();
 });
