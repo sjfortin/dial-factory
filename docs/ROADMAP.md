@@ -6,7 +6,9 @@ This is a proposed sequence, not approval to implement every phase. The owner re
 
 Country lookup, station selection and the player are implemented and independently reviewed; 19 automated tests and live Inspector checks passed. Owner reports successful ChatGPT QA. Formal verification still needs dated station-specific host evidence required by its approved spec. Existing work is pushed on work/DIAL-002; PR #2 targets main: https://github.com/sjfortin/dial-factory/pull/2. The PR is open and mergeable, not merged. main was created from factory/bootstrap at 487e865; changing the default branch is a separate repository setting not performed here.
 
-## Next: single active playback across threads (DIAL-003)
+## Completed: single active playback across threads (DIAL-003 probe, DIAL-004 integration)
+
+DIAL-004 COMPLETE/PASS on reviewed product candidate d196b7e. Regular-player integration passed independent Review, 28 automated tests, local Chromium startup checks, Inspector delivery and owner-reported ChatGPT takeover, remote Pause and close-tab recovery QA. The supported scope remains one tested browser profile/device. See its journal and handoff; earlier proposal language below explains the route and constraints.
 
 First proposed support boundary: two live Dial views in separate ChatGPT chats in the same browser profile/device. Proposed behavior: Play takes ownership from the other view; Pause can stop active playback from either. These are explicit proposals pending owner approval, not assumed completed product behavior.
 
