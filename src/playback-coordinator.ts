@@ -55,10 +55,12 @@ export class PlaybackCoordinator {
   constructor(env: CoordinationEnvironment = {}) {
     this.id = env.id?.() ?? randomId();
     this.now = env.now ?? Date.now;
-    this.timer = env.setTimeout ?? setTimeout;
-    this.clearTimer = env.clearTimeout ?? clearTimeout;
-    this.interval = env.setInterval ?? setInterval;
-    this.clearIntervalTimer = env.clearInterval ?? clearInterval;
+    // Browser Window timers require their original receiver in Chromium.
+    // Calling a copied native timer as this.timer() throws Illegal invocation.
+    this.timer = (env.setTimeout ?? globalThis.setTimeout).bind(env.setTimeout ? env : globalThis);
+    this.clearTimer = (env.clearTimeout ?? globalThis.clearTimeout).bind(env.clearTimeout ? env : globalThis);
+    this.interval = (env.setInterval ?? globalThis.setInterval).bind(env.setInterval ? env : globalThis);
+    this.clearIntervalTimer = (env.clearInterval ?? globalThis.clearInterval).bind(env.clearInterval ? env : globalThis);
     this.locks = env.locks;
     try { if (this.locks && env.channel) this.channel = env.channel(CHANNEL_NAME); } catch { /* fail closed */ }
     this.available = !!(this.locks && this.channel && typeof this.locks.request === 'function');

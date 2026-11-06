@@ -36,7 +36,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const radioTool = tools.tools.find((entry) => entry.name === 'open_radio');
   assert.ok(radioTool);
   const uri = radioTool._meta?.ui?.resourceUri;
-  assert.equal(uri, 'ui://dial/radio-v6.html');
+  assert.equal(uri, 'ui://dial/radio-v7.html');
 
   const result = await client.callTool({ name: 'open_radio', arguments: {} });
   assert.equal(result.structuredContent.station.name, 'Radio Paradise');
@@ -61,7 +61,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
-  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v4.html');
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v5.html');
   assert.match(countryResource.contents[0].text, /id="remote-pause"/);
   assert.deepEqual(countryResource.contents[0]._meta.ui.csp, {
     connectDomains: [],
