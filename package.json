@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "tsc && esbuild src/player.ts --bundle --format=iife --platform=browser --outfile=dist/player.js",
+    "build": "tsc && esbuild src/player.ts --bundle --format=iife --platform=browser --outfile=dist/player.js && esbuild src/probe.ts --bundle --format=iife --platform=browser --outfile=dist/probe.js",
     "start": "node --dns-result-order=ipv4first --no-network-family-autoselection dist/server.js",
     "test": "npm run build && node --test test/*.test.js"
   },

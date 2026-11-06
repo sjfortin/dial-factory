@@ -1,0 +1,23 @@
+{
+  "agent": "/root/dial_003_triage",
+  "candidate": null,
+  "contract": "factory/agents/triage/agent.md",
+  "criteria": [
+    "Investigate cross-thread communication and playback ownership in actual ChatGPT MCP Apps instances, documenting platform and scope limits.",
+    "Within the supported scope, starting playback in one Dial instance stops or pauses any previously playing Dial instance so two streams do not remain audible together.",
+    "Play and Pause behavior in a second thread is defined explicitly, including whether its controls operate the active playback or transfer ownership.",
+    "Playback ownership and visible player state recover predictably after rapid interactions, closed or remounted instances, and unavailable coordination.",
+    "Automated coordination tests and separate actual two-thread ChatGPT playback evidence cover the approved behavior."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Investigate and define a single active playback experience across Dial instances in different ChatGPT threads; prevent overlapping audio and make Play/Pause behavior clear.",
+  "requested_model": "gpt-6-luna",
+  "requested_reasoning": "medium",
+  "role": "Triage",
+  "run_id": "run-9e5bdf306f5f",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "work_item": "DIAL-003"
+}

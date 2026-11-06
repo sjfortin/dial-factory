@@ -26,6 +26,8 @@
     <ul id="stations"></ul>
     <button id="toggle" type="button" disabled>Play</button>
     <p id="status" role="status" aria-live="polite" data-state="idle">Select a station to listen.</p>
+    <button id="remote-pause" type="button" hidden>Pause Dial in other thread</button>
+    <p id="remote-status" role="status" aria-live="polite"></p>
     <audio id="radio" preload="none"></audio>
     <p>Station data: <a href="https://docs.radio-browser.info/" target="_blank" rel="noopener noreferrer">Radio Browser</a>. After playback starts, Dial reports a click to Radio Browser; it receives the station ID and server IP. Reporting failure does not stop audio.</p>
   </main>

@@ -7,8 +7,9 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
-const UI_URI = 'ui://dial/radio-v3.html';
-const DISCOVERY_URI = 'ui://dial/country-v1.html';
+const UI_URI = 'ui://dial/radio-v7.html';
+const DISCOVERY_URI = 'ui://dial/country-v5.html';
+const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',
   provider: 'Radio Paradise',
@@ -20,6 +21,7 @@ const playerPath = fileURLToPath(new URL('../public/player.html', import.meta.ur
 const scriptPath = fileURLToPath(new URL('./player.js', import.meta.url));
 const html = readFileSync(playerPath, 'utf8').replace('/* PLAYER_SCRIPT */', () => readFileSync(scriptPath, 'utf8'));
 const discoveryHtml = readFileSync(fileURLToPath(new URL('../public/discovery.html', import.meta.url)), 'utf8').replace('/* PLAYER_SCRIPT */', () => readFileSync(scriptPath, 'utf8'));
+const probeHtml = readFileSync(fileURLToPath(new URL('../public/probe.html', import.meta.url)), 'utf8').replace('/* PROBE_SCRIPT */', () => readFileSync(fileURLToPath(new URL('./probe.js', import.meta.url)), 'utf8'));
 const providerOrigin = process.env.RADIO_BROWSER_API_ORIGIN ?? 'https://de1.api.radio-browser.info';
 
 function makeServer() {
@@ -44,6 +46,16 @@ function makeServer() {
     contents: [{ uri: DISCOVERY_URI, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
       _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS] } } } }]
   }));
+  registerAppResource(server, 'Dial two-thread capability probe v2', PROBE_URI, {}, async () => ({
+    contents: [{ uri: PROBE_URI, mimeType: RESOURCE_MIME_TYPE, text: probeHtml,
+      _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: ['https://stream.radioparadise.com'] } } } }]
+  }));
+  registerAppTool(server, 'open_capability_probe', {
+    title: 'Open Dial two-thread capability probe',
+    description: 'Test Dial messaging, Web Locks, and post-transfer radio playback in two real ChatGPT threads. Diagnostic only.',
+    inputSchema: {},
+    _meta: { ui: { resourceUri: PROBE_URI } }
+  }, async () => ({ content: [{ type: 'text', text: 'Open this probe in two ChatGPT threads in one browser profile. Use its controls and copy results from both frames.' }] }));
   registerAppTool(server, 'open_radio', {
     title: 'Open one live radio station',
     description: 'Show the Radio Paradise live player. Playback starts only when the user presses Play.',

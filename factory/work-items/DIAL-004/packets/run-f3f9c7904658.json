@@ -1,0 +1,26 @@
+{
+  "agent": "/root/dial004_implement",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "Regular fixed and country players share exclusive playback ownership within the tested browser profile/device.",
+    "Play in a second thread pauses the previous player before starting; simultaneous and canceled attempts cannot overlap or restart stale audio.",
+    "Either thread can request Pause of the active player and show acknowledged versus unconfirmed status honestly.",
+    "Missing APIs, unresponsive owners, rapid actions and close/remount recovery have bounded safe behavior.",
+    "Meaningful automated and delivered-resource tests pass, followed by independent Review and actual two-thread host playback/recovery verification."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Implement the owner-approved same-browser takeover and shared Pause design using the DIAL-003 proven messaging/lock capabilities. Carry the untested close/remount case into mandatory feature verification.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-f3f9c7904658",
+  "spec": {
+    "at": "2026-11-05T23:19:45+00:00",
+    "by": "FOREMAN",
+    "mode": "skipped",
+    "reason": "Reuse exact owner-approved DIAL-003 PRODUCT/TECH architecture and behavior; owner explicitly directs regular-player integration now with close/remount retained as required verification. No new architecture or scope."
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-004"
+}

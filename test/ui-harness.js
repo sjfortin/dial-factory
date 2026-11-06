@@ -24,7 +24,7 @@ class Element extends EventTarget {
 const tick = async () => { await new Promise(resolve => setImmediate(resolve)); };
 
 export async function exerciseDeliveredScript(script) {
-  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary'].map(id => [id, new Element()]));
+  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#remote-pause', '#remote-status'].map(id => [id, new Element()]));
   nodes['#toggle'].disabled = true;
   const listeners = new Map();
   const listenerOps = [];
@@ -45,7 +45,14 @@ export async function exerciseDeliveredScript(script) {
   };
   const document = { querySelector(selector) { return nodes[selector] ?? null; }, createElement() { return new Element(); }, documentElement: { style: { height: '' }, getBoundingClientRect() { return { height: 400 }; } }, body: new Element() };
   class ResizeObserver { observe() {} disconnect() {} }
-  runInNewContext(script, { window, document, console: { ...console, debug() {} }, URL, setTimeout, clearTimeout, queueMicrotask, requestAnimationFrame: (callback) => queueMicrotask(callback), ResizeObserver, Event, EventTarget, AbortController, TextEncoder, TextDecoder }, { timeout: 5000 });
+  class BroadcastChannel { onmessage = null; postMessage() {} close() {} }
+  const navigator = { locks: { request(_name, { signal }, callback) {
+    if (signal.aborted) return Promise.reject(new Error('aborted'));
+    return Promise.resolve().then(callback);
+  } } };
+  runInNewContext(script, { window, document, navigator, BroadcastChannel, console: { ...console, debug() {} }, URL, setTimeout, clearTimeout,
+    setInterval: () => 0, clearInterval: () => {}, queueMicrotask, requestAnimationFrame: (callback) => queueMicrotask(callback),
+    ResizeObserver, Event, EventTarget, AbortController, TextEncoder, TextDecoder }, { timeout: 5000 });
   await tick();
   assert.ok(sent.some(item => item.method === 'ui/initialize'), 'delivered bundle initializes the MCP Apps bridge');
   assert.ok(sent.some(item => item.method === 'ui/notifications/initialized'), `bridge did not finish initialization: ${sent.map(item => item.method).join(', ')}`);

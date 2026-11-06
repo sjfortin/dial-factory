@@ -1,0 +1,5 @@
+# Regular-player cross-thread coordination
+
+Owner explicitly requested implementing and verifying the regular-player feature after positive DIAL-003 probe results. Reuse the owner-approved same-browser/profile/device design in DIAL-003 PRODUCT.md and TECH.md. The close/remount capability test remains unobserved; owner authorizes moving forward while carrying this into mandatory implementation verification. Do not claim that recovery or the full feature already passes.
+
+Play in one regular player takes ownership after old audio stops; Pause can request stopping the active player from another view with honest confirmed/unconfirmed status. Use exclusive Web Locks plus BroadcastChannel under the tested shared origin/partition. No accounts, backend coordination, cross-device promises or widened CSP. Missing or unavailable ownership fails closed. Resource versions must change with delivered script. Independent Review and Verify required; actual host tests still needed after integration. No automatic merge/deployment.
