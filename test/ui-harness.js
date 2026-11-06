@@ -15,6 +15,7 @@ class Element extends EventTarget {
   append(...items) { this.children.push(...items); }
   replaceChildren(...items) { this.children = items; }
   setAttribute(key, value) { this.attributes[key] = value; }
+  querySelectorAll(selector) { return selector === 'button.station-option' ? this.children.map(item => item.children[0]) : []; }
   removeAttribute(key) { if (key === 'src') this.src = ''; }
   pause() { this.pauseCalls++; this.dispatchEvent(new Event('pause')); }
   load() { this.loadCalls++; this.error = null; }
@@ -24,7 +25,7 @@ class Element extends EventTarget {
 const tick = async () => { await new Promise(resolve => setImmediate(resolve)); };
 
 export async function exerciseDeliveredScript(script) {
-  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#remote-pause', '#remote-status'].map(id => [id, new Element()]));
+  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle'].map(id => [id, new Element()]));
   nodes['#toggle'].disabled = true;
   const listeners = new Map();
   const listenerOps = [];
@@ -63,9 +64,10 @@ export async function exerciseDeliveredScript(script) {
   result('ok', [a, b]);
   await tick();
   assert.equal(nodes['#stations'].children.length, 2, `tool result did not render; sent ${sent.map(item => item.method).join(', ')}; listener ${listeners.has('message')}; ops ${listenerOps.join(', ')}`);
-  assert.equal(nodes['#stations'].children[0].children[0].textContent, 'Select A <b>unsafe</b>');
+  assert.equal(nodes['#stations'].children[0].children[0].children[0].children[0].textContent, 'A <b>unsafe</b>');
   assert.equal(nodes['#radio'].playCalls, 0, 'result does not autoplay');
   nodes['#stations'].children[0].children[0].click();
+  assert.equal(nodes['#station-title'].textContent, 'A <b>unsafe</b>');
   assert.equal(nodes['#radio'].src, a.streamUrl);
   assert.equal(nodes['#status'].dataset.state, 'idle');
   nodes['#toggle'].click();
@@ -75,6 +77,8 @@ export async function exerciseDeliveredScript(script) {
   nodes['#toggle'].click();
   assert.equal(nodes['#status'].dataset.state, 'paused');
   nodes['#stations'].children[1].children[0].click();
+  assert.equal(nodes['#stations'].children[0].children[0].attributes['aria-pressed'], 'false');
+  assert.equal(nodes['#stations'].children[1].children[0].attributes['aria-pressed'], 'true');
   assert.equal(nodes['#radio'].src, b.streamUrl);
   assert.equal(nodes['#status'].dataset.state, 'idle');
   nodes['#toggle'].click();

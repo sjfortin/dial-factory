@@ -27,13 +27,30 @@ export function renderStations(value: unknown, list: HTMLElement, summary: HTMLE
     const item = document.createElement('li');
     const button = document.createElement('button');
     button.type = 'button';
-    button.textContent = `Select ${row.name}`;
+    button.className = 'station-option';
     button.setAttribute('aria-label', `Select ${row.name}`);
-    button.addEventListener('click', () => { select(row); toggle.disabled = false; });
+    button.setAttribute('aria-pressed', 'false');
+    const copy = document.createElement('span');
+    copy.className = 'station-option-copy';
+    const name = document.createElement('span');
+    name.className = 'station-option-name';
+    name.textContent = row.name;
     const metadata = document.createElement('span');
     metadata.className = 'metadata';
     metadata.textContent = [row.countryCode, row.codec, typeof row.bitrate === 'number' ? `${row.bitrate} kbps` : null].filter(Boolean).join(' · ');
-    item.append(button, metadata);
+    const check = document.createElement('span');
+    check.className = 'station-option-check';
+    check.textContent = '✓';
+    check.setAttribute('aria-hidden', 'true');
+    copy.append(name, metadata);
+    button.append(copy, check);
+    button.addEventListener('click', () => {
+      for (const option of list.querySelectorAll('button.station-option')) option.setAttribute('aria-pressed', 'false');
+      button.setAttribute('aria-pressed', 'true');
+      select(row);
+      toggle.disabled = false;
+    });
+    item.append(button);
     list.append(item);
   }
 }

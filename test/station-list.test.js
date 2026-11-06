@@ -10,6 +10,7 @@ class Element extends EventTarget {
   append(...children) { this.children.push(...children); }
   replaceChildren(...children) { this.children = children; }
   setAttribute(key, value) { this.attributes[key] = value; }
+  querySelectorAll(selector) { return selector === 'button.station-option' ? this.children.map(item => item.children[0]) : []; }
   click() { this.dispatchEvent(new Event('click')); }
 }
 const originalDocument = globalThis.document;
@@ -23,9 +24,12 @@ test('safe text rendering, bounded choices, keyboard button selection', () => {
   const selected = [];
   renderStations({ status: 'ok', countryCode: 'FR', stations: [station, ...Array.from({ length: 20 }, (_, i) => ({ ...station, id: String(i) }))] }, ui.list, ui.summary, ui.toggle, row => selected.push(row));
   assert.equal(ui.list.children.length, 10);
-  assert.equal(ui.list.children[0].children[0].textContent, `Select ${station.name}`);
-  assert.equal(ui.list.children[0].children[1].textContent, 'FR · MP3 · 128 kbps');
+  assert.equal(ui.list.children[0].children[0].attributes['aria-label'], `Select ${station.name}`);
+  assert.equal(ui.list.children[0].children[0].children[0].children[0].textContent, station.name);
+  assert.equal(ui.list.children[0].children[0].children[0].children[1].textContent, 'FR · MP3 · 128 kbps');
   ui.list.children[0].children[0].click();
+  assert.equal(ui.list.children[0].children[0].attributes['aria-pressed'], 'true');
+  assert.equal(ui.list.children[1].children[0].attributes['aria-pressed'], 'false');
   assert.deepEqual(selected, [station]);
   assert.equal(ui.toggle.disabled, false);
 });
