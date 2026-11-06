@@ -115,3 +115,35 @@ test('slow provider fetch and slow body terminate at the discovery timeout', asy
   assert.equal(slowBody.status, 'provider_unavailable');
   assert.equal(bodyAborted, true);
 });
+
+test('bounded continuation uses exact offsets and rejects arbitrary pages', async () => {
+  const offsets = [];
+  for (const pageIndex of [0, 1, 2]) {
+    const result = await discover('FR', { pageIndex, fetcher: async url => { offsets.push(new URL(url).searchParams.get('offset')); return json([row(pageIndex + 1)]); } });
+    assert.equal(result.kind, pageIndex ? 'continuation' : 'initial');
+    assert.equal(result.pageIndex, pageIndex);
+    assert.equal(result.stations.length, 1);
+  }
+  assert.deepEqual(offsets, ['0', '50', '100']);
+  for (const pageIndex of [-1, 3, 1.5, Infinity]) await assert.rejects(discover('FR', { pageIndex }), RangeError);
+  for (const country of ['FR', 'GB', 'US', 'CA', 'DE', 'JP', 'ES', 'IT']) {
+    assert.equal((await discover(country, { fetcher: async () => json([]) })).countryCode, country);
+  }
+});
+
+test('exact approved origins, duplicate URLs and exact UUID overrides only', async () => {
+  const meuh = '960a0f41-0601-11e8-ae97-52543be04c81';
+  const rows = [
+    row(1, { url_resolved: 'https://streamer.radio.co/s66f2626b4/listen' }),
+    row(2, { url_resolved: 'https://streamer.radio.co/s66f2626b4/listen' }),
+    row(3, { url_resolved: 'https://icy.unitedradio.it/um020.mp3' }),
+    row(4, { stationuuid: meuh, url_resolved: 'http://radiomeuh.ice.infomaniak.ch/radiomeuh-128.mp3' }),
+    row(5, { url_resolved: 'http://radiomeuh.ice.infomaniak.ch/radiomeuh-128.mp3' }),
+    row(6, { url_resolved: 'https://ice5.somafm.com/secretagent-128-mp3' })
+  ];
+  const result = await discover('FR', { fetcher: async () => json(rows) });
+  assert.deepEqual(result.stations.map(s => s.id), [id(1), id(3), meuh]);
+  assert.equal(result.stations[2].streamUrl, 'https://radiomeuh.ice.infomaniak.ch/radiomeuh-128.mp3');
+  assert.equal(tokenStationId(result.stations[2].clickToken), meuh);
+  assert.ok(!MEDIA_ORIGINS.includes('https://ice5.somafm.com'));
+});

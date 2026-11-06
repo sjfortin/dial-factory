@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
 const UI_URI = 'ui://dial/radio-v9.html';
-const DISCOVERY_URI = 'ui://dial/country-v7.html';
+const DISCOVERY_URI = 'ui://dial/country-v8.html';
 const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',
@@ -78,6 +78,15 @@ function makeServer() {
       : result.status === 'no_supported_stations' ? `No supported stations in the first 50 results for ${result.countryCode}.`
       : `${result.stations.length} supported stations for ${result.countryCode} from the first 50 results: ${result.stations.map(s => `${s.name} (${s.id}, ${s.codec}${s.bitrate ? ` ${s.bitrate} kbps` : ''})`).join('; ')}. Select one in the player.`;
     return { content: [{ type: 'text', text: `${message} Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser.` }], structuredContent: result };
+  });
+  registerAppTool(server, 'more_stations_by_country', {
+    title: 'More stations by country',
+    description: 'Scan the next bounded page of 50 Radio Browser rows (page 1 or 2).',
+    inputSchema: { countryCode: z.string(), pageIndex: z.union([z.literal(1), z.literal(2)]) },
+    _meta: { ui: { resourceUri: DISCOVERY_URI, visibility: ['app'] } }
+  }, async ({ countryCode, pageIndex }) => {
+    const result = await discover(countryCode, { providerOrigin, pageIndex });
+    return { content: [{ type: 'text', text: `${result.stations.length} supported stations in provider rows ${pageIndex * 50 + 1}–${(pageIndex + 1) * 50} for ${result.countryCode}. Radio Browser: https://docs.radio-browser.info/.` }], structuredContent: result };
   });
   registerAppTool(server, 'report_station_click', {
     title: 'Report a radio play', description: 'Best-effort Radio Browser play count after user playback starts.',

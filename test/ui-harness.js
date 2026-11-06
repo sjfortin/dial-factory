@@ -25,7 +25,7 @@ class Element extends EventTarget {
 const tick = async () => { await new Promise(resolve => setImmediate(resolve)); };
 
 export async function exerciseDeliveredScript(script) {
-  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle'].map(id => [id, new Element()]));
+  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle'].map(id => [id, new Element()]));
   nodes['#toggle'].disabled = true;
   const listeners = new Map();
   const listenerOps = [];
@@ -40,7 +40,9 @@ export async function exerciseDeliveredScript(script) {
         listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { protocolVersion: '2026-01-26', hostInfo: { name: 'test-host', version: '1' }, hostCapabilities: {}, hostContext: {} } }, source: window.parent });
       });
       if (message.method === 'tools/call') queueMicrotask(() => {
-        listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { content: [{ type: 'text', text: 'Play count unavailable' }], structuredContent: { counted: false } } }, source: window.parent });
+        const more = message.params?.name === 'more_stations_by_country';
+        const structuredContent = more ? { kind: 'continuation', pageIndex: message.params.arguments.pageIndex, countryCode: 'FR', status: 'ok', searchedCount: 50, limit: 50, stations: [{ id: 'c', name: 'C', countryCode: 'FR', streamUrl: 'https://icy.unitedradio.it/c.mp3', origin: 'https://icy.unitedradio.it', codec: 'MP3', clickToken: 'token-c' }] } : { counted: false };
+        listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { content: [{ type: 'text', text: 'Tool response' }], structuredContent } }, source: window.parent });
       });
     } }
   };
@@ -57,7 +59,7 @@ export async function exerciseDeliveredScript(script) {
   await tick();
   assert.ok(sent.some(item => item.method === 'ui/initialize'), 'delivered bundle initializes the MCP Apps bridge');
   assert.ok(sent.some(item => item.method === 'ui/notifications/initialized'), `bridge did not finish initialization: ${sent.map(item => item.method).join(', ')}`);
-  const result = (status, stations) => listeners.get('message')?.({ data: { jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: { content: [], structuredContent: { status, countryCode: 'FR', searchedCount: stations.length, limit: 50, stations } } }, source: window.parent });
+  const result = (status, stations) => listeners.get('message')?.({ data: { jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: { content: [], structuredContent: { kind: 'initial', pageIndex: 0, status, countryCode: 'FR', searchedCount: 50, limit: 50, stations } } }, source: window.parent });
   const row = (id, name, streamUrl, clickToken) => ({ id, name, countryCode: 'FR', streamUrl, origin: new URL(streamUrl).origin, codec: 'MP3', clickToken });
   const a = row('a', 'A <b>unsafe</b>', 'https://audio.bfmtv.com/a.mp3', 'token-a');
   const b = row('b', 'B', 'https://media-ssl.musicradio.com/b', 'token-b');
@@ -84,6 +86,16 @@ export async function exerciseDeliveredScript(script) {
   nodes['#toggle'].click();
   await tick();
   assert.ok(sent.some(item => item.method === 'tools/call' && item.params?.name === 'report_station_click' && item.params.arguments.clickToken === 'token-b'));
+  const playingSource = nodes['#radio'].src;
+  const pausesBeforeMore = nodes['#radio'].pauseCalls;
+  nodes['#more-stations'].click();
+  await tick();
+  assert.ok(sent.some(item => item.method === 'tools/call' && item.params?.name === 'more_stations_by_country' && item.params.arguments.pageIndex === 1));
+  assert.equal(nodes['#stations'].children.length, 3);
+  assert.equal(nodes['#radio'].src, playingSource);
+  assert.equal(nodes['#radio'].pauseCalls, pausesBeforeMore);
+  assert.equal(nodes['#status'].dataset.state, 'playing');
+  assert.equal(nodes['#stations'].children[1].children[0].attributes['aria-pressed'], 'true');
   result('provider_unavailable', []);
   await tick();
   assert.equal(nodes['#radio'].src, '');

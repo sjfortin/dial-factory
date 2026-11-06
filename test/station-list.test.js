@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderStations } from '../dist/station-list.js';
+import { createStationCatalog, renderStations } from '../dist/station-list.js';
 
 class Element extends EventTarget {
   children = [];
@@ -22,7 +22,7 @@ const station = { id: 'id', name: '<img src=x onerror=alert(1)>', countryCode: '
 test('safe text rendering, bounded choices, keyboard button selection', () => {
   const ui = setup();
   const selected = [];
-  renderStations({ status: 'ok', countryCode: 'FR', stations: [station, ...Array.from({ length: 20 }, (_, i) => ({ ...station, id: String(i) }))] }, ui.list, ui.summary, ui.toggle, row => selected.push(row));
+  renderStations({ status: 'ok', countryCode: 'FR', stations: [station, ...Array.from({ length: 20 }, (_, i) => ({ ...station, id: String(i), streamUrl: `https://audio.bfmtv.com/${i}.mp3` }))] }, ui.list, ui.summary, ui.toggle, row => selected.push(row));
   assert.equal(ui.list.children.length, 10);
   assert.equal(ui.list.children[0].children[0].attributes['aria-label'], `Select ${station.name}`);
   assert.equal(ui.list.children[0].children[0].children[0].children[0].textContent, station.name);
@@ -46,4 +46,27 @@ test('unsafe URL is never selectable and statuses replace stale rows', () => {
     assert.ok(ui.summary.textContent.length > 0);
   }
   assert.deepEqual(selected, []);
+});
+
+test('three bounded pages append unique rows while preserving selection and retrying a failed page', () => {
+  const ui = setup(); const selected = [];
+  const catalog = createStationCatalog(ui.list, ui.summary, ui.toggle, row => selected.push(row));
+  const page = (pageIndex, stations, status = 'ok', searchedCount = 50) => ({ kind: pageIndex ? 'continuation' : 'initial', pageIndex, countryCode: 'FR', status, searchedCount, stations });
+  const distinct = i => ({ ...station, id: `id-${i}`, streamUrl: `https://audio.bfmtv.com/${i}.mp3` });
+  catalog.receive(page(0, [distinct(0), distinct(1)]));
+  ui.list.children[0].children[0].click();
+  assert.equal(catalog.nextPage, 1);
+  catalog.receive(page(1, [], 'provider_unavailable', 0));
+  assert.equal(catalog.nextPage, 1);
+  assert.equal(ui.list.children.length, 2);
+  assert.equal(ui.list.children[0].children[0].attributes['aria-pressed'], 'true');
+  catalog.receive(page(1, [distinct(1), { ...distinct(2), streamUrl: distinct(0).streamUrl }, distinct(3)]));
+  assert.deepEqual(catalog.rows.map(row => row.id), ['id-0', 'id-1', 'id-3']);
+  assert.equal(ui.list.children[0].children[0].attributes['aria-pressed'], 'true');
+  assert.equal(catalog.nextPage, 2);
+  catalog.receive(page(1, [distinct(4)]));
+  assert.equal(catalog.rows.length, 3);
+  catalog.receive(page(2, []));
+  assert.equal(catalog.nextPage, null);
+  assert.deepEqual(selected.map(row => row.id), ['id-0']);
 });
