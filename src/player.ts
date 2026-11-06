@@ -29,27 +29,36 @@ if (list && summary) {
     if (stationTitle) stationTitle.textContent = row.name;
     if (stationSubtitle) stationSubtitle.textContent = [row.countryCode, row.codec, typeof row.bitrate === 'number' ? `${row.bitrate} kbps` : null].filter(Boolean).join(' · ');
   });
-  let pending = false;
-  const refreshMore = () => { if (more) { more.hidden = catalog.nextPage === null; more.disabled = pending; } };
+  let pending: { generation: number; countryCode: string; pageIndex: number } | null = null;
+  const refreshMore = () => { if (more) { more.hidden = catalog.nextPage === null; more.disabled = pending !== null; } };
   more?.addEventListener('click', () => {
     const pageIndex = catalog.nextPage;
     if (pending || pageIndex === null) return;
     const countryCode = catalog.country;
-    pending = true;
+    const request = { generation: catalog.generation, countryCode, pageIndex };
+    pending = request;
     refreshMore();
     void app.callServerTool({ name: 'more_stations_by_country', arguments: { countryCode, pageIndex } })
-      .then(result => { if (result.structuredContent) catalog.receive(result.structuredContent); })
-      .catch(() => { catalog.receive({ kind: 'continuation', pageIndex, countryCode, status: 'provider_unavailable', searchedCount: 0, limit: 50, stations: [] }); })
-      .finally(() => { pending = false; refreshMore(); });
+      .then(result => {
+        if (pending !== request || catalog.generation !== request.generation) return;
+        const value = result.structuredContent as { kind?: string; countryCode?: string; pageIndex?: number } | undefined;
+        if (value?.kind === 'continuation' && value.countryCode === countryCode && value.pageIndex === pageIndex) catalog.receive(value, request.generation);
+      })
+      .catch(() => {
+        if (pending === request && catalog.generation === request.generation) catalog.receive({ kind: 'continuation', pageIndex, countryCode, status: 'provider_unavailable', searchedCount: 0, limit: 50, stations: [] }, request.generation);
+      })
+      .finally(() => { if (pending === request) { pending = null; refreshMore(); } });
   });
   app.ontoolresult = (params) => {
     if (!params.structuredContent || typeof params.structuredContent !== 'object' || !('status' in params.structuredContent)) return;
     const result = params.structuredContent as { kind?: string };
-    if (result.kind !== 'continuation') {
-      player.clearSelection();
-      if (stationTitle) stationTitle.textContent = 'Choose a station';
-      if (stationSubtitle) stationSubtitle.textContent = 'Select from the stations below';
-    }
+    // Continuations are consumed only from the request promise, which carries
+    // the search generation. A host notification has no request identity.
+    if (result.kind === 'continuation') return;
+    pending = null;
+    player.clearSelection();
+    if (stationTitle) stationTitle.textContent = 'Choose a station';
+    if (stationSubtitle) stationSubtitle.textContent = 'Select from the stations below';
     catalog.receive(result);
     refreshMore();
   };

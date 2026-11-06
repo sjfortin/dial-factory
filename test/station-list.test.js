@@ -54,19 +54,47 @@ test('three bounded pages append unique rows while preserving selection and retr
   const page = (pageIndex, stations, status = 'ok', searchedCount = 50) => ({ kind: pageIndex ? 'continuation' : 'initial', pageIndex, countryCode: 'FR', status, searchedCount, stations });
   const distinct = i => ({ ...station, id: `id-${i}`, streamUrl: `https://audio.bfmtv.com/${i}.mp3` });
   catalog.receive(page(0, [distinct(0), distinct(1)]));
+  const generation = catalog.generation;
   ui.list.children[0].children[0].click();
   assert.equal(catalog.nextPage, 1);
-  catalog.receive(page(1, [], 'provider_unavailable', 0));
+  catalog.receive(page(1, [], 'provider_unavailable', 0), generation);
   assert.equal(catalog.nextPage, 1);
   assert.equal(ui.list.children.length, 2);
   assert.equal(ui.list.children[0].children[0].attributes['aria-pressed'], 'true');
-  catalog.receive(page(1, [distinct(1), { ...distinct(2), streamUrl: distinct(0).streamUrl }, distinct(3)]));
+  catalog.receive(page(1, [distinct(1), { ...distinct(2), streamUrl: distinct(0).streamUrl }, distinct(3)]), generation);
   assert.deepEqual(catalog.rows.map(row => row.id), ['id-0', 'id-1', 'id-3']);
   assert.equal(ui.list.children[0].children[0].attributes['aria-pressed'], 'true');
   assert.equal(catalog.nextPage, 2);
-  catalog.receive(page(1, [distinct(4)]));
+  catalog.receive(page(1, [distinct(4)]), generation);
   assert.equal(catalog.rows.length, 3);
-  catalog.receive(page(2, []));
+  catalog.receive(page(2, [], 'no_stations', 0), generation);
   assert.equal(catalog.nextPage, null);
+  assert.match(ui.summary.textContent, /none in requested window 101–150/);
   assert.deepEqual(selected.map(row => row.id), ['id-0']);
+});
+
+test('new same-country and return-to-country searches reject stale page and error', () => {
+  const ui = setup();
+  const catalog = createStationCatalog(ui.list, ui.summary, ui.toggle, () => {});
+  const initial = (countryCode, id) => ({ kind: 'initial', pageIndex: 0, countryCode, status: 'ok', searchedCount: 50, stations: [{ ...station, id, countryCode, streamUrl: `https://audio.bfmtv.com/${id}.mp3` }] });
+  const late = (status, id) => ({ kind: 'continuation', pageIndex: 1, countryCode: 'FR', status, searchedCount: status === 'ok' ? 50 : 0, stations: status === 'ok' ? [{ ...station, id, streamUrl: `https://audio.bfmtv.com/${id}.mp3` }] : [] });
+  catalog.receive(initial('FR', 'old'));
+  const oldGeneration = catalog.generation;
+  catalog.receive(initial('FR', 'fresh'));
+  assert.equal(catalog.receive(late('ok', 'stale'), oldGeneration), 'ignored');
+  assert.equal(catalog.receive(late('provider_unavailable', 'stale'), oldGeneration), 'ignored');
+  assert.deepEqual(catalog.rows.map(row => row.id), ['fresh']);
+  catalog.receive(initial('GB', 'other'));
+  catalog.receive(initial('FR', 'return'));
+  assert.equal(catalog.receive(late('ok', 'stale'), oldGeneration), 'ignored');
+  assert.deepEqual(catalog.rows.map(row => row.id), ['return']);
+  assert.equal(catalog.nextPage, 1);
+});
+
+test('short initial page reports actual inspected range', () => {
+  const ui = setup();
+  const catalog = createStationCatalog(ui.list, ui.summary, ui.toggle, () => {});
+  catalog.receive({ kind: 'initial', pageIndex: 0, countryCode: 'FR', status: 'ok', searchedCount: 1, stations: [station] });
+  assert.match(ui.summary.textContent, /Inspected provider rows 1–1/);
+  assert.equal(catalog.nextPage, null);
 });

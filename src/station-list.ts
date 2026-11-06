@@ -20,11 +20,12 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
   let pageIndex = 0;
   let canMore = false;
   let error = '';
+  let generation = 0;
+  let inspected: string[] = [];
   const loaded = new Set<number>();
   function paint() {
     list.replaceChildren();
-    const scanned = (pageIndex + 1) * 50;
-    summary.textContent = error || `${rows.length} supported stations for ${country} after scanning provider rows 1–${scanned}. ${canMore ? 'More stations may be available.' : 'Bounded scan complete.'} Select one, then press Play. Results can change between requests.`;
+    summary.textContent = error || `${rows.length} supported stations for ${country}. Inspected provider rows ${inspected.join(', ')}. ${canMore ? 'More stations may be available.' : 'Bounded scan complete.'} Select one, then press Play. Results can change between requests.`;
     for (const row of rows) {
       const item = document.createElement('li');
       const button = document.createElement('button');
@@ -57,18 +58,21 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
       list.append(item);
     }
   }
-  function receive(value: unknown): 'initial' | 'continuation' | 'ignored' {
+  function receive(value: unknown, expectedGeneration?: number): 'initial' | 'continuation' | 'ignored' {
     if (!value || typeof value !== 'object') return 'ignored';
     const result = value as Partial<Results>;
     if (typeof result.status !== 'string' || typeof result.countryCode !== 'string') return 'ignored';
     const continuation = result.kind === 'continuation';
     const nextPage = result.pageIndex ?? 0;
+    if (continuation && expectedGeneration !== generation) return 'ignored';
     if (continuation && (result.countryCode !== country || nextPage !== pageIndex + 1 || loaded.has(nextPage))) return 'ignored';
     if (!continuation) {
+      generation++;
       country = result.countryCode;
       rows = [];
       selectedId = '';
       pageIndex = 0;
+      inspected = [];
       loaded.clear();
       loaded.add(0);
       toggle.disabled = true;
@@ -95,11 +99,14 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
     }
     pageIndex = nextPage;
     loaded.add(pageIndex);
+    const start = pageIndex * 50 + 1;
+    const count = typeof result.searchedCount === 'number' && Number.isInteger(result.searchedCount) ? Math.max(0, Math.min(50, result.searchedCount)) : 0;
+    inspected.push(count ? `${start}–${start + count - 1}` : `none in requested window ${start}–${start + 49}`);
     canMore = pageIndex < 2 && result.searchedCount === 50 && rows.length < 30;
     paint();
     return continuation ? 'continuation' : 'initial';
   }
-  return { receive, get country() { return country; }, get nextPage() { return canMore ? pageIndex + 1 : null; }, get rows() { return [...rows]; }, get selectedId() { return selectedId; } };
+  return { receive, get generation() { return generation; }, get country() { return country; }, get nextPage() { return canMore ? pageIndex + 1 : null; }, get rows() { return [...rows]; }, get selectedId() { return selectedId; } };
 }
 
 export function renderStations(value: unknown, list: HTMLElement, summary: HTMLElement, toggle: HTMLButtonElement, select: (row: Row) => void) {
