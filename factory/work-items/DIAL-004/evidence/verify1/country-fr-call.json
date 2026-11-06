@@ -1,0 +1,46 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "3 supported stations for FR from the first 50 results: RMC FR (7a3a3989-8f26-44f7-9ae5-fa91e5cf4f9d, MP3 128 kbps); BFM radio (3e6e3252-dd81-4b07-baba-b61bf96cd457, MP3 256 kbps); RMC Info Talk Sport (12e68964-5928-4623-b82e-4bf9a4963780, MP3 128 kbps). Select one in the player. Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser."
+    }
+  ],
+  "structuredContent": {
+    "status": "ok",
+    "countryCode": "FR",
+    "searchedCount": 50,
+    "limit": 50,
+    "stations": [
+      {
+        "id": "7a3a3989-8f26-44f7-9ae5-fa91e5cf4f9d",
+        "name": "RMC FR",
+        "countryCode": "FR",
+        "streamUrl": "https://audio.bfmtv.com/rmcradio_128.mp3",
+        "origin": "https://audio.bfmtv.com",
+        "codec": "MP3",
+        "clickToken": "[redacted from evidence]",
+        "bitrate": 128
+      },
+      {
+        "id": "3e6e3252-dd81-4b07-baba-b61bf96cd457",
+        "name": "BFM radio",
+        "countryCode": "FR",
+        "streamUrl": "https://audio.bfmtv.com/bfmradio_128.mp3",
+        "origin": "https://audio.bfmtv.com",
+        "codec": "MP3",
+        "clickToken": "[redacted from evidence]",
+        "bitrate": 256
+      },
+      {
+        "id": "12e68964-5928-4623-b82e-4bf9a4963780",
+        "name": "RMC Info Talk Sport",
+        "countryCode": "FR",
+        "streamUrl": "https://audio.bfmtv.com/rmcradio_128.mp3?aw_0_1st.playerId=RMC_audio_web&aggregator=RMC_audio_web",
+        "origin": "https://audio.bfmtv.com",
+        "codec": "MP3",
+        "clickToken": "[redacted from evidence]",
+        "bitrate": 128
+      }
+    ]
+  }
+}

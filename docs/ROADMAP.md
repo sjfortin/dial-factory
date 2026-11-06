@@ -14,6 +14,10 @@ First gate is an actual ChatGPT capability test for shared messaging and atomic 
 
 Then build the smallest supported protocol, clear ownership/status UI, safe failure behavior and rapid-interaction/lifecycle tests. Exit requires independent Review, automated verification and actual two-thread host observations demonstrating the approved Play/Pause/transfer behavior. No hard guarantee is made about paused/suspended or unreachable instances before that evidence exists.
 
+## Next after playback coordination: minimal inline player redesign (owner requested)
+
+Give Dial a polished, compact appearance within a ChatGPT thread. Prepare visual options with a clear station title, refined typography and spacing, restrained color, one obvious Play/Pause action, and quiet secondary controls. Country results should feel integrated without dominating the conversation. Include local/remote playback status, loading/error/empty states, narrow layouts, light/dark themes and accessible keyboard/focus behavior. Keep diagnostics in the dedicated probe. Obtain feedback on concrete visual mockups before implementing the chosen design; validate it at actual thread widths. This is a design request, not approval of an unseen visual revision.
+
 ## Afterward: reliability and easy operation (proposed)
 
 Make repeat testing and routine use predictable: an explicitly approved automatic-start setup for the local server, restart/reconnect handling, understandable ownership/provider/media errors and the previously deferred controlled stream-error/recovery host check. Define what happens on sleep, reboot, closed views and expired click tokens. Do not promise background playback through host teardown. Exit with a documented runbook and real interruption/recovery evidence.

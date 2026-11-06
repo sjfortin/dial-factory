@@ -1,0 +1,94 @@
+{
+  "tools": [
+    {
+      "name": "open_capability_probe",
+      "title": "Open Dial two-thread capability probe",
+      "description": "Test Dial messaging, Web Locks, and post-transfer radio playback in two real ChatGPT threads. Diagnostic only.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://dial/capability-probe-v2.html"
+        },
+        "ui/resourceUri": "ui://dial/capability-probe-v2.html"
+      }
+    },
+    {
+      "name": "open_radio",
+      "title": "Open one live radio station",
+      "description": "Show the Radio Paradise live player. Playback starts only when the user presses Play.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://dial/radio-v6.html"
+        },
+        "ui/resourceUri": "ui://dial/radio-v6.html"
+      }
+    },
+    {
+      "name": "find_stations_by_country",
+      "title": "Find radio stations by country",
+      "description": "Find up to 10 playable MP3 stations among the first 50 Radio Browser results for an ISO alpha-2 country code, such as FR.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "countryCode": {
+            "type": "string"
+          }
+        },
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://dial/country-v4.html"
+        },
+        "ui/resourceUri": "ui://dial/country-v4.html"
+      }
+    },
+    {
+      "name": "report_station_click",
+      "title": "Report a radio play",
+      "description": "Best-effort Radio Browser play count after user playback starts.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "clickToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "clickToken"
+        ],
+        "$schema": "http://json-schema.org/draft-07/schema#"
+      },
+      "execution": {
+        "taskSupport": "forbidden"
+      },
+      "_meta": {
+        "ui": {
+          "resourceUri": "ui://dial/country-v4.html",
+          "visibility": [
+            "app"
+          ]
+        },
+        "ui/resourceUri": "ui://dial/country-v4.html"
+      }
+    }
+  ]
+}

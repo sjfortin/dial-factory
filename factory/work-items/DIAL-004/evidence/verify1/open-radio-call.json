@@ -1,0 +1,17 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "One known station: Radio Paradise (Radio Paradise), MP3 128 kbps. Source: https://radioparadise.com/listen/stream-links."
+    }
+  ],
+  "structuredContent": {
+    "station": {
+      "name": "Radio Paradise",
+      "provider": "Radio Paradise",
+      "streamUrl": "https://stream.radioparadise.com/mp3-128",
+      "format": "MP3 128 kbps",
+      "sourceUrl": "https://radioparadise.com/listen/stream-links"
+    }
+  }
+}
