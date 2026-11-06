@@ -1,0 +1,22 @@
+{
+  "agent": "/root/dial005_triage",
+  "candidate": null,
+  "contract": "factory/agents/triage/agent.md",
+  "criteria": [
+    "Provide concrete clean/minimal inline player design alternatives at realistic thread widths for owner selection.",
+    "Selected design preserves regular player takeover, remote Pause and clear honest playback/error states.",
+    "Design covers fixed player, bounded country list, light/dark themes, narrow widths and accessible controls.",
+    "Approved design implementation passes meaningful resource/interaction regression checks and independent Review/Verify, including actual host visual QA."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Give the regular player and country results a polished compact design that looks excellent inside ChatGPT threads; propose visual alternatives before implementing the owner-selected revision.",
+  "requested_model": "gpt-6-luna",
+  "requested_reasoning": "medium",
+  "role": "Triage",
+  "run_id": "run-d17e25b76c6b",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "work_item": "DIAL-005"
+}

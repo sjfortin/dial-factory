@@ -1,22 +1,22 @@
 # Dial roadmap — proposal
 
-This is a proposed sequence, not approval to implement every phase. The owner requested cross-thread playback next and a plan for what follows. Changes to sequence and scope remain possible after real host evidence. Only DIAL-003 has been admitted as the active next-phase work item.
+This is a proposed sequence, not approval to implement every phase. The owner requested cross-thread playback next and a plan for what follows. Changes to sequence and scope remain possible after real host evidence. DIAL-004 playback coordination is complete and merged; DIAL-005 visual redesign is the active next phase.
 
 ## Current delivery: country discovery (DIAL-002)
 
-Country lookup, station selection and the player are implemented and independently reviewed; 19 automated tests and live Inspector checks passed. Owner reports successful ChatGPT QA. Formal verification still needs dated station-specific host evidence required by its approved spec. Existing work is pushed on work/DIAL-002; PR #2 targets main: https://github.com/sjfortin/dial-factory/pull/2. The PR is open and mergeable, not merged. main was created from factory/bootstrap at 487e865; changing the default branch is a separate repository setting not performed here.
+Country lookup, station selection and the player are implemented and independently reviewed; 19 automated tests and live Inspector checks passed. Owner reports successful ChatGPT QA. Formal verification still needs dated station-specific host evidence required by its approved spec. Existing work is pushed on work/DIAL-002; PR #2 targets main: https://github.com/sjfortin/dial-factory/pull/2. PR2 was merged into main at 5fb9ae7. main is now the repository default.
 
 ## Completed: single active playback across threads (DIAL-003 probe, DIAL-004 integration)
 
 DIAL-004 COMPLETE/PASS on reviewed product candidate d196b7e. Regular-player integration passed independent Review, 28 automated tests, local Chromium startup checks, Inspector delivery and owner-reported ChatGPT takeover, remote Pause and close-tab recovery QA. The supported scope remains one tested browser profile/device. See its journal and handoff; earlier proposal language below explains the route and constraints.
 
-First proposed support boundary: two live Dial views in separate ChatGPT chats in the same browser profile/device. Proposed behavior: Play takes ownership from the other view; Pause can stop active playback from either. These are explicit proposals pending owner approval, not assumed completed product behavior.
+First proposed support boundary: two live Dial views in separate ChatGPT chats in the same browser profile/device. Proposed behavior: Play takes ownership from the other view; Pause can stop active playback from either. These choices were approved and implemented in DIAL-004.
 
 First gate is an actual ChatGPT capability test for shared messaging and atomic ownership primitives. The host may partition iframe origins/storage or suspend old views; browser API availability in a local fixture is insufficient. If coordination cannot be made reliable, return with evidence and a revised proposal rather than silently introducing accounts, a server registry or cross-device promises.
 
 Then build the smallest supported protocol, clear ownership/status UI, safe failure behavior and rapid-interaction/lifecycle tests. Exit requires independent Review, automated verification and actual two-thread host observations demonstrating the approved Play/Pause/transfer behavior. No hard guarantee is made about paused/suspended or unreachable instances before that evidence exists.
 
-## Next after playback coordination: minimal inline player redesign (owner requested)
+## Active: DIAL-005 minimal inline player redesign
 
 Give Dial a polished, compact appearance within a ChatGPT thread. Prepare visual options with a clear station title, refined typography and spacing, restrained color, one obvious Play/Pause action, and quiet secondary controls. Country results should feel integrated without dominating the conversation. Include local/remote playback status, loading/error/empty states, narrow layouts, light/dark themes and accessible keyboard/focus behavior. Keep diagnostics in the dedicated probe. Obtain feedback on concrete visual mockups before implementing the chosen design; validate it at actual thread widths. This is a design request, not approval of an unseen visual revision.
 

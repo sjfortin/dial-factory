@@ -1,0 +1,185 @@
+<div id="dial005-directions" aria-label="Dial inline player design directions">
+  <style>
+    #dial005-directions {
+      color-scheme: light dark;
+      --d-ink: light-dark(#202522, #f0f2ee);
+      --d-muted: light-dark(#59635e, #b8c2bb);
+      --d-line: light-dark(#dfe4de, #3d4741);
+      --d-surface: light-dark(#ffffff, #242b27);
+      --d-warm: light-dark(#faf7f0, #2b2924);
+      --d-cool: light-dark(#f4f7f6, #222c2a);
+      --d-accent: light-dark(#245b48, #b9ddc7);
+      --d-accent-ink: light-dark(#ffffff, #172b21);
+      --d-error: light-dark(#a43b39, #f7aaa4);
+      font: 14px/1.45 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--d-ink);
+      width: 100%;
+    }
+    #dial005-directions * { box-sizing: border-box; }
+    #dial005-directions [hidden] { display: none !important; }
+    #dial005-directions .direction { margin: 0 0 22px; }
+    #dial005-directions .direction-title { display: flex; align-items: baseline; gap: 10px; margin: 0 0 8px; font-size: 13px; font-weight: 500; }
+    #dial005-directions .direction-title span { color: var(--d-muted); font-weight: 400; }
+    #dial005-directions .sample { width: min(100%, 520px); overflow: hidden; background: var(--d-surface); color: var(--d-ink); }
+    #dial005-directions .eyebrow { font-size: 11px; font-weight: 500; letter-spacing: .11em; text-transform: uppercase; }
+    #dial005-directions .station { margin: 0; font-size: 19px; line-height: 1.2; font-weight: 500; overflow-wrap: anywhere; }
+    #dial005-directions .subtle { color: var(--d-muted); font-size: 12px; }
+    #dial005-directions .state { display: flex; align-items: flex-start; gap: 7px; min-width: 0; color: var(--d-muted); font-size: 12px; }
+    #dial005-directions .state::before { content: ""; flex: none; width: 6px; height: 6px; margin-top: 5px; border-radius: 50%; background: currentColor; }
+    #dial005-directions [data-state="playing"] .state { color: var(--d-accent); }
+    #dial005-directions [data-state="error"] .state { color: var(--d-error); }
+    #dial005-directions button { cursor: pointer; font: inherit; }
+    #dial005-directions button:focus-visible { outline: 3px solid light-dark(#ad682e, #f5c376); outline-offset: 3px; }
+    #dial005-directions .play-icon, #dial005-directions .pause-icon { display: inline-flex; align-items: center; justify-content: center; }
+    #dial005-directions [data-state="playing"] .play-icon,
+    #dial005-directions [data-state="switching"] .play-icon { display: none; }
+    #dial005-directions .sample:not([data-state="playing"]):not([data-state="switching"]) .pause-icon { display: none; }
+    #dial005-directions .remote-action { border: 0; background: transparent; color: var(--d-ink); padding: 5px 0; text-decoration: underline; text-underline-offset: 3px; text-align: left; }
+    #dial005-directions .results-heading { font-size: 12px; font-weight: 500; }
+    #dial005-directions .result { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 38px; border: 0; background: transparent; color: var(--d-ink); text-align: left; padding: 7px 0; }
+    #dial005-directions .result span:first-child { min-width: 0; overflow-wrap: anywhere; }
+    #dial005-directions .result .check { visibility: hidden; color: var(--d-accent); flex: none; }
+    #dial005-directions .result[aria-pressed="true"] .check { visibility: visible; }
+    #dial005-directions .result[aria-pressed="true"] span:first-child { font-weight: 500; }
+
+    #dial005-directions .studio { border: 1px solid var(--d-line); border-radius: 17px; box-shadow: 0 2px 8px light-dark(#1b38200a, #00000020); }
+    #dial005-directions .studio-main { padding: 17px 18px 13px; }
+    #dial005-directions .studio-head { display: flex; gap: 12px; align-items: center; }
+    #dial005-directions .studio-copy { flex: 1; min-width: 0; }
+    #dial005-directions .studio .eyebrow { color: var(--d-accent); margin-bottom: 5px; }
+    #dial005-directions .studio .subtle { margin-top: 4px; }
+    #dial005-directions .studio-play { flex: none; width: 48px; height: 48px; display: grid; place-items: center; border: 0; border-radius: 50%; color: var(--d-accent-ink); background: var(--d-accent); }
+    #dial005-directions .studio .state { margin-top: 13px; }
+    #dial005-directions .studio-results { padding: 11px 18px 12px; border-top: 1px solid var(--d-line); }
+    #dial005-directions .studio-results .results-heading { margin-bottom: 3px; }
+    #dial005-directions .studio .result + .result { border-top: 1px solid var(--d-line); }
+
+    #dial005-directions .editorial { border: 1px solid light-dark(#e7e0d3, #504a3f); border-radius: 12px; background: var(--d-warm); }
+    #dial005-directions .editorial-main { padding: 18px 20px 15px; }
+    #dial005-directions .editorial .eyebrow { color: light-dark(#866d49, #ddc39b); margin-bottom: 8px; }
+    #dial005-directions .editorial-top { display: flex; align-items: center; gap: 14px; }
+    #dial005-directions .editorial-copy { min-width: 0; flex: 1; }
+    #dial005-directions .editorial .station { font: 400 24px/1.15 Georgia, "Times New Roman", serif; }
+    #dial005-directions .editorial .subtle { margin-top: 5px; }
+    #dial005-directions .editorial-play { flex: none; min-width: 80px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid currentColor; border-radius: 999px; color: var(--d-ink); background: transparent; padding: 7px 12px; }
+    #dial005-directions .editorial .state { margin-top: 15px; }
+    #dial005-directions .editorial-results { border-top: 1px solid light-dark(#e7e0d3, #504a3f); padding: 11px 20px 12px; }
+    #dial005-directions .editorial-results .results-heading { margin-bottom: 4px; }
+    #dial005-directions .editorial .result { border-bottom: 1px solid light-dark(#e7e0d3, #504a3f); }
+    #dial005-directions .editorial .result:last-child { border-bottom: 0; }
+
+    #dial005-directions .slim { border: 1px solid var(--d-line); border-radius: 10px; background: var(--d-cool); }
+    #dial005-directions .slim-main { padding: 12px 15px 11px; }
+    #dial005-directions .slim-top { display: flex; align-items: center; gap: 12px; }
+    #dial005-directions .slim-mark { display: flex; align-items: center; justify-content: center; flex: none; width: 36px; height: 36px; border-radius: 8px; color: var(--d-accent); background: light-dark(#e4eeea, #33463d); }
+    #dial005-directions .slim-copy { min-width: 0; flex: 1; }
+    #dial005-directions .slim .station { font-size: 15px; }
+    #dial005-directions .slim .subtle { margin-top: 2px; }
+    #dial005-directions .slim-play { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex: none; min-width: 67px; min-height: 38px; border: 0; border-radius: 7px; color: var(--d-accent-ink); background: var(--d-accent); padding: 7px 10px; }
+    #dial005-directions .slim .state { margin: 8px 0 0 48px; }
+    #dial005-directions .slim-results { border-top: 1px solid var(--d-line); padding: 9px 15px 10px; }
+    #dial005-directions .slim-results .results-heading { margin-bottom: 1px; }
+    #dial005-directions .slim .result { min-height: 34px; }
+    @media (max-width: 380px) {
+      #dial005-directions .editorial-top { align-items: flex-start; }
+      #dial005-directions .editorial .station { font-size: 21px; }
+      #dial005-directions .editorial-play { min-width: 70px; padding-inline: 9px; }
+      #dial005-directions .slim-mark { display: none; }
+      #dial005-directions .slim .state { margin-left: 0; }
+    }
+    @media (pointer: coarse) {
+      #dial005-directions .result { min-height: 44px; }
+      #dial005-directions .editorial-play, #dial005-directions .slim-play { min-height: 44px; }
+    }
+  </style>
+
+  <section class="direction" aria-labelledby="dial005-a-title">
+    <h2 class="direction-title" id="dial005-a-title">A · Studio <span>compact, balanced</span></h2>
+    <div class="sample studio" data-state="idle" aria-label="Studio player direction">
+      <div class="studio-main">
+        <div class="studio-head">
+          <div class="studio-copy"><div class="eyebrow">Dial · Live radio</div><h3 class="station">BFM radio</h3><div class="subtle station-subtitle">France · MP3</div></div>
+          <button class="studio-play play-toggle" type="button" aria-label="Play BFM radio"><span class="play-icon"><i data-lucide="play" aria-hidden="true"></i></span><span class="pause-icon"><i data-lucide="pause" aria-hidden="true"></i></span></button>
+        </div>
+        <div class="state" role="status" aria-live="polite">Ready to play</div>
+        <button class="remote-action" type="button" hidden>Pause Dial in other thread</button>
+      </div>
+      <div class="studio-results" data-results aria-label="Country result treatment"><div class="results-heading">France <span class="subtle">· stations</span></div><button class="result" type="button" aria-pressed="true"><span>BFM radio</span><span class="check"><i data-lucide="check" aria-hidden="true"></i></span></button><button class="result" type="button" aria-pressed="false"><span>RMC FR</span><span class="check"><i data-lucide="check" aria-hidden="true"></i></span></button></div>
+    </div>
+  </section>
+
+  <section class="direction" aria-labelledby="dial005-b-title">
+    <h2 class="direction-title" id="dial005-b-title">B · Editorial <span>warm, typographic</span></h2>
+    <div class="sample editorial" data-state="idle" aria-label="Editorial player direction">
+      <div class="editorial-main"><div class="eyebrow">Dial / Live radio</div><div class="editorial-top"><div class="editorial-copy"><h3 class="station">BFM radio</h3><div class="subtle station-subtitle">France · MP3</div></div><button class="editorial-play play-toggle" type="button" aria-label="Play BFM radio"><span class="play-icon"><i data-lucide="play" aria-hidden="true"></i></span><span class="pause-icon"><i data-lucide="pause" aria-hidden="true"></i></span><span class="play-word">Play</span></button></div><div class="state" role="status" aria-live="polite">Ready to play</div><button class="remote-action" type="button" hidden>Pause Dial in other thread</button></div>
+      <div class="editorial-results" data-results aria-label="Country result treatment"><div class="results-heading">Stations in France</div><button class="result" type="button" aria-pressed="true"><span>BFM radio</span><span class="check"><i data-lucide="check" aria-hidden="true"></i></span></button><button class="result" type="button" aria-pressed="false"><span>RMC FR</span><span class="check"><i data-lucide="check" aria-hidden="true"></i></span></button></div>
+    </div>
+  </section>
+
+  <section class="direction" aria-labelledby="dial005-c-title">
+    <h2 class="direction-title" id="dial005-c-title">C · Slim <span>quiet, space-saving</span></h2>
+    <div class="sample slim" data-state="idle" aria-label="Slim player direction">
+      <div class="slim-main"><div class="slim-top"><div class="slim-mark"><i data-lucide="radio" aria-hidden="true"></i></div><div class="slim-copy"><h3 class="station">BFM radio</h3><div class="subtle station-subtitle">France · MP3</div></div><button class="slim-play play-toggle" type="button" aria-label="Play BFM radio"><span class="play-icon"><i data-lucide="play" aria-hidden="true"></i></span><span class="pause-icon"><i data-lucide="pause" aria-hidden="true"></i></span><span class="play-word">Play</span></button></div><div class="state" role="status" aria-live="polite">Ready to play</div><button class="remote-action" type="button" hidden>Pause Dial in other thread</button></div>
+      <div class="slim-results" data-results aria-label="Country result treatment"><div class="results-heading">France <span class="subtle">· stations</span></div><button class="result" type="button" aria-pressed="true"><span>BFM radio</span><span class="check"><i data-lucide="check" aria-hidden="true"></i></span></button><button class="result" type="button" aria-pressed="false"><span>RMC FR</span><span class="check"><i data-lucide="check" aria-hidden="true"></i></span></button></div>
+    </div>
+  </section>
+
+  <script>
+    (() => {
+      const root = document.getElementById('dial005-directions');
+      const preview = { state: 'idle', showStations: true };
+      function render(card, state) {
+        card.dataset.state = state;
+        const active = state === 'playing' || state === 'switching';
+        const station = preview.showStations ? card.querySelector('.result[aria-pressed="true"] span:first-child').textContent : 'Radio Paradise';
+        card.querySelector('.station').textContent = station;
+        card.querySelector('.station-subtitle').textContent = preview.showStations ? 'France · MP3' : 'Eclectic radio';
+        card.querySelector('[data-results]').hidden = !preview.showStations;
+        const toggle = card.querySelector('.play-toggle');
+        toggle.setAttribute('aria-label', `${active ? 'Pause' : 'Play'} ${station}`);
+        const word = card.querySelector('.play-word');
+        if (word) word.textContent = active ? 'Pause' : 'Play';
+        const status = card.querySelector('.state');
+        const messages = {
+          idle: preview.showStations ? `${station} selected. Press Play to listen.` : 'Ready to play',
+          switching: 'Switching playback…',
+          playing: `Playing ${station}`,
+          paused: `Paused ${station}`,
+          remote: `Dial may be playing ${station} in another thread.`,
+          remotePending: 'Pause requested in other thread. Waiting for confirmation…',
+          error: 'Could not start audio. Try Play again.'
+        };
+        status.textContent = messages[state];
+        status.setAttribute('role', state === 'error' ? 'alert' : 'status');
+        const remote = card.querySelector('.remote-action');
+        remote.hidden = state !== 'remote' && state !== 'remotePending';
+        remote.disabled = state === 'remotePending';
+        remote.textContent = state === 'remotePending' ? 'Pause requested' : 'Pause Dial in other thread';
+      }
+      const cards = [...root.querySelectorAll('.sample')];
+      function renderAll() { cards.forEach(card => render(card, preview.state)); }
+      cards.forEach(card => {
+        card.querySelector('.play-toggle').addEventListener('click', () => render(card, card.dataset.state === 'playing' || card.dataset.state === 'switching' ? 'paused' : 'playing'));
+        card.querySelector('.remote-action').addEventListener('click', () => {
+          render(card, 'paused');
+          card.querySelector('.state').textContent = 'Pause confirmed in other thread.';
+        });
+        card.querySelectorAll('.result').forEach(button => button.addEventListener('click', () => {
+          card.querySelectorAll('.result').forEach(row => row.setAttribute('aria-pressed', String(row === button)));
+          render(card, 'idle');
+        }));
+      });
+      renderAll();
+      if (globalThis.Tweak) {
+        const tweak = new Tweak({ container: root, onChange: renderAll });
+        tweak.addSelect(preview, 'state', { label: 'Preview playback state', options: [
+          { label: 'Ready', value: 'idle' }, { label: 'Switching', value: 'switching' },
+          { label: 'Playing', value: 'playing' }, { label: 'Paused', value: 'paused' },
+          { label: 'Other thread', value: 'remote' }, { label: 'Pause unconfirmed', value: 'remotePending' },
+          { label: 'Error', value: 'error' }
+        ] });
+        tweak.addToggle(preview, 'showStations', { label: 'Show country results' });
+      }
+    })();
+  </script>
+</div>
