@@ -1,0 +1,17 @@
+{
+  "agent": "/root/dial007_review",
+  "architecture": "Server discovery and browser station validation now call the same parseMediaUrl helper from media-policy.ts. It inspects the original HTTPS authority before normalization, rejects colon-bearing authorities, then applies parsed URL credential, fragment, playlist and exact-origin checks. The shared nine-origin list, country-v9 resource, empty connectDomains and fixed-player CSP remain as previously reviewed.",
+  "at": "2026-11-07T22:22:34+00:00",
+  "attempt": 2,
+  "candidate_commit": "e1528f4caf9c13ce100a86752594fca47aad4dd4",
+  "complexity": "A single shared parser removes duplicated validation and fixes the finding without broadening the change. The dated coverage document remains truthful about direct-byte observations and absent host playback evidence. No further code revision is requested by Review.",
+  "correctness": "The raw-authority check rejects :443 before URL can erase it, as well as nondefault ports and malformed authority separators. Both callers use the shared result; browser validation also retains the source-origin equality requirement. Reviewed the candidate diff and baseline source-file list: no player, controller, coordinator, pagination generation/request guard, catalog append/reset, or override changes. The narrow validator consolidation is consistent with the approved rejection correction.",
+  "findings": [],
+  "recommendation": "ACCEPT",
+  "requirements": "Reviewed exact candidate and attempt-2 packet; HEAD equals the full candidate SHA and PRODUCT/TECH hashes still match approved revisions. The previous explicit-default-port finding is resolved. Approval scope remains exactly two added media origins, no added UUID overrides, preserved DIAL-006 behavior, and separate Verify/owner host evidence gates. ACCEPT is code-review acceptance, not eight-country playback or hosting acceptance.",
+  "role": "Review",
+  "run_id": "run-bd547f2f0318",
+  "security": "No wildcard origin, arbitrary URL input, proxy or added override appears. Existing signed provider UUID attribution remains unchanged. The earlier issue was a literal policy mismatch on an approved origin and is now corrected. Source validation does not establish runtime redirect destinations or host CSP/audibility; those remain explicit Verify obligations.",
+  "tests": "Independently ran direct imports of the candidate TypeScript media-policy source with assertions for both new origins: ordinary URLs accepted and :443, :0443, :8443 and empty explicit port rejected. Independently ran node --test test/discovery.test.js test/station-list.test.js against existing build output; both test files passed. Inspected regression additions for both origins' :443 rejection in discovery and browser, retained :8443 checks, malformed-authority rejection and credential rejection. Full build/35-test suite pass is Implement evidence in the packet, not a fresh Review full-suite run; independent Verify still owns that gate.",
+  "work_item": "DIAL-007"
+}

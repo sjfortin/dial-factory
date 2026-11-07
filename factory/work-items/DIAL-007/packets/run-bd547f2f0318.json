@@ -1,0 +1,53 @@
+{
+  "agent": "/root/dial007_review",
+  "candidate": {
+    "agent": "/root/dial007_implement",
+    "ambiguities": [
+      "Dated catalog/direct MP3 evidence and ChatGPT host playback/CSP acceptance remain separate independent Verify gates; this revision performed no live probes."
+    ],
+    "at": "2026-11-07T22:21:51+00:00",
+    "attempt": 2,
+    "blockers": [],
+    "candidate_commit": "e1528f4caf9c13ce100a86752594fca47aad4dd4",
+    "change_summary": "Review revision: server discovery and delivered browser validation now share one media URL parser that rejects explicit source-authority ports before URL normalization. Added default :443 regressions for both newly approved origins, retained :8443 rejection, and checked malformed authority forms. No pagination, player, coordinator, UI, CSP, origin-list, or UUID-override change was made in this revision.",
+    "decisions": [
+      "Accepted Review's P2 finding: URL parsing erases an explicit default :443 port, so checking the parsed URL port was insufficient for the approved no-explicit-port policy.",
+      "The shared parser requires an ordinary HTTPS authority without a colon or backslash before applying parsed URL, credential, fragment, playlist, and exact-origin checks. The finite list remains nine exact origins.",
+      "The exact approved PRODUCT.md and TECH.md SHA-256 hashes remain 80985c6ed67addab2c0fbb4fff72f52371aa55d166ec30b4aa4e743593d72e1c and c4782f7a9197d81cc496b25b7a930c8dd0d782f4a874ebeb3cfe1542d407b0ea. No new approval needed for this rejection correction."
+    ],
+    "role": "Implement",
+    "run_id": "run-d46844608f94",
+    "tests": [
+      "npm test: PASS under approved localhost execution; TypeScript and esbuild completed, 35 tests passed, 0 failed, 0 skipped. The initial sandboxed run failed only because the MCP integration test could not bind 127.0.0.1 (EPERM), then the full rerun passed.",
+      "Discovery fixtures on both new origins reject explicit :443 and :8443, malformed HTTPS authority, and credentialed URL; approved exact source URLs still admit and retain provider UUID click attribution.",
+      "Browser regression rejects explicit :443 on both new origins, :8443, malformed authority, unlisted origin, and playlist while accepting the two approved direct source URLs.",
+      "Previously passing three-page bounds, stale-response guards, selection and playback continuity, coordination, click-token, server CSP/URI, and delivered-browser harness regressions passed in the full suite.",
+      "git diff --check: PASS before commit. Candidate commit contains only five source/test files; Foreman lifecycle records were excluded."
+    ],
+    "work_item": "DIAL-007"
+  },
+  "contract": "factory/agents/review/agent.md",
+  "criteria": [
+    "Document dated compatible station candidates for FR GB US CA DE JP ES IT; keep unsupported or unobserved countries explicitly blocked rather than claim complete coverage.",
+    "Define and approve exact finite stream origins and any exact provider UUID overrides using bounded direct HTTPS MP3 evidence; preserve provider attribution and avoid arbitrary media access or proxies.",
+    "Carry forward bounded More stations and reviewed stale-response fixes from DIAL-006 without regressing playback continuity or neutral Studio UI.",
+    "Independent Review and Verify assess the final exact candidate and required host playback evidence before coverage acceptance; hosting remains deferred until owner accepts coverage."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Successor to DIAL-006 partial candidate164ed275: research and specify expanded finite stream candidates for missing countries, preserve the original eight-country goal and reviewed pagination, then implement only after exact revised spec approval. Hosting remains next after owner acceptance.",
+  "requested_model": "gpt-6-astra",
+  "requested_reasoning": "medium",
+  "role": "Review",
+  "run_id": "run-bd547f2f0318",
+  "spec": {
+    "at": "2026-11-07T22:15:38+00:00",
+    "by": "Owner: approved",
+    "hashes": {
+      "PRODUCT.md": "80985c6ed67addab2c0fbb4fff72f52371aa55d166ec30b4aa4e743593d72e1c",
+      "TECH.md": "c4782f7a9197d81cc496b25b7a930c8dd0d782f4a874ebeb3cfe1542d407b0ea"
+    },
+    "mode": "approved"
+  },
+  "state": "REVIEWING",
+  "work_item": "DIAL-007"
+}

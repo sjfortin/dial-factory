@@ -1,0 +1,28 @@
+{
+  "agent": "/root/dial007_implement",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "Document dated compatible station candidates for FR GB US CA DE JP ES IT; keep unsupported or unobserved countries explicitly blocked rather than claim complete coverage.",
+    "Define and approve exact finite stream origins and any exact provider UUID overrides using bounded direct HTTPS MP3 evidence; preserve provider attribution and avoid arbitrary media access or proxies.",
+    "Carry forward bounded More stations and reviewed stale-response fixes from DIAL-006 without regressing playback continuity or neutral Studio UI.",
+    "Independent Review and Verify assess the final exact candidate and required host playback evidence before coverage acceptance; hosting remains deferred until owner accepts coverage."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Successor to DIAL-006 partial candidate164ed275: research and specify expanded finite stream candidates for missing countries, preserve the original eight-country goal and reviewed pagination, then implement only after exact revised spec approval. Hosting remains next after owner acceptance.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-d46844608f94",
+  "spec": {
+    "at": "2026-11-07T22:15:38+00:00",
+    "by": "Owner: approved",
+    "hashes": {
+      "PRODUCT.md": "80985c6ed67addab2c0fbb4fff72f52371aa55d166ec30b4aa4e743593d72e1c",
+      "TECH.md": "c4782f7a9197d81cc496b25b7a930c8dd0d782f4a874ebeb3cfe1542d407b0ea"
+    },
+    "mode": "approved"
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-007"
+}
