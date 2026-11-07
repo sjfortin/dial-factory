@@ -147,3 +147,32 @@ test('exact approved origins, duplicate URLs and exact UUID overrides only', asy
   assert.equal(tokenStationId(result.stations[2].clickToken), meuh);
   assert.ok(!MEDIA_ORIGINS.includes('https://ice5.somafm.com'));
 });
+
+test('US and ES catalog rows use their approved direct URLs and retain provider click UUIDs', async () => {
+  const candidates = [
+    { country: 'US', uuid: '9627dcf4-0601-11e8-ae97-52543be04c81', url: 'https://listen.181fm.com/181-beat_128k.mp3' },
+    { country: 'ES', uuid: '3fd18c3f-8157-11e9-aa30-52543be04c81', url: 'https://streams.radio.co/se1a320b47/listen' }
+  ];
+  for (const { country, uuid, url } of candidates) {
+    const providerRow = row(1, { stationuuid: uuid, countrycode: country, url_resolved: url });
+    const result = await discover(country, { fetcher: async () => json([providerRow]) });
+    assert.equal(result.status, 'ok');
+    assert.equal(result.stations[0].streamUrl, url);
+    assert.equal(result.stations[0].origin, new URL(url).origin);
+    assert.equal(tokenStationId(result.stations[0].clickToken), uuid);
+    const changedProviderUrl = { ...providerRow, url_resolved: `https://unlisted.example/${country}.mp3` };
+    assert.equal((await discover(country, { fetcher: async () => json([changedProviderUrl]) })).status, 'no_supported_stations', 'new UUIDs have no URL override');
+    for (const change of [
+      { countrycode: country === 'US' ? 'ES' : 'US' },
+      { codec: 'AAC' },
+      { stationuuid: 'invalid' },
+      { url_resolved: url.replace('https:', 'http:') },
+      { url_resolved: url.replace(new URL(url).host, 'unlisted.example') },
+      { url_resolved: url.replace(new URL(url).host, `${new URL(url).host}:8443`) },
+      { url_resolved: `${url}#fragment` },
+      { url_resolved: `${new URL(url).origin}/playlist.m3u` }
+    ]) {
+      assert.equal((await discover(country, { fetcher: async () => json([{ ...providerRow, ...change }]) })).status, 'no_supported_stations');
+    }
+  }
+});

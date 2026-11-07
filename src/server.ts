@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
 const UI_URI = 'ui://dial/radio-v9.html';
-const DISCOVERY_URI = 'ui://dial/country-v8.html';
+const DISCOVERY_URI = 'ui://dial/country-v9.html';
 const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',

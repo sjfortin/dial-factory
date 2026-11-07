@@ -62,7 +62,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
-  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v8.html');
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v9.html');
   assert.match(resource.contents[0].text, /class="card"/);
   assert.match(resource.contents[0].text, /prefers-color-scheme: dark/);
   for (const deliveredHtml of [resource.contents[0].text, countryResource.contents[0].text]) {
@@ -77,6 +77,17 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
     connectDomains: [],
     resourceDomains: [...MEDIA_ORIGINS]
   });
+  assert.deepEqual(MEDIA_ORIGINS, [
+    'https://stream.radioparadise.com',
+    'https://audio.bfmtv.com',
+    'https://media-ssl.musicradio.com',
+    'https://streamer.radio.co',
+    'https://icy.unitedradio.it',
+    'https://radiomeuh.ice.infomaniak.ch',
+    'https://novazz.ice.infomaniak.ch',
+    'https://listen.181fm.com',
+    'https://streams.radio.co'
+  ]);
   const moreTool = tools.tools.find(entry => entry.name === 'more_stations_by_country');
   assert.ok(moreTool);
   assert.deepEqual(moreTool._meta.ui.visibility, ['app']);

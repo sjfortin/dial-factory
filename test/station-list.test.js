@@ -48,6 +48,20 @@ test('unsafe URL is never selectable and statuses replace stale rows', () => {
   assert.deepEqual(selected, []);
 });
 
+test('browser accepts only the new exact origins with safe source URLs', () => {
+  const ui = setup(); const selected = [];
+  renderStations({ status: 'ok', countryCode: 'FR', stations: [
+    { ...station, id: 'us', streamUrl: 'https://listen.181fm.com/181-beat_128k.mp3', origin: 'https://listen.181fm.com' },
+    { ...station, id: 'es', streamUrl: 'https://streams.radio.co/se1a320b47/listen', origin: 'https://streams.radio.co' },
+    { ...station, id: 'other', streamUrl: 'https://other.radio.co/listen', origin: 'https://other.radio.co' },
+    { ...station, id: 'port', streamUrl: 'https://streams.radio.co:8443/listen', origin: 'https://streams.radio.co' },
+    { ...station, id: 'playlist', streamUrl: 'https://listen.181fm.com/playlist.m3u', origin: 'https://listen.181fm.com' }
+  ] }, ui.list, ui.summary, ui.toggle, row => selected.push(row));
+  assert.deepEqual(ui.list.children.map(item => item.children[0].attributes['aria-label']), [`Select ${station.name}`, `Select ${station.name}`]);
+  ui.list.children[1].children[0].click();
+  assert.equal(selected[0].id, 'es');
+});
+
 test('three bounded pages append unique rows while preserving selection and retrying a failed page', () => {
   const ui = setup(); const selected = [];
   const catalog = createStationCatalog(ui.list, ui.summary, ui.toggle, row => selected.push(row));

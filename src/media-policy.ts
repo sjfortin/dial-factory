@@ -6,5 +6,7 @@ export const MEDIA_ORIGINS = [
   'https://streamer.radio.co',
   'https://icy.unitedradio.it',
   'https://radiomeuh.ice.infomaniak.ch',
-  'https://novazz.ice.infomaniak.ch'
+  'https://novazz.ice.infomaniak.ch',
+  'https://listen.181fm.com',
+  'https://streams.radio.co'
 ] as const;
