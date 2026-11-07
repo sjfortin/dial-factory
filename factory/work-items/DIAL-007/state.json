@@ -254,6 +254,19 @@
       "seq": 26,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-07T22:59:55+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Yes, please do so",
+      "kind": "intervention",
+      "possible_improvement": "Keep rollout authorization distinct from owner audible playback acceptance.",
+      "question": "Push merge and roll out the reviewed candidate for owner host QA?",
+      "reason": "Owner authorized push PR merge and rollout to existing testing endpoint; host QA still pending",
+      "seq": 27,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-007"
     }
   ],
   "final_result": null,
@@ -269,6 +282,17 @@
       "question": "Authorize pushing the candidate, PR merge and rollout to the current testing endpoint for owner eight-country and More-stations host QA?",
       "reason": "Independent review ACCEPT and 35 tests pass; all eight direct streams freshly return MP3, but corrected catalog request did not complete and actual ChatGPT host QA is missing",
       "stage": "VERIFYING",
+      "work_item": "DIAL-007"
+    },
+    {
+      "at": "2026-11-07T22:59:55+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Yes, please do so",
+      "possible_improvement": "Keep rollout authorization distinct from owner audible playback acceptance.",
+      "question": "Push merge and roll out the reviewed candidate for owner host QA?",
+      "reason": "Owner authorized push PR merge and rollout to existing testing endpoint; host QA still pending",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-007"
     }
   ],
@@ -627,5 +651,5 @@
   },
   "state": "WAITING_FOR_HUMAN",
   "title": "Complete eight-country station coverage with expanded finite candidates",
-  "updated_at": "2026-11-07T22:28:35+00:00"
+  "updated_at": "2026-11-07T22:59:55+00:00"
 }
