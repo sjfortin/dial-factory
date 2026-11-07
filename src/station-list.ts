@@ -1,16 +1,13 @@
-import { MEDIA_ORIGINS } from './media-policy.js';
+import { parseMediaUrl } from './media-policy.js';
 
 export type Row = { id: string; name: string; countryCode: string; streamUrl: string; origin: string; codec?: string; bitrate?: number; clickToken: string };
 export type Results = { kind?: 'initial' | 'continuation'; pageIndex?: number; status: string; countryCode: string; searchedCount: number; limit: number; stations: Row[] };
-const allowed = new Set<string>(MEDIA_ORIGINS);
 function safeRow(value: unknown, countryCode: string): value is Row {
   if (!value || typeof value !== 'object') return false;
   const row = value as Partial<Row>;
   if (typeof row.id !== 'string' || typeof row.name !== 'string' || typeof row.streamUrl !== 'string' || typeof row.origin !== 'string' || typeof row.clickToken !== 'string' || row.countryCode !== countryCode) return false;
-  try {
-    const url = new URL(row.streamUrl);
-    return url.protocol === 'https:' && !url.username && !url.password && !url.port && !url.hash && !/\.(m3u8?|pls|asx)$/i.test(url.pathname) && url.origin === row.origin && allowed.has(url.origin);
-  } catch { return false; }
+  const url = parseMediaUrl(row.streamUrl);
+  return url !== null && url.origin === row.origin;
 }
 
 export function createStationCatalog(list: HTMLElement, summary: HTMLElement, toggle: HTMLButtonElement, select: (row: Row) => void) {

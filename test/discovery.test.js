@@ -168,7 +168,10 @@ test('US and ES catalog rows use their approved direct URLs and retain provider 
       { stationuuid: 'invalid' },
       { url_resolved: url.replace('https:', 'http:') },
       { url_resolved: url.replace(new URL(url).host, 'unlisted.example') },
+      { url_resolved: url.replace(new URL(url).host, `${new URL(url).host}:443`) },
       { url_resolved: url.replace(new URL(url).host, `${new URL(url).host}:8443`) },
+      { url_resolved: url.replace('https://', 'https:\\') },
+      { url_resolved: url.replace('https://', 'https://user@') },
       { url_resolved: `${url}#fragment` },
       { url_resolved: `${new URL(url).origin}/playlist.m3u` }
     ]) {

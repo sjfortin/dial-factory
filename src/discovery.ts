@@ -1,6 +1,6 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { ISO_CODES } from './iso-codes.js';
-import { MEDIA_ORIGINS } from './media-policy.js';
+import { parseMediaUrl } from './media-policy.js';
 export { MEDIA_ORIGINS } from './media-policy.js';
 
 export const PROVIDER_ORIGIN = 'https://de1.api.radio-browser.info';
@@ -31,16 +31,6 @@ export function validateProviderOrigin(input: string): string {
   const url = new URL(input);
   if (url.protocol !== 'https:' || url.username || url.password || url.port || url.pathname !== '/' || url.search || url.hash) throw new Error('RADIO_BROWSER_API_ORIGIN must be an HTTPS origin');
   return url.origin;
-}
-
-function streamUrl(raw: unknown): URL | null {
-  if (typeof raw !== 'string') return null;
-  try {
-    const url = new URL(raw);
-    if (url.protocol !== 'https:' || url.username || url.password || url.port || url.hash || !MEDIA_ORIGINS.includes(url.origin as typeof MEDIA_ORIGINS[number])) return null;
-    if (/\.(m3u8?|pls|asx)(?:$|[?])/i.test(url.pathname)) return null;
-    return url;
-  } catch { return null; }
 }
 
 function tokenFor(id: string, expiry: number): string {
@@ -116,7 +106,7 @@ export async function discover(input: unknown, options: { fetcher?: Fetch; provi
       const codec = typeof item.codec === 'string' ? item.codec.trim().toUpperCase() : '';
       const id = typeof rawId === 'string' ? rawId.toLowerCase() : '';
       const resolved = Object.hasOwn(OVERRIDES, id) ? OVERRIDES[id] : typeof item.url_resolved === 'string' && item.url_resolved.trim() ? item.url_resolved : item.url;
-      const media = streamUrl(resolved);
+      const media = parseMediaUrl(resolved);
       if (typeof rawId !== 'string' || !UUID.test(rawId) || typeof name !== 'string' || !name.trim() || code !== countryCode || codec !== 'MP3' || !media || ids.has(id) || urls.has(media.href)) continue;
       ids.add(id);
       urls.add(media.href);
