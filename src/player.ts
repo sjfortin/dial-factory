@@ -1,6 +1,6 @@
 import { App } from '@modelcontextprotocol/ext-apps';
 import { installPlayer } from './player-controller.js';
-import { renderStations } from './station-list.js';
+import { createStationCatalog } from './station-list.js';
 
 const audio = document.querySelector<HTMLAudioElement>('#radio')!;
 const toggle = document.querySelector<HTMLButtonElement>('#toggle')!;
@@ -10,6 +10,7 @@ const remoteStatus = document.querySelector<HTMLElement>('#remote-status');
 const app = new App({ name: 'dial-radio-player', version: '0.2.0' });
 const list = document.querySelector<HTMLElement>('#stations');
 const summary = document.querySelector<HTMLElement>('#summary');
+const more = document.querySelector<HTMLButtonElement>('#more-stations');
 const stationTitle = document.querySelector<HTMLElement>('#station-title');
 const stationSubtitle = document.querySelector<HTMLElement>('#station-subtitle');
 const player = installPlayer(audio, toggle, status, {
@@ -23,16 +24,43 @@ const player = installPlayer(audio, toggle, status, {
   }
 });
 if (list && summary) {
+  const catalog = createStationCatalog(list, summary, toggle, (row) => {
+    player.selectStation(row);
+    if (stationTitle) stationTitle.textContent = row.name;
+    if (stationSubtitle) stationSubtitle.textContent = [row.countryCode, row.codec, typeof row.bitrate === 'number' ? `${row.bitrate} kbps` : null].filter(Boolean).join(' · ');
+  });
+  let pending: { generation: number; countryCode: string; pageIndex: number } | null = null;
+  const refreshMore = () => { if (more) { more.hidden = catalog.nextPage === null; more.disabled = pending !== null; } };
+  more?.addEventListener('click', () => {
+    const pageIndex = catalog.nextPage;
+    if (pending || pageIndex === null) return;
+    const countryCode = catalog.country;
+    const request = { generation: catalog.generation, countryCode, pageIndex };
+    pending = request;
+    refreshMore();
+    void app.callServerTool({ name: 'more_stations_by_country', arguments: { countryCode, pageIndex } })
+      .then(result => {
+        if (pending !== request || catalog.generation !== request.generation) return;
+        const value = result.structuredContent as { kind?: string; countryCode?: string; pageIndex?: number } | undefined;
+        if (value?.kind === 'continuation' && value.countryCode === countryCode && value.pageIndex === pageIndex) catalog.receive(value, request.generation);
+      })
+      .catch(() => {
+        if (pending === request && catalog.generation === request.generation) catalog.receive({ kind: 'continuation', pageIndex, countryCode, status: 'provider_unavailable', searchedCount: 0, limit: 50, stations: [] }, request.generation);
+      })
+      .finally(() => { if (pending === request) { pending = null; refreshMore(); } });
+  });
   app.ontoolresult = (params) => {
     if (!params.structuredContent || typeof params.structuredContent !== 'object' || !('status' in params.structuredContent)) return;
+    const result = params.structuredContent as { kind?: string };
+    // Continuations are consumed only from the request promise, which carries
+    // the search generation. A host notification has no request identity.
+    if (result.kind === 'continuation') return;
+    pending = null;
     player.clearSelection();
     if (stationTitle) stationTitle.textContent = 'Choose a station';
     if (stationSubtitle) stationSubtitle.textContent = 'Select from the stations below';
-    renderStations(params.structuredContent, list, summary, toggle, (row) => {
-      player.selectStation(row);
-      if (stationTitle) stationTitle.textContent = row.name;
-      if (stationSubtitle) stationSubtitle.textContent = [row.countryCode, row.codec, typeof row.bitrate === 'number' ? `${row.bitrate} kbps` : null].filter(Boolean).join(' · ');
-    });
+    catalog.receive(result);
+    refreshMore();
   };
 }
 void app.connect().catch(() => {

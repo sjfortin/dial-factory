@@ -1,0 +1,49 @@
+{
+  "agent": "/root/dial006_triage",
+  "at": "2026-11-06T12:03:12+00:00",
+  "complexity": "Medium-high: provider paging itself is bounded, but useful coverage depends on compatible-origin curation, synchronized CSP/server/client allowlists, and preserving selection/playback across incremental results. Eight-country compatibility needs empirical evidence.",
+  "evidence": [
+    "README.md documents the current exact-country Radio Browser query, first-50/10-result limits, three fixed media origins, resource CSP, click reporting, and no pagination.",
+    "The requested countries are syntactically covered by normalizeCountry because it checks the checked-in assigned ISO alpha-2 set; actual provider inventory and playable-stream counts for each country have not been measured in this triage.",
+    "Catalog support is not equivalent to playable coverage: discovery filters MP3 and exactly https://stream.radioparadise.com, https://audio.bfmtv.com, and https://media-ssl.musicradio.com. New candidate providers/origins require deliberate server and client allowlist changes and CSP resourceDomains alignment; provider data alone cannot add playable origins.",
+    "Discovery currently asks only for offset 0 and does not expose a page/offset/cursor; any bounded continuation needs explicit page bounds, deduplication across pages, and behavior for short/empty pages and provider failures.",
+    "The server-side click reporting token is bound to provider UUID and best-effort reporting is triggered only after a user-initiated playback reaches playing; keep attribution semantics intact when adding rows/providers.",
+    "Existing test/discovery.test.js covers first-50 limits, filtering, exact-origin checks, duplicate IDs, bounded provider failures and token reporting. Existing test/station-list.test.js covers safe text, 10-row bound, selection and status replacement. These are inspected test sources, not tests executed by this triage.",
+    "No live provider/catalog queries, stream probes, ChatGPT host QA, test commands, or production edits were performed."
+  ],
+  "open_questions": [
+    "Which exact compatible station origins, codecs and redirect patterns are acceptable for allowlist expansion, and what evidence threshold qualifies an origin?",
+    "What should the browse-more bound be (maximum provider pages, total provider rows, and/or maximum displayed choices), and should results append in provider vote order?",
+    "Should candidate FIP, Nova and Meuh station entries be explicitly included when available, or are they discovery targets only? Their feasibility is not established by this read-only inspection.",
+    "For a later hosting phase, what owner acceptance evidence and hosting scope are expected? Defer that decision until coverage review per packet."
+  ],
+  "recommendation": "SPEC",
+  "relevant_code": [
+    "src/iso-codes.ts: checked-in ISO alpha-2 codes feed normalizeCountry; no country allowlist limits the eight requested countries.",
+    "src/discovery.ts: discover requests one Radio Browser exact-country page (offset=0, limit=50), scans at most 50 records, allows only MP3 and MEDIA_ORIGINS, deduplicates UUIDs, returns at most 10; provider fetch is HTTPS-origin validated, timeout/byte bounded, and redirects rejected.",
+    "src/station-list.ts: renderStations replaces the entire list, limits selection to 10 rows and accepts only a duplicated hard-coded client origin allowlist; safe text nodes preserve provider-name safety.",
+    "src/server.ts: country resource CSP resourceDomains is derived from MEDIA_ORIGINS while connectDomains stays empty; discovery/click-count provider traffic is server-side. Resource version is country-v7.html.",
+    "src/player.ts and src/player-controller.ts: each new country tool result clears the selected station and stops playback; choosing a station also stops/resets the prior stream. A browse-more action must avoid treating a subsequent page as a fresh tool result if it is to preserve selection/playback.",
+    "src/playback-coordinator.ts: playback ownership coordination is shared; avoid changing it for catalog pagination unless evidence requires it.",
+    "public/discovery.html: current UI says up to 10 supported stations from first 50 provider results and has no browse-more control."
+  ],
+  "risks": [
+    "A code-only expansion of countries may yield few or no stations because the strict three-origin allowlist and MP3 filter reject most catalog entries; FIP/Nova/Meuh support cannot be promised from current code evidence.",
+    "Adding arbitrary provider-controlled stream origins would broaden media access and CSP. Each accepted origin needs review and evidence; redirects may still be blocked by host CSP and MP3 metadata does not prove compatibility.",
+    "Naively invoking the existing country tool to fetch another page will fire player.clearSelection() and stop playback; replacing list contents can also lose the selected marker.",
+    "Page overlap or changing provider vote order can create duplicates or omissions; bound total requests/results and deduplicate by canonical UUID across the browsing session.",
+    "Cross-origin stream redirects, codec/container mismatches, station outages and host-specific CSP/autoplay behavior may make catalogued stations unplayable despite reported MP3 metadata.",
+    "Changing click-count attribution or issuing tokens for later pages must preserve short-lived HMAC validation, best-effort failure behavior and user-initiated play semantics."
+  ],
+  "role": "Triage",
+  "run_id": "run-53e01ae20011",
+  "scope": "Expand station coverage for FR, GB, US, CA, DE, JP, ES, IT and provide bounded browsing for more compatible stations. FIP, Nova and Meuh are desired candidates, with feasibility explicitly unpromised. Hosting/public launch is a later phase after owner acceptance of coverage and is out of scope here.",
+  "tests": [
+    "Existing test/discovery.test.js should be extended for all eight requested country codes and pagination boundaries, cross-page UUID deduplication, server/client origin and codec filtering, and provider timeout/error behavior on later pages.",
+    "Existing test/station-list.test.js should cover bounded append/continuation, duplicate suppression, selected-row retention, and preserving player state when more results arrive.",
+    "test/server.test.js should assert the revised resource CSP domains match the exact expanded server and client media allowlists and resource version changes appropriately.",
+    "Independent verification should collect dated provider result counts and candidate stream metadata per requested country; verify direct HTTPS response/redirect behavior for accepted origins and live stream playback for representative distinct stations.",
+    "Owner host QA should verify the neutral Studio UI, more-stations interaction, selected/playing station preservation, playback, and click-reporting disclosure in the actual host; missing host or stream evidence remains BLOCKED."
+  ],
+  "work_item": "DIAL-006"
+}

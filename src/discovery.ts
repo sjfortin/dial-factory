@@ -1,7 +1,8 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { ISO_CODES } from './iso-codes.js';
+import { parseMediaUrl } from './media-policy.js';
+export { MEDIA_ORIGINS } from './media-policy.js';
 
-export const MEDIA_ORIGINS = ['https://stream.radioparadise.com', 'https://audio.bfmtv.com', 'https://media-ssl.musicradio.com'] as const;
 export const PROVIDER_ORIGIN = 'https://de1.api.radio-browser.info';
 const API_TIMEOUT_MS = 5000;
 const MAX_BYTES = 512_000;
@@ -10,9 +11,15 @@ const STATION_LIMIT = 10;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 
 export type Station = { id: string; name: string; countryCode: string; streamUrl: string; origin: string; codec?: string; bitrate?: number; clickToken: string };
-export type Discovery = { status: 'invalid_country' | 'provider_unavailable' | 'no_stations' | 'no_supported_stations' | 'ok'; countryCode: string; searchedCount: number; limit: 50; stations: Station[] };
+export type Discovery = { kind: 'initial' | 'continuation'; pageIndex: number; status: 'invalid_country' | 'provider_unavailable' | 'no_stations' | 'no_supported_stations' | 'ok'; countryCode: string; searchedCount: number; limit: 50; stations: Station[] };
 type Fetch = typeof fetch;
 const signingKey = randomBytes(32);
+const OVERRIDES: Readonly<Record<string, string>> = {
+  '960a0f41-0601-11e8-ae97-52543be04c81': 'https://radiomeuh.ice.infomaniak.ch/radiomeuh-128.mp3',
+  '121cc91e-1f4d-41d5-b7f3-5d09c688fc2f': 'https://novazz.ice.infomaniak.ch/novazz-128.mp3',
+  '8a728f88-35f3-4ebf-95bb-46730999bc8a': 'https://novazz.ice.infomaniak.ch/novazz-128.mp3',
+  '963fb390-0601-11e8-ae97-52543be04c81': 'https://novazz.ice.infomaniak.ch/novazz-128.mp3'
+};
 
 export function normalizeCountry(input: unknown): string | null {
   if (typeof input !== 'string') return null;
@@ -24,16 +31,6 @@ export function validateProviderOrigin(input: string): string {
   const url = new URL(input);
   if (url.protocol !== 'https:' || url.username || url.password || url.port || url.pathname !== '/' || url.search || url.hash) throw new Error('RADIO_BROWSER_API_ORIGIN must be an HTTPS origin');
   return url.origin;
-}
-
-function streamUrl(raw: unknown): URL | null {
-  if (typeof raw !== 'string') return null;
-  try {
-    const url = new URL(raw);
-    if (url.protocol !== 'https:' || url.username || url.password || url.port || url.hash || !MEDIA_ORIGINS.includes(url.origin as typeof MEDIA_ORIGINS[number])) return null;
-    if (/\.(m3u8?|pls|asx)(?:$|[?])/i.test(url.pathname)) return null;
-    return url;
-  } catch { return null; }
 }
 
 function tokenFor(id: string, expiry: number): string {
@@ -84,19 +81,22 @@ async function boundedJson(url: string, fetcher: Fetch, timeoutMs: number): Prom
   }
 }
 
-export async function discover(input: unknown, options: { fetcher?: Fetch; providerOrigin?: string; timeoutMs?: number; now?: number } = {}): Promise<Discovery> {
+export async function discover(input: unknown, options: { fetcher?: Fetch; providerOrigin?: string; timeoutMs?: number; now?: number; pageIndex?: number } = {}): Promise<Discovery> {
+  const pageIndex = options.pageIndex ?? 0;
+  if (!Number.isInteger(pageIndex) || pageIndex < 0 || pageIndex > 2) throw new RangeError('pageIndex must be 0, 1, or 2');
   const countryCode = normalizeCountry(input);
-  const base: Discovery = { status: 'invalid_country', countryCode: countryCode ?? '', searchedCount: 0, limit: ROW_LIMIT, stations: [] };
+  const base: Discovery = { kind: pageIndex === 0 ? 'initial' : 'continuation', pageIndex, status: 'invalid_country', countryCode: countryCode ?? '', searchedCount: 0, limit: ROW_LIMIT, stations: [] };
   if (!countryCode) return base;
   try {
     const origin = validateProviderOrigin(options.providerOrigin ?? PROVIDER_ORIGIN);
     const url = new URL(`/json/stations/bycountrycodeexact/${countryCode}`, origin);
-    url.search = new URLSearchParams({ order: 'votes', reverse: 'true', offset: '0', limit: '50', hidebroken: 'true' }).toString();
+    url.search = new URLSearchParams({ order: 'votes', reverse: 'true', offset: String(pageIndex * ROW_LIMIT), limit: '50', hidebroken: 'true' }).toString();
     const json = await boundedJson(url.href, options.fetcher ?? fetch, options.timeoutMs ?? API_TIMEOUT_MS);
     if (!Array.isArray(json)) throw new Error('Provider response is not an array');
     const rows = json.slice(0, ROW_LIMIT);
     const stations: Station[] = [];
     const ids = new Set<string>();
+    const urls = new Set<string>();
     for (const row of rows) {
       if (!row || typeof row !== 'object') continue;
       const item = row as Record<string, unknown>;
@@ -104,11 +104,12 @@ export async function discover(input: unknown, options: { fetcher?: Fetch; provi
       const name = item.name;
       const code = typeof item.countrycode === 'string' ? item.countrycode.trim().toUpperCase() : '';
       const codec = typeof item.codec === 'string' ? item.codec.trim().toUpperCase() : '';
-      const resolved = typeof item.url_resolved === 'string' && item.url_resolved.trim() ? item.url_resolved : item.url;
-      const media = streamUrl(resolved);
-      if (typeof rawId !== 'string' || !UUID.test(rawId) || typeof name !== 'string' || !name.trim() || code !== countryCode || codec !== 'MP3' || !media || ids.has(rawId.toLowerCase())) continue;
-      const id = rawId.toLowerCase();
+      const id = typeof rawId === 'string' ? rawId.toLowerCase() : '';
+      const resolved = Object.hasOwn(OVERRIDES, id) ? OVERRIDES[id] : typeof item.url_resolved === 'string' && item.url_resolved.trim() ? item.url_resolved : item.url;
+      const media = parseMediaUrl(resolved);
+      if (typeof rawId !== 'string' || !UUID.test(rawId) || typeof name !== 'string' || !name.trim() || code !== countryCode || codec !== 'MP3' || !media || ids.has(id) || urls.has(media.href)) continue;
       ids.add(id);
+      urls.add(media.href);
       const station: Station = { id, name: name.trim().slice(0, 120), countryCode, streamUrl: media.href, origin: media.origin, codec: 'MP3', clickToken: tokenFor(id, (options.now ?? Date.now()) + 5 * 60_000) };
       if (typeof item.bitrate === 'number' && Number.isInteger(item.bitrate) && item.bitrate > 0 && item.bitrate <= 1000) station.bitrate = item.bitrate;
       stations.push(station);

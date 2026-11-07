@@ -1,0 +1,24 @@
+{
+  "agent": "/root/dial007_review",
+  "architecture": "Shared MEDIA_ORIGINS is imported by discovery and station-list and exported to server CSP. The exact nine-origin list matches TECH. Country resource advances from v8 to v9; connectDomains remains empty and fixed-player CSP stays Radio Paradise-only. No proxy or new arbitrary URL input was introduced.",
+  "at": "2026-11-07T22:19:30+00:00",
+  "attempt": 1,
+  "candidate_commit": "a8ffc47059d2643a7383eca49f41c664348bbeb2",
+  "complexity": "The origin/resource change is appropriately small and uses the existing shared policy. Coverage documentation is candid about dated samples and absent host checks. A narrow validation correction and regression cases are sufficient for the finding; no pagination/player redesign is needed.",
+  "correctness": "Compared src/test changes with DIAL-006 candidate 164ed275bf510869410c1df8fcf42a460510e5e6: production changes are confined to media-policy and country resource URI. Pagination, request-generation guards, player, controller, coordinator, and existing four Meuh/Nova overrides are unchanged. URL parsing strips explicit default HTTPS ports before validation, leaving an approved edge-case requirement unmet.",
+  "findings": [
+    {
+      "description": "Explicit default HTTPS ports are accepted although approved PRODUCT/TECH require rejecting explicit-port source URLs. new URL('https://streams.radio.co:443/se1a320b47/listen') normalizes port to an empty string before the url.port check, so discovery admits this row and browser validation likewise accepts it. The new negative tests exercise only :8443. This behavior predates this patch but contradicts the exact approved DIAL-007 source admission requirement carried forward for the newly added origins.",
+      "location": "src/discovery.ts:39-40; src/station-list.ts:11-12; test/discovery.test.js:173; test/station-list.test.js:58",
+      "requested_change": "Reject explicit ports in the original URL authority before URL normalization in both server and browser source validation, preserving exact origin checks. Add regressions for explicit :443 (including both newly admitted origins) as well as the existing nondefault-port cases. If normalized default ports are intentionally allowed, obtain approval for that policy change instead of asserting all explicit ports are rejected.",
+      "severity": "P2"
+    }
+  ],
+  "recommendation": "REVISE",
+  "requirements": "Inspected exact candidate (HEAD matches full SHA), Review packet, approved PRODUCT/TECH and their matching SHA-256 hashes. Only the two approved origins were added, with no new UUID override. Dated eight-country candidate table distinguishes direct MP3 evidence from unobserved host playback. One explicit-port rejection requirement is not satisfied; fresh provider/direct and owner host QA remain separate Verify gates.",
+  "role": "Review",
+  "run_id": "run-4a548fea572f",
+  "security": "No origin escape, wildcard media access, stream proxy, or new UUID override found. The default-port issue stays on an approved HTTPS origin; it is a literal approved-policy mismatch, not evidence of arbitrary host access. Runtime redirect destinations and CSP/audibility cannot be established by these source checks and remain Verify/owner host obligations.",
+  "tests": "Inspected new fixture admission/click-UUID/no-override tests, negative URL tests, browser selection tests, exact-origin/CSP/URI tests and retained bounds/stale-response tests. New explicit-port cases use :8443 only and miss :443. Independently ran a Node URL normalization probe, which returned port empty for https://streams.radio.co:443/se1a320b47/listen, and a local discover fixture against existing dist output, which returned status ok and the normalized URL. Source inspection confirms both validators use the same ineffective default-port check. Did not rerun the full suite or fresh live/host probes in Review; the packet's 35-test pass is Implement evidence, with independent execution assigned to Verify.",
+  "work_item": "DIAL-007"
+}

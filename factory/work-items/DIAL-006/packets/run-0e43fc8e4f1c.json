@@ -1,0 +1,28 @@
+{
+  "agent": "/root/dial006_implement",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "Expand documented compatible station coverage for France, UK, US, Canada, Germany, Japan, Spain and Italy, with explicit measured limitations.",
+    "Provide bounded more-stations browsing without duplicates or disrupting selected/playing station.",
+    "Preserve neutral Studio UI, playback coordination, safe stream handling, provider attribution and click-reporting semantics.",
+    "Independent Review and Verify assess the exact candidate with meaningful regression checks, live stream/provider evidence and owner host QA; missing evidence remains BLOCKED."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Expand the agreed eight-country coverage and bounded station browsing. Hosting is explicitly the following phase only after owner acceptance; no hosting or public launch changes in this phase.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-0e43fc8e4f1c",
+  "spec": {
+    "at": "2026-11-06T22:48:47+00:00",
+    "by": "Owner: lets continue! following the presented DIAL-006 specs",
+    "hashes": {
+      "PRODUCT.md": "d5072a90fedb2661809c6d0ffde9c3f309cd28391f38fd9ff6d1128108baba57",
+      "TECH.md": "74356faeafb949ea8fc0c59bce46ab8f2520b42da299fa71c9eaa9ecbaf93ae4"
+    },
+    "mode": "approved"
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-006"
+}

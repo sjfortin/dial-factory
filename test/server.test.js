@@ -6,6 +6,7 @@ import { Script } from 'node:vm';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { exerciseDeliveredScript } from './ui-harness.js';
+import { MEDIA_ORIGINS } from '../dist/media-policy.js';
 
 test('HTTP MCP tool returns the station and its renderable UI resource', async (t) => {
   const port = 20000 + Math.floor(Math.random() * 30000);
@@ -61,7 +62,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
-  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v7.html');
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v9.html');
   assert.match(resource.contents[0].text, /class="card"/);
   assert.match(resource.contents[0].text, /prefers-color-scheme: dark/);
   for (const deliveredHtml of [resource.contents[0].text, countryResource.contents[0].text]) {
@@ -74,8 +75,24 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.match(countryResource.contents[0].text, /id="remote-pause"/);
   assert.deepEqual(countryResource.contents[0]._meta.ui.csp, {
     connectDomains: [],
-    resourceDomains: ['https://stream.radioparadise.com', 'https://audio.bfmtv.com', 'https://media-ssl.musicradio.com']
+    resourceDomains: [...MEDIA_ORIGINS]
   });
+  assert.deepEqual(MEDIA_ORIGINS, [
+    'https://stream.radioparadise.com',
+    'https://audio.bfmtv.com',
+    'https://media-ssl.musicradio.com',
+    'https://streamer.radio.co',
+    'https://icy.unitedradio.it',
+    'https://radiomeuh.ice.infomaniak.ch',
+    'https://novazz.ice.infomaniak.ch',
+    'https://listen.181fm.com',
+    'https://streams.radio.co'
+  ]);
+  const moreTool = tools.tools.find(entry => entry.name === 'more_stations_by_country');
+  assert.ok(moreTool);
+  assert.deepEqual(moreTool._meta.ui.visibility, ['app']);
+  assert.equal(moreTool._meta.ui.resourceUri, findTool._meta.ui.resourceUri);
+  assert.equal((await client.callTool({ name: 'more_stations_by_country', arguments: { countryCode: 'FR', pageIndex: 3 } })).isError, true);
   assert.match(countryResource.contents[0].text, /Select a station to listen/);
   assert.doesNotMatch(countryResource.contents[0].text, /http:\/\/unavailable\.test/);
   const countryScript = countryResource.contents[0].text.match(/<script>([\s\S]*?)<\/script>/)?.[1];

@@ -1,6 +1,6 @@
 # Dial roadmap — proposal
 
-This is a proposed sequence, not approval to implement every phase. The owner requested cross-thread playback next and a plan for what follows. Changes to sequence and scope remain possible after real host evidence. DIAL-004 playback coordination is complete and merged; DIAL-005 visual redesign is the active next phase.
+This is a proposed sequence, not approval to implement every phase. DIAL-004 playback coordination and DIAL-005 Studio redesign are complete. DIAL-006 is the current planning phase: bounded station coverage for FR, GB, US, CA, DE, JP, ES and IT. Hosting follows only after the owner accepts coverage and separately approves its scope.
 
 ## Current delivery: country discovery (DIAL-002)
 
@@ -16,19 +16,27 @@ First gate is an actual ChatGPT capability test for shared messaging and atomic 
 
 Then build the smallest supported protocol, clear ownership/status UI, safe failure behavior and rapid-interaction/lifecycle tests. Exit requires independent Review, automated verification and actual two-thread host observations demonstrating the approved Play/Pause/transfer behavior. No hard guarantee is made about paused/suspended or unreachable instances before that evidence exists.
 
-## Active: DIAL-005 minimal inline player redesign
+## Completed: DIAL-005 minimal inline player redesign
 
 Give Dial a polished, compact appearance within a ChatGPT thread. Prepare visual options with a clear station title, refined typography and spacing, restrained color, one obvious Play/Pause action, and quiet secondary controls. Country results should feel integrated without dominating the conversation. Include local/remote playback status, loading/error/empty states, narrow layouts, light/dark themes and accessible keyboard/focus behavior. Keep diagnostics in the dedicated probe. Obtain feedback on concrete visual mockups before implementing the chosen design; validate it at actual thread widths. This is a design request, not approval of an unseen visual revision.
 
-## Afterward: reliability and easy operation (proposed)
+## Current planning: DIAL-006 station coverage and bounded browsing
+
+Measure compatible direct HTTPS MP3 streams for the eight requested countries and investigate FIP, Nova and Meuh without promising unsupported streams. Add at most two More stations requests after the initial 50-row page, preserving selected playback and finite media/CSP origins. Independent Review and Verify must record actual provider, stream and owner host QA evidence. The exact DIAL-006 spec revision requires owner approval before implementation. See `factory/work-items/DIAL-006/PRODUCT.md` and `TECH.md`.
+
+## Next gate: owner coverage acceptance, then hosting proposal
+
+After the DIAL-006 handoff, the owner reviews the measured coverage and remaining gaps. Hosting is a separate phase only after that acceptance, with its own scope, safety and operating decisions. No hosting work, public launch, merge or deployment is authorized by DIAL-006.
+
+## Later: reliability and easy operation (proposed)
 
 Make repeat testing and routine use predictable: an explicitly approved automatic-start setup for the local server, restart/reconnect handling, understandable ownership/provider/media errors and the previously deferred controlled stream-error/recovery host check. Define what happens on sleep, reboot, closed views and expired click tokens. Do not promise background playback through host teardown. Exit with a documented runbook and real interruption/recovery evidence.
 
 Rationale: playback should be dependable before adding more discovery or stored state. Hosting on a laptop still depends on its power, network and awake state; an always-on host would be a separate deployment decision.
 
-## Then: useful station coverage and discovery (proposed)
+## Further discovery (proposed)
 
-Expand beyond the present finite FR/GB media-origin proof. Begin with owner-valued stations such as FIP and a small set of known compatible streams; evaluate name search and a conversational country-selection flow. Investigate media CSP/origin policy and redirects first. Keep result sizes bounded and errors clear. Do not replace the existing finite policy with unrestricted media access without an approved design. Exit with documented coverage and actual audible evidence for the supported stations.
+After DIAL-006 evidence and a separate approval, evaluate name search and a conversational country-selection flow. Keep result sizes bounded and errors clear. Do not replace the finite media policy with unrestricted access without an approved design.
 
 ## Later: favorites and resume (proposed)
 

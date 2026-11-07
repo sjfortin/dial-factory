@@ -1,0 +1,16 @@
+{
+  "agent": "/root/dial007_spec",
+  "at": "2026-11-06T23:30:17+00:00",
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "evidence_document": "docs/DIAL-007-CANDIDATES.md",
+  "evidence_sha256": "53dba5c7f92b0bdfade382d7335f34f65ea6a01d34098e5d1062a640838b6a62",
+  "product_sha256": "80985c6ed67addab2c0fbb4fff72f52371aa55d166ec30b4aa4e743593d72e1c",
+  "role": "Spec",
+  "run_id": "run-017d023d7089",
+  "summary": "Proposes exactly two new media origins, listen.181fm.com for US 181.FM The Beat and streams.radio.co for ES Café del Mar. Fresh dated Radio Browser rows and bounded redirect-rejecting direct probes support one MP3 candidate in each of FR, GB, US, CA, DE, JP, ES and IT. No new UUID override is needed. DIAL-006 reviewed pagination and stale-response fixes remain the implementation baseline. Native audio may redirect subject to host CSP; actual ChatGPT host playback, destinations and owner coverage acceptance remain unobserved gates. No production code or deployment changed.",
+  "tech_sha256": "c4782f7a9197d81cc496b25b7a930c8dd0d782f4a874ebeb3cfe1542d407b0ea",
+  "work_item": "DIAL-007"
+}

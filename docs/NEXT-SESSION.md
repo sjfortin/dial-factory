@@ -1,7 +1,5 @@
-# Dial resume checkpoint — DIAL-005 Studio host QA
+# Dial checkpoint — DIAL-007 ready for rollout decision
 
-Studio candidate 6148c3720703f4d6e066d434b07a49641a4a9823 has independent Review ACCEPT and 28 passing tests. Additional independent Chromium review checked 320px/560px light/dark layouts and state fixtures without blocking visual defects. Two minor text repetition notes are in the polish evidence. Actual ChatGPT host visual/audio QA remains unobserved; DIAL-005 remains WAITING_FOR_HUMAN with Verify BLOCKED, not COMPLETE.
+Owner approved exact DIAL007 specs. Candidate e1528f4caf9c13ce100a86752594fca47aad4dd4, attempt2. Independent Review ACCEPT after explicit443-port parser correction. Independent Verify BLOCKED: 35 tests pass and all8 direct streams freshly200 audio/mpeg with MP3 bytes, but corrected fresh catalog request interrupted before result and actual ChatGPT host audible/CSP/More QA unobserved. See durable verification evidence and reports. DIAL007 WAITING_FOR_HUMAN resume VERIFYING.
 
-Owner explicitly authorized merge/push and serving this version to see it in the plugin. Resources are radio-v8 and country-v6. After rollout, open a fresh player and country results in ChatGPT, check appearance and Play/Pause, takeover and remote Pause. Record actual owner observations before final Verify/handoff.
-
-Endpoint: https://macbook-air.tail10dbb3.ts.net/mcp via Tailscale Funnel to localhost8787. Foreman owns lifecycle; only Implement edits production. No future merge or deployment is automatic.
+Local branch work/DIAL-006 contains preserved pagination plus DIAL007 finite2-origin addition. No new push, merge or rollout yet. Await owner authorization for push/PRmerge/test-endpoint rollout. Then test all8 countries (FR GB US CA DE JP ES IT), loading More without stopping selected audio, local/remote Pause, Studio layout and disclosure; record actual evidence before acceptance. Hosting phase only after owner accepts coverage. DIAL006 cancelled as superseded lifecycle, code preserved; no criteria silently waived. Production endpoint still DIAL005 correction.

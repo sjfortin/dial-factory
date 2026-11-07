@@ -1,0 +1,19 @@
+{
+  "agent": "/root/dial006_spec",
+  "at": "2026-11-06T12:10:28+00:00",
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "evidence": [
+    "2026-11-06: Radio Browser de1 API read-only query of offsets 0, 50, 100 returned 50 rows per page for FR, GB, US, CA, DE, JP, ES, IT. Current three-origin MP3 policy yielded FR 6 UUIDs, GB 6 UUIDs and zero in the sampled US, CA, DE, JP, ES, IT rows.",
+    "2026-11-06: redirect-rejecting bounded HTTPS reads returned audio/mpeg and MP3-looking bytes for one SomaFM US, radio.co CA, United Radio IT, Radio Meuh and Radio Nova URL; FIP AAC returned audio/aac. Sample SWR DE, Gensokyo JP, Los 40 ES URLs returned 302, 301, 302 respectively.",
+    "No ChatGPT host audio/UI QA was performed during Spec. Direct byte probes do not establish audibility."
+  ],
+  "owner_review": "Approve exact PRODUCT.md and TECH.md hashes before build. Coverage for DE, JP, ES and FIP remains conditional or blocked under the finite policy; hosting is deferred until owner accepts coverage.",
+  "product_sha256": "d5072a90fedb2661809c6d0ffde9c3f309cd28391f38fd9ff6d1128108baba57",
+  "role": "Spec",
+  "run_id": "run-add551018fcd",
+  "tech_sha256": "74356faeafb949ea8fc0c59bce46ab8f2520b42da299fa71c9eaa9ecbaf93ae4",
+  "work_item": "DIAL-006"
+}

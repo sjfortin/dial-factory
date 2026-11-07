@@ -1,0 +1,36 @@
+{
+  "agent": "/root/dial007_verify",
+  "at": "2026-11-07T22:28:35+00:00",
+  "attempt": 2,
+  "candidate_commit": "e1528f4caf9c13ce100a86752594fca47aad4dd4",
+  "criteria": [
+    {
+      "criterion": "Document dated compatible station candidates for FR GB US CA DE JP ES IT; keep unsupported or unobserved countries explicitly blocked rather than claim complete coverage.",
+      "evidence": "The dated 2026-11-06 Spec table identifies UUID/name/country/codec/URL/page and prior direct results for all eight countries; it explicitly says it is not host playback verification.\nFresh provider catalog evidence is unavailable: the initial mistaken path returned HTTP 404, and the corrected bounded request was interrupted with no result. No fresh row match is claimed.\nFresh direct checks for the eight documented exact URLs returned HTTP 200, Content-Type audio/mpeg, exactly 4096 bytes read, and MP3-like first bytes: FR fffb9260; GB fffb9244; US fffb9260; CA fffb9264; DE fffbb264; JP fffb9264; ES fffbb264; IT fffb9264. Redirects were disabled, 8-second timeouts and 4096-byte read caps were used. This establishes direct byte response at probe time only.\nNo actual ChatGPT host playback was performed; do not claim audible or complete coverage.",
+      "method": "Inspected docs/DIAL-007-CANDIDATES.md; attempted fresh bounded provider catalog queries for the documented sample pages using exact candidate endpoint bycountrycodeexact. Requests were capped at 8 seconds and 512 KB with redirects disabled. The corrected request command was interrupted before returning any results.",
+      "result": "BLOCKED"
+    },
+    {
+      "criterion": "Define and approve exact finite stream origins and any exact provider UUID overrides using bounded direct HTTPS MP3 evidence; preserve provider attribution and avoid arbitrary media access or proxies.",
+      "evidence": "HEAD is exactly e1528f4caf9c13ce100a86752594fca47aad4dd4; approved PRODUCT.md SHA-256 is 80985c6ed67addab2c0fbb4fff72f52371aa55d166ec30b4aa4e743593d72e1c and TECH.md is c4782f7a9197d81cc496b25b7a930c8dd0d782f4a874ebeb3cfe1542d407b0ea.\nTECH.md enumerates nine exact origins, including only the two approved additions listen.181fm.com and streams.radio.co; no new UUID override is specified.\nnpm test passed: TypeScript/esbuild build completed and 35 tests passed, 0 failed, 0 skipped. Tests include exact-origin/UUID override checks, US/ES catalog rows retaining provider click UUIDs, explicit port and unsafe URL rejection, and redirect rejection at fetch boundary.\nAll eight direct URLs returned HTTP 200 audio/mpeg and MP3-like first bytes under 8-second timeout, redirect-disabled requests and 4096-byte caps. No query strings or redirect destinations were logged.",
+      "method": "Compared approved TECH.md and PRODUCT.md hashes with packet, inspected candidate commit and executed full candidate test suite. Ran bounded redirect-disabled probes against all eight documented station URLs.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Carry forward bounded More stations and reviewed stale-response fixes from DIAL-006 without regressing playback continuity or neutral Studio UI.",
+      "evidence": "npm test passed all 35 tests (0 failed, 0 skipped). Relevant passing cases include bounded continuation, page cap and exact offsets; deduplication; selection/audio continuity across later pages and retry; stale same/cross-country response rejection; neutral safe text/keyboard behavior; coordination and pause; delivered browser bundle controls; MCP tool/resource integration.",
+      "method": "Ran npm test against exact candidate checkout, including build and full node:test suite.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Independent Review and Verify assess the final exact candidate and required host playback evidence before coverage acceptance; hosting remains deferred until owner accepts coverage.",
+      "evidence": "Independent Review attempt 2 run-bd547f2f0318 recommends ACCEPT for exact candidate e1528f4caf9c13ce100a86752594fca47aad4dd4, while explicitly distinguishing code review from coverage or hosting acceptance.\nThis Verify run independently passed the full local regression suite and all eight direct byte probes.\nFresh catalog UUID rows were not verified because the corrected network command was interrupted; no result is inferred.\nActual owner ChatGPT playback/CSP/layout/More-state/Pause/click disclosure evidence is absent. This human-host-only gate remains BLOCKED.\nNo hosting, merge, publication or deployment action was taken.",
+      "method": "Inspected the attempt-2 Review report and verified its bound candidate SHA; checked available evidence from this Verify run. No actual ChatGPT host audio/CSP/layout/More/Pause/click-disclosure session was performed. The corrected live catalog retry was interrupted before a result.",
+      "result": "BLOCKED"
+    }
+  ],
+  "overall": "BLOCKED",
+  "role": "Verify",
+  "run_id": "run-2f60a590f086",
+  "work_item": "DIAL-007"
+}
