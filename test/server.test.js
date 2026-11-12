@@ -92,7 +92,9 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   ]);
   assert.deepEqual(MEDIA_ORIGINS, [...EXISTING_MEDIA_ORIGINS, ...new Set(COUNTRY_CANDIDATES.map(([, , url]) => new URL(url).origin))]);
   assert.ok(!MEDIA_ORIGINS.some(origin => origin.includes('*') || origin.includes('radiomast')));
+  assert.equal(MEDIA_ORIGINS.includes('https://wr11-ice.stream.khz.se'), false);
   assert.match(countryResource.contents[0].text, /id="country-select"/);
+  assert.match(countryResource.contents[0].text, /<option value="SE">Sweden<\/option>/);
   assert.match(countryResource.contents[0].text, /id="nts-panel"/);
   assert.match(countryResource.contents[0].text, /In-player listening is unavailable/);
   const moreTool = tools.tools.find(entry => entry.name === 'retry_stations_by_country');

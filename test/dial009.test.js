@@ -8,9 +8,9 @@ const json = rows => new Response(JSON.stringify(rows));
 const directoryRow = ([code, id, url], changes = {}) => ({ stationuuid: id, name: '<b>Provider text</b>', countrycode: code, codec: 'MP3', url_resolved: url, ...changes });
 const pages = rows => async address => json(Number(new URL(address).searchParams.get('offset')) === 0 ? rows : []);
 
-test('all 16 exact candidate pairs require current matching directory rows', async () => {
-  assert.equal(COUNTRY_CANDIDATES.length, 16);
-  assert.equal(new Set(COUNTRY_CANDIDATES.map(([code]) => code)).size, 16);
+test('all 15 currently admitted exact candidate pairs require matching directory rows', async () => {
+  assert.equal(COUNTRY_CANDIDATES.length, 15);
+  assert.equal(new Set(COUNTRY_CANDIDATES.map(([code]) => code)).size, 15);
   for (const candidate of COUNTRY_CANDIDATES) {
     const [code, id, url] = candidate;
     const result = await discover(code, { fetcher: pages([directoryRow(candidate)]) });
@@ -22,6 +22,19 @@ test('all 16 exact candidate pairs require current matching directory rows', asy
     assert.ok(MEDIA_ORIGINS.includes(new URL(url).origin));
     assert.equal((await discover(code, { fetcher: pages([]) })).stations.length, 0, `${code} missing row`);
   }
+});
+
+test('failed SE Bandit candidate and its origin are excluded while SE remains a valid country', async () => {
+  const excluded = ['SE', '40dfa430-7988-4b02-ae1b-ce5fe8b5aad3', 'https://wr11-ice.stream.khz.se/wr11_mp3'];
+  assert.equal(COUNTRY_CANDIDATES.some(([code]) => code === 'SE'), false);
+  assert.equal(MEDIA_ORIGINS.includes('https://wr11-ice.stream.khz.se'), false);
+  assert.equal(parseMediaUrl(excluded[2]), null);
+  assert.equal(matchesCountryCandidate(...excluded), false);
+  const result = await discover('SE', { fetcher: pages([directoryRow(excluded)]) });
+  assert.equal(result.countryCode, 'SE');
+  assert.equal(result.status, 'no_supported_stations');
+  assert.equal(result.stations.length, 0);
+  assert.equal(result.scanState, 'complete');
 });
 
 test('new origins reject nearby URLs, changed query, wrong country/codec and unsafe URL forms', async () => {

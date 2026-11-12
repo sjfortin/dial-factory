@@ -28,9 +28,11 @@ export const COUNTRY_CANDIDATES = [
   ['KR', '7a72aa80-3902-4d73-a548-db81ac780240', 'https://antares.dribbcast.com/proxy/kpop?mp=/s'],
   ['IN', '0db90d9a-4ecc-450c-b8fa-695405b24587', 'https://drive.uber.radio/uber/bollywood2010s/icecast.audio'],
   ['ZA', 'dd493e42-1c7c-4256-8277-53cf61452d88', 'https://live.ecr.co.za/ecrgoldhigh.mp3'],
-  ['NL', '0c62b9d7-8de0-4693-9842-6bf9b50229d3', 'https://icecast.omroep.nl/3fm-bb-mp3'],
-  ['SE', '40dfa430-7988-4b02-ae1b-ce5fe8b5aad3', 'https://wr11-ice.stream.khz.se/wr11_mp3']
+  ['NL', '0c62b9d7-8de0-4693-9842-6bf9b50229d3', 'https://icecast.omroep.nl/3fm-bb-mp3']
 ] as const;
+
+// The approved SE Bandit candidate was excluded after independent direct
+// verification returned HTTP 500/no bytes (docs/DIAL-009-CANDIDATE-STATUS.md).
 
 const candidateById = new Map<string, readonly [string, string, string]>(COUNTRY_CANDIDATES.map(candidate => [candidate[1], candidate]));
 const additionalOrigins = [...new Set(COUNTRY_CANDIDATES.map(candidate => new URL(candidate[2]).origin))];
