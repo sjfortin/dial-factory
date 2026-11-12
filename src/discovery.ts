@@ -7,11 +7,12 @@ export const PROVIDER_ORIGIN = 'https://de1.api.radio-browser.info';
 const API_TIMEOUT_MS = 5000;
 const MAX_BYTES = 512_000;
 const ROW_LIMIT = 50;
-const STATION_LIMIT = 10;
+const STATION_LIMIT = 30;
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 
 export type Station = { id: string; name: string; countryCode: string; streamUrl: string; origin: string; codec?: string; bitrate?: number; clickToken: string };
-export type Discovery = { kind: 'initial' | 'continuation'; pageIndex: number; status: 'invalid_country' | 'provider_unavailable' | 'no_stations' | 'no_supported_stations' | 'ok'; countryCode: string; searchedCount: number; limit: 50; stations: Station[] };
+export type ScanWindow = { pageIndex: number; offset: number; searchedCount: number; success: boolean };
+export type Discovery = { kind: 'initial' | 'retry'; status: 'invalid_country' | 'provider_unavailable' | 'no_stations' | 'no_supported_stations' | 'ok'; countryCode: string; stations: Station[]; windows: ScanWindow[]; scanState: 'complete' | 'partial' | null; choiceLimitReached: boolean };
 type Fetch = typeof fetch;
 const signingKey = randomBytes(32);
 const OVERRIDES: Readonly<Record<string, string>> = {
@@ -81,23 +82,32 @@ async function boundedJson(url: string, fetcher: Fetch, timeoutMs: number): Prom
   }
 }
 
-export async function discover(input: unknown, options: { fetcher?: Fetch; providerOrigin?: string; timeoutMs?: number; now?: number; pageIndex?: number } = {}): Promise<Discovery> {
-  const pageIndex = options.pageIndex ?? 0;
-  if (!Number.isInteger(pageIndex) || pageIndex < 0 || pageIndex > 2) throw new RangeError('pageIndex must be 0, 1, or 2');
+export async function discover(input: unknown, options: { fetcher?: Fetch; providerOrigin?: string; timeoutMs?: number; now?: number; kind?: 'initial' | 'retry' } = {}): Promise<Discovery> {
   const countryCode = normalizeCountry(input);
-  const base: Discovery = { kind: pageIndex === 0 ? 'initial' : 'continuation', pageIndex, status: 'invalid_country', countryCode: countryCode ?? '', searchedCount: 0, limit: ROW_LIMIT, stations: [] };
+  const base: Discovery = { kind: options.kind ?? 'initial', status: 'invalid_country', countryCode: countryCode ?? '', stations: [], windows: [], scanState: null, choiceLimitReached: false };
   if (!countryCode) return base;
-  try {
-    const origin = validateProviderOrigin(options.providerOrigin ?? PROVIDER_ORIGIN);
+  const stations: Station[] = [];
+  const windows: ScanWindow[] = [];
+  const ids = new Set<string>();
+  const urls = new Set<string>();
+  let rawCount = 0;
+  let origin: string;
+  try { origin = validateProviderOrigin(options.providerOrigin ?? PROVIDER_ORIGIN); }
+  catch { return { ...base, status: 'provider_unavailable', scanState: 'partial', windows: [0, 1, 2].map(pageIndex => ({ pageIndex, offset: pageIndex * ROW_LIMIT, searchedCount: 0, success: false })) }; }
+  for (let pageIndex = 0; pageIndex < 3; pageIndex++) {
+    const window: ScanWindow = { pageIndex, offset: pageIndex * ROW_LIMIT, searchedCount: 0, success: false };
+    windows.push(window);
+    try {
     const url = new URL(`/json/stations/bycountrycodeexact/${countryCode}`, origin);
     url.search = new URLSearchParams({ order: 'votes', reverse: 'true', offset: String(pageIndex * ROW_LIMIT), limit: '50', hidebroken: 'true' }).toString();
     const json = await boundedJson(url.href, options.fetcher ?? fetch, options.timeoutMs ?? API_TIMEOUT_MS);
     if (!Array.isArray(json)) throw new Error('Provider response is not an array');
     const rows = json.slice(0, ROW_LIMIT);
-    const stations: Station[] = [];
-    const ids = new Set<string>();
-    const urls = new Set<string>();
+    window.success = true;
+    window.searchedCount = rows.length;
+    rawCount += rows.length;
     for (const row of rows) {
+      if (stations.length >= STATION_LIMIT) continue;
       if (!row || typeof row !== 'object') continue;
       const item = row as Record<string, unknown>;
       const rawId = item.stationuuid;
@@ -113,10 +123,12 @@ export async function discover(input: unknown, options: { fetcher?: Fetch; provi
       const station: Station = { id, name: name.trim().slice(0, 120), countryCode, streamUrl: media.href, origin: media.origin, codec: 'MP3', clickToken: tokenFor(id, (options.now ?? Date.now()) + 5 * 60_000) };
       if (typeof item.bitrate === 'number' && Number.isInteger(item.bitrate) && item.bitrate > 0 && item.bitrate <= 1000) station.bitrate = item.bitrate;
       stations.push(station);
-      if (stations.length === STATION_LIMIT) break;
     }
-    return { ...base, status: !rows.length ? 'no_stations' : !stations.length ? 'no_supported_stations' : 'ok', searchedCount: rows.length, stations };
-  } catch { return { ...base, status: 'provider_unavailable' }; }
+    } catch { /* Later bounded windows can still contribute. */ }
+  }
+  const scanState = windows.every(window => window.success) ? 'complete' : 'partial';
+  const status = stations.length ? 'ok' : scanState === 'partial' ? 'provider_unavailable' : rawCount ? 'no_supported_stations' : 'no_stations';
+  return { ...base, status, stations, windows, scanState, choiceLimitReached: stations.length === STATION_LIMIT };
 }
 
 export async function reportClick(token: unknown, options: { fetcher?: Fetch; providerOrigin?: string; timeoutMs?: number } = {}): Promise<boolean> {

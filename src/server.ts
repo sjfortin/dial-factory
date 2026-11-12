@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 
 const UI_URI = 'ui://dial/radio-v9.html';
-const DISCOVERY_URI = 'ui://dial/country-v9.html';
+const DISCOVERY_URI = 'ui://dial/country-v10.html';
 const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',
@@ -67,26 +67,23 @@ function makeServer() {
   }));
   registerAppTool(server, 'find_stations_by_country', {
     title: 'Find radio stations by country',
-    description: 'Find up to 10 playable MP3 stations among the first 50 Radio Browser results for an ISO alpha-2 country code, such as FR.',
+    description: 'Collect up to 30 compatible MP3 catalog choices from three bounded Radio Browser windows for an ISO alpha-2 country code, such as FR. Stream playback is not guaranteed.',
     inputSchema: { countryCode: z.string().optional() },
     _meta: { ui: { resourceUri: DISCOVERY_URI } }
   }, async ({ countryCode }) => {
     const result = await discover(countryCode, { providerOrigin });
     const message = result.status === 'invalid_country' ? 'Invalid country code. Use an assigned ISO alpha-2 code such as FR.'
-      : result.status === 'provider_unavailable' ? 'Radio Browser is unavailable. Try again.'
-      : result.status === 'no_stations' ? `No stations in the first 50 results for ${result.countryCode}.`
-      : result.status === 'no_supported_stations' ? `No supported stations in the first 50 results for ${result.countryCode}.`
-      : `${result.stations.length} supported stations for ${result.countryCode} from the first 50 results: ${result.stations.map(s => `${s.name} (${s.id}, ${s.codec}${s.bitrate ? ` ${s.bitrate} kbps` : ''})`).join('; ')}. Select one in the player.`;
+      : `${result.stations.length} compatible catalog choices for ${result.countryCode} in three bounded provider windows. Scan ${result.scanState}. ${result.choiceLimitReached ? '30-choice limit reached. ' : ''}Select one in the player; audible playback is not guaranteed.`;
     return { content: [{ type: 'text', text: `${message} Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser.` }], structuredContent: result };
   });
-  registerAppTool(server, 'more_stations_by_country', {
-    title: 'More stations by country',
-    description: 'Scan the next bounded page of 50 Radio Browser rows (page 1 or 2).',
-    inputSchema: { countryCode: z.string(), pageIndex: z.union([z.literal(1), z.literal(2)]) },
+  registerAppTool(server, 'retry_stations_by_country', {
+    title: 'Retry country station scan',
+    description: 'Retry the same three bounded Radio Browser windows after an incomplete scan.',
+    inputSchema: { countryCode: z.string() },
     _meta: { ui: { resourceUri: DISCOVERY_URI, visibility: ['app'] } }
-  }, async ({ countryCode, pageIndex }) => {
-    const result = await discover(countryCode, { providerOrigin, pageIndex });
-    return { content: [{ type: 'text', text: `${result.stations.length} supported stations in provider rows ${pageIndex * 50 + 1}–${(pageIndex + 1) * 50} for ${result.countryCode}. Radio Browser: https://docs.radio-browser.info/.` }], structuredContent: result };
+  }, async ({ countryCode }) => {
+    const result = await discover(countryCode, { providerOrigin, kind: 'retry' });
+    return { content: [{ type: 'text', text: `${result.stations.length} compatible catalog choices for ${result.countryCode}; scan ${result.scanState}. Radio Browser: https://docs.radio-browser.info/.` }], structuredContent: result };
   });
   registerAppTool(server, 'report_station_click', {
     title: 'Report a radio play', description: 'Best-effort Radio Browser play count after user playback starts.',

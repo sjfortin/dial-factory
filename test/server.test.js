@@ -62,7 +62,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
-  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v9.html');
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v10.html');
   assert.match(resource.contents[0].text, /class="card"/);
   assert.match(resource.contents[0].text, /prefers-color-scheme: dark/);
   for (const deliveredHtml of [resource.contents[0].text, countryResource.contents[0].text]) {
@@ -88,11 +88,11 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
     'https://listen.181fm.com',
     'https://streams.radio.co'
   ]);
-  const moreTool = tools.tools.find(entry => entry.name === 'more_stations_by_country');
+  const moreTool = tools.tools.find(entry => entry.name === 'retry_stations_by_country');
   assert.ok(moreTool);
   assert.deepEqual(moreTool._meta.ui.visibility, ['app']);
   assert.equal(moreTool._meta.ui.resourceUri, findTool._meta.ui.resourceUri);
-  assert.equal((await client.callTool({ name: 'more_stations_by_country', arguments: { countryCode: 'FR', pageIndex: 3 } })).isError, true);
+  assert.equal((await client.callTool({ name: 'retry_stations_by_country', arguments: { countryCode: 'ZZ' } })).structuredContent.status, 'invalid_country');
   assert.match(countryResource.contents[0].text, /Select a station to listen/);
   assert.doesNotMatch(countryResource.contents[0].text, /http:\/\/unavailable\.test/);
   const countryScript = countryResource.contents[0].text.match(/<script>([\s\S]*?)<\/script>/)?.[1];

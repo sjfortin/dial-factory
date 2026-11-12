@@ -1,29 +1,48 @@
 import { parseMediaUrl } from './media-policy.js';
 
 export type Row = { id: string; name: string; countryCode: string; streamUrl: string; origin: string; codec?: string; bitrate?: number; clickToken: string };
-export type Results = { kind?: 'initial' | 'continuation'; pageIndex?: number; status: string; countryCode: string; searchedCount: number; limit: number; stations: Row[] };
+type Window = { pageIndex: number; offset: number; searchedCount: number; success: boolean };
+type Results = { kind: 'initial' | 'retry'; status: 'invalid_country' | 'provider_unavailable' | 'no_stations' | 'no_supported_stations' | 'ok'; countryCode: string; stations: Row[]; windows: Window[]; scanState: 'complete' | 'partial' | null; choiceLimitReached: boolean };
+const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 function safeRow(value: unknown, countryCode: string): value is Row {
   if (!value || typeof value !== 'object') return false;
   const row = value as Partial<Row>;
-  if (typeof row.id !== 'string' || typeof row.name !== 'string' || typeof row.streamUrl !== 'string' || typeof row.origin !== 'string' || typeof row.clickToken !== 'string' || row.countryCode !== countryCode) return false;
+  if (typeof row.id !== 'string' || !UUID.test(row.id) || typeof row.name !== 'string' || !row.name.trim() || typeof row.streamUrl !== 'string' || typeof row.origin !== 'string' || typeof row.clickToken !== 'string' || row.countryCode !== countryCode || row.codec !== 'MP3') return false;
   const url = parseMediaUrl(row.streamUrl);
   return url !== null && url.origin === row.origin;
+}
+
+function validResult(value: unknown): value is Results {
+  if (!value || typeof value !== 'object') return false;
+  const result = value as Partial<Results>;
+  if (!['initial', 'retry'].includes(result.kind ?? '') || typeof result.countryCode !== 'string' || !Array.isArray(result.stations) || !Array.isArray(result.windows) || typeof result.choiceLimitReached !== 'boolean') return false;
+  if (!['ok', 'invalid_country', 'provider_unavailable', 'no_stations', 'no_supported_stations'].includes(result.status ?? '')) return false;
+  if (result.status === 'invalid_country') return result.scanState === null && result.windows.length === 0;
+  return ['complete', 'partial'].includes(result.scanState ?? '') && result.windows.length === 3 && result.windows.every((window, index) => window && window.pageIndex === index && window.offset === index * 50 && Number.isInteger(window.searchedCount) && window.searchedCount >= 0 && window.searchedCount <= 50 && typeof window.success === 'boolean');
 }
 
 export function createStationCatalog(list: HTMLElement, summary: HTMLElement, toggle: HTMLButtonElement, select: (row: Row) => void) {
   let country = '';
   let rows: Row[] = [];
+  let visibleCount = 0;
   let selectedId = '';
-  let pageIndex = 0;
-  let canMore = false;
-  let error = '';
   let generation = 0;
-  let inspected: string[] = [];
-  const loaded = new Set<number>();
+  let scanState: 'complete' | 'partial' | null = null;
+  let choiceLimitReached = false;
+  let windows: Window[] = [];
+  let status: Results['status'] = 'invalid_country';
+  let loadError = '';
   function paint() {
     list.replaceChildren();
-    summary.textContent = error || `${rows.length} supported stations for ${country}. Inspected provider rows ${inspected.join(', ')}. ${canMore ? 'More stations may be available.' : 'Bounded scan complete.'} Select one, then press Play. Results can change between requests.`;
-    for (const row of rows) {
+    const scanned = windows.reduce((total, window) => total + window.searchedCount, 0);
+    if (loadError) summary.textContent = loadError;
+    else if (status === 'invalid_country') summary.textContent = 'Invalid country code. Use an assigned two-letter code such as FR.';
+    else {
+      const state = scanState === 'partial' ? 'Scan incomplete. Retry scan to check failed windows.' : choiceLimitReached ? '30-choice limit reached within three windows.' : 'Three bounded provider windows scanned.';
+      const empty = status === 'provider_unavailable' ? 'Provider unavailable in at least one window.' : status === 'no_stations' ? 'No provider rows in these windows.' : status === 'no_supported_stations' ? 'No compatible choices in these windows.' : '';
+      summary.textContent = `${rows.length} compatible catalog choices for ${country}; ${visibleCount} shown; ${scanned} provider rows inspected. ${state} ${empty} A catalog choice may not play. Select one, then press Play.`;
+    }
+    for (const row of rows.slice(0, visibleCount)) {
       const item = document.createElement('li');
       const button = document.createElement('button');
       button.type = 'button';
@@ -55,55 +74,48 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
       list.append(item);
     }
   }
-  function receive(value: unknown, expectedGeneration?: number): 'initial' | 'continuation' | 'ignored' {
-    if (!value || typeof value !== 'object') return 'ignored';
-    const result = value as Partial<Results>;
-    if (typeof result.status !== 'string' || typeof result.countryCode !== 'string') return 'ignored';
-    const continuation = result.kind === 'continuation';
-    const nextPage = result.pageIndex ?? 0;
-    if (continuation && expectedGeneration !== generation) return 'ignored';
-    if (continuation && (result.countryCode !== country || nextPage !== pageIndex + 1 || loaded.has(nextPage))) return 'ignored';
-    if (!continuation) {
-      generation++;
-      country = result.countryCode;
-      rows = [];
-      selectedId = '';
-      pageIndex = 0;
-      inspected = [];
-      loaded.clear();
-      loaded.add(0);
-      toggle.disabled = true;
-    }
-    if (result.status === 'provider_unavailable') {
-      error = continuation ? `Could not load provider rows ${nextPage * 50 + 1}–${(nextPage + 1) * 50}. Retry More stations.` : 'Radio Browser is unavailable. Try the country request again.';
-      if (!continuation) canMore = false;
-      paint();
-      return continuation ? 'continuation' : 'initial';
-    }
-    if (result.status === 'invalid_country') { error = 'Invalid country code. Use an assigned two-letter code such as FR.'; canMore = false; paint(); return 'initial'; }
-    if (!['ok', 'no_stations', 'no_supported_stations'].includes(result.status) || !Array.isArray(result.stations)) return 'ignored';
-    error = '';
+  function append(stations: Row[]) {
     const ids = new Set(rows.map(row => row.id.toLowerCase()));
     const urls = new Set(rows.map(row => new URL(row.streamUrl).href));
-    for (const row of result.stations.slice(0, 10)) {
+    for (const row of stations) {
+      if (rows.length >= 30) break;
       if (!safeRow(row, country)) continue;
+      const id = row.id.toLowerCase();
       const url = new URL(row.streamUrl).href;
-      if (ids.has(row.id.toLowerCase()) || urls.has(url)) continue;
-      rows.push(row);
-      ids.add(row.id.toLowerCase());
-      urls.add(url);
-      if (rows.length === 30) break;
+      if (ids.has(id) || urls.has(url)) continue;
+      rows.push(row); ids.add(id); urls.add(url);
     }
-    pageIndex = nextPage;
-    loaded.add(pageIndex);
-    const start = pageIndex * 50 + 1;
-    const count = typeof result.searchedCount === 'number' && Number.isInteger(result.searchedCount) ? Math.max(0, Math.min(50, result.searchedCount)) : 0;
-    inspected.push(count ? `${start}–${start + count - 1}` : `none in requested window ${start}–${start + 49}`);
-    canMore = pageIndex < 2 && result.searchedCount === 50 && rows.length < 30;
-    paint();
-    return continuation ? 'continuation' : 'initial';
   }
-  return { receive, get generation() { return generation; }, get country() { return country; }, get nextPage() { return canMore ? pageIndex + 1 : null; }, get rows() { return [...rows]; }, get selectedId() { return selectedId; } };
+  function receive(value: unknown, expectedGeneration?: number): 'initial' | 'retry' | 'ignored' {
+    if (!validResult(value)) return 'ignored';
+    if (value.kind === 'retry' && (expectedGeneration !== generation || value.countryCode !== country)) return 'ignored';
+    if (value.kind === 'initial') {
+      generation++;
+      country = value.countryCode;
+      rows = [];
+      visibleCount = 0;
+      selectedId = '';
+      choiceLimitReached = false;
+      toggle.disabled = true;
+    }
+    status = value.status;
+    scanState = value.scanState;
+    choiceLimitReached = choiceLimitReached || value.choiceLimitReached;
+    windows = value.windows;
+    loadError = '';
+    append(value.stations);
+    if (value.kind === 'initial') visibleCount = Math.min(8, rows.length);
+    paint();
+    return value.kind;
+  }
+  function reveal() {
+    if (visibleCount >= rows.length) return false;
+    visibleCount = Math.min(rows.length, visibleCount + 8);
+    paint();
+    return true;
+  }
+  function error(message: string) { loadError = message; paint(); }
+  return { receive, reveal, error, get generation() { return generation; }, get country() { return country; }, get canMore() { return visibleCount < rows.length; }, get canRetry() { return scanState === 'partial'; }, get rows() { return [...rows]; }, get selectedId() { return selectedId; } };
 }
 
 export function renderStations(value: unknown, list: HTMLElement, summary: HTMLElement, toggle: HTMLButtonElement, select: (row: Row) => void) {
