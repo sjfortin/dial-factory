@@ -87,3 +87,37 @@ test('invalid result is ignored and load error does not erase prior choices', ()
   assert.equal(ui.summary.textContent, 'Retry failed.');
   assert.equal(ui.catalog.canRetry, true);
 });
+
+test('partial scan discloses both incompleteness and the 30-choice limit', () => {
+  const ui = setup();
+  ui.catalog.receive(result(Array.from({ length: 30 }, (_, i) => row(i + 1)), { partial: true, choiceLimitReached: true }));
+  assert.match(ui.summary.textContent, /Latest scan incomplete/);
+  assert.match(ui.summary.textContent, /30-choice catalog limit reached/);
+  assert.equal(ui.catalog.canRetry, true);
+  assert.equal(ui.catalog.canMore, true);
+});
+
+test('retry merge discloses the client cap even when neither scan individually reached it', () => {
+  const ui = setup();
+  ui.catalog.receive(result(Array.from({ length: 20 }, (_, i) => row(i + 1)), { partial: true }));
+  const generation = ui.catalog.generation;
+  ui.catalog.receive(result(Array.from({ length: 20 }, (_, i) => row(i + 21)), { kind: 'retry' }), generation);
+  assert.equal(ui.catalog.rows.length, 30);
+  assert.match(ui.summary.textContent, /30 retained compatible catalog choices/);
+  assert.match(ui.summary.textContent, /30-choice catalog limit reached/);
+  assert.equal(ui.catalog.canRetry, false);
+});
+
+test('empty successful retry describes latest scan separately from retained choices', () => {
+  const ui = setup();
+  ui.catalog.receive(result([row(1)], { partial: true }));
+  ui.list.children[0].children[0].click();
+  const generation = ui.catalog.generation;
+  ui.catalog.receive(result([], { kind: 'retry', status: 'no_supported_stations' }), generation);
+  assert.equal(ui.catalog.rows.length, 1);
+  assert.equal(ui.catalog.selectedId, id(1));
+  assert.match(ui.summary.textContent, /1 retained compatible catalog choices/);
+  assert.match(ui.summary.textContent, /latest scan inspected 50 provider rows/);
+  assert.match(ui.summary.textContent, /Latest scan: no compatible choices in these windows/);
+  assert.equal(ui.catalog.canRetry, false);
+});

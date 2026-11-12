@@ -31,6 +31,7 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
   let choiceLimitReached = false;
   let windows: Window[] = [];
   let status: Results['status'] = 'invalid_country';
+  let retried = false;
   let loadError = '';
   function paint() {
     list.replaceChildren();
@@ -38,9 +39,11 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
     if (loadError) summary.textContent = loadError;
     else if (status === 'invalid_country') summary.textContent = 'Invalid country code. Use an assigned two-letter code such as FR.';
     else {
-      const state = scanState === 'partial' ? 'Scan incomplete. Retry scan to check failed windows.' : choiceLimitReached ? '30-choice limit reached within three windows.' : 'Three bounded provider windows scanned.';
-      const empty = status === 'provider_unavailable' ? 'Provider unavailable in at least one window.' : status === 'no_stations' ? 'No provider rows in these windows.' : status === 'no_supported_stations' ? 'No compatible choices in these windows.' : '';
-      summary.textContent = `${rows.length} compatible catalog choices for ${country}; ${visibleCount} shown; ${scanned} provider rows inspected. ${state} ${empty} A catalog choice may not play. Select one, then press Play.`;
+      const state = scanState === 'partial' ? 'Latest scan incomplete. Retry scan to check failed windows.' : 'Latest scan completed three bounded provider windows.';
+      const limit = choiceLimitReached ? '30-choice catalog limit reached.' : '';
+      const empty = status === 'provider_unavailable' ? 'Latest scan: provider unavailable in at least one window.' : status === 'no_stations' ? 'Latest scan: no provider rows in these windows.' : status === 'no_supported_stations' ? 'Latest scan: no compatible choices in these windows.' : '';
+      const count = retried ? `${rows.length} retained compatible catalog choices for ${country}` : `${rows.length} compatible catalog choices for ${country}`;
+      summary.textContent = `${count}; ${visibleCount} shown; latest scan inspected ${scanned} provider rows. ${state} ${limit} ${empty} A catalog choice may not play. Select one, then press Play.`;
     }
     for (const row of rows.slice(0, visibleCount)) {
       const item = document.createElement('li');
@@ -96,14 +99,16 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
       visibleCount = 0;
       selectedId = '';
       choiceLimitReached = false;
+      retried = false;
       toggle.disabled = true;
-    }
+    } else retried = true;
     status = value.status;
     scanState = value.scanState;
     choiceLimitReached = choiceLimitReached || value.choiceLimitReached;
     windows = value.windows;
     loadError = '';
     append(value.stations);
+    choiceLimitReached = choiceLimitReached || rows.length === 30;
     if (value.kind === 'initial') visibleCount = Math.min(8, rows.length);
     paint();
     return value.kind;
