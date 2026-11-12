@@ -1,6 +1,6 @@
 import { createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 import { ISO_CODES } from './iso-codes.js';
-import { parseMediaUrl } from './media-policy.js';
+import { EXISTING_MEDIA_ORIGINS, matchesCountryCandidate, parseMediaUrl } from './media-policy.js';
 export { MEDIA_ORIGINS } from './media-policy.js';
 
 export const PROVIDER_ORIGIN = 'https://de1.api.radio-browser.info';
@@ -118,6 +118,7 @@ export async function discover(input: unknown, options: { fetcher?: Fetch; provi
       const resolved = Object.hasOwn(OVERRIDES, id) ? OVERRIDES[id] : typeof item.url_resolved === 'string' && item.url_resolved.trim() ? item.url_resolved : item.url;
       const media = parseMediaUrl(resolved);
       if (typeof rawId !== 'string' || !UUID.test(rawId) || typeof name !== 'string' || !name.trim() || code !== countryCode || codec !== 'MP3' || !media || ids.has(id) || urls.has(media.href)) continue;
+      if (!EXISTING_MEDIA_ORIGINS.includes(media.origin as typeof EXISTING_MEDIA_ORIGINS[number]) && (typeof item.url_resolved !== 'string' || !matchesCountryCandidate(id, code, item.url_resolved))) continue;
       ids.add(id);
       urls.add(media.href);
       const station: Station = { id, name: name.trim().slice(0, 120), countryCode, streamUrl: media.href, origin: media.origin, codec: 'MP3', clickToken: tokenFor(id, (options.now ?? Date.now()) + 5 * 60_000) };
