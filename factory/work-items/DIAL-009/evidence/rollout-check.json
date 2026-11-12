@@ -1,0 +1,39 @@
+{
+  "at": "2026-11-12T08:05:46.055Z",
+  "endpoint": "https://macbook-air.tail10dbb3.ts.net/mcp",
+  "resourceUri": "ui://dial/country-v12.html",
+  "tools": [
+    "open_capability_probe",
+    "open_radio",
+    "find_stations_by_country",
+    "retry_stations_by_country",
+    "report_station_click"
+  ],
+  "ui": {
+    "countryPicker": true,
+    "nts": true,
+    "retry": true
+  },
+  "countries": [
+    {
+      "countryCode": "US",
+      "status": "ok",
+      "count": 11,
+      "scanState": "complete",
+      "firstStation": "Miami Beach Radio"
+    },
+    {
+      "countryCode": "AU",
+      "status": "ok",
+      "count": 1,
+      "scanState": "complete",
+      "firstStation": "The Prog Rock Machine"
+    },
+    {
+      "countryCode": "SE",
+      "status": "no_supported_stations",
+      "count": 0,
+      "scanState": "complete"
+    }
+  ]
+}

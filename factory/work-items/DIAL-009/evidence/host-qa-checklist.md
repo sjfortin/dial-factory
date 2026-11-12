@@ -1,6 +1,6 @@
 # Pending ChatGPT desktop QA
 
-Candidate: d4da1f9d1c9bb4c509bd35789fcb676607c3fbde (country-v12). This checklist is a plan, not observed evidence. Candidate has not been pushed, merged or deployed; owner authorization is required for rollout to the existing testing endpoint.
+Candidate: d4da1f9d1c9bb4c509bd35789fcb676607c3fbde (country-v12). This checklist is a plan, not observed evidence. Owner approved rollout; PR7 is merged and the existing testing endpoint now serves this candidate. See rollout.md.
 
 After authorized rollout, refresh the Dial connection and open a fresh card. Record date, station and country with every playback observation.
 
