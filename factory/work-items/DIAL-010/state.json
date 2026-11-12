@@ -1,0 +1,196 @@
+{
+  "created_at": "2026-11-12T08:25:17+00:00",
+  "criteria": [
+    "Inspect owner omarchy-nts-radio reference and document its actual NTS live stream URLs, playback backend and relevant failure/recovery handling.",
+    "Establish a bounded NTS1/2 in-app playback experiment and justified finite stream/redirect/CSP policy using actual primary-source and runtime evidence, preserving clean UI and playback coordination.",
+    "Independently Review and Verify any implemented exact candidate, separating direct HTTP/browser checks from actual ChatGPT audible Play/Pause/resume and host CSP evidence; missing host evidence stays BLOCKED."
+  ],
+  "events": [
+    {
+      "at": "2026-11-12T08:25:17+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Prove NTS in-app playback using Omarchy reference"
+    },
+    {
+      "at": "2026-11-12T08:25:17+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "agent": "/root/dial010_triage",
+      "at": "2026-11-12T08:25:27+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-c7ce036cff56",
+      "seq": 3
+    },
+    {
+      "at": "2026-11-12T08:28:08+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "SPEC",
+      "role": "Triage",
+      "run_id": "run-c7ce036cff56",
+      "seq": 4
+    },
+    {
+      "at": "2026-11-12T08:28:08+00:00",
+      "from_state": "TRIAGE",
+      "kind": "advanced",
+      "seq": 5,
+      "terminal_failure_reason": null,
+      "to_state": "PLANNING"
+    },
+    {
+      "agent": "/root/dial010_spec",
+      "at": "2026-11-12T08:28:20+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Spec",
+      "run_id": "run-6d6350ae8110",
+      "seq": 6
+    },
+    {
+      "at": "2026-11-12T08:31:49+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Spec",
+      "run_id": "run-6d6350ae8110",
+      "seq": 7
+    },
+    {
+      "at": "2026-11-12T08:31:49+00:00",
+      "from_state": "PLANNING",
+      "kind": "advanced",
+      "seq": 8,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "DIAL-010",
+  "interventions": [],
+  "objective": "Use owner omarchy-nts-radio repo as read-only reference to enable NTS1/2 playback in Dial through a focused compatibility experiment; no proxy or broad policy change without concrete reviewed design.",
+  "reports": [
+    {
+      "agent": "/root/dial010_triage",
+      "at": "2026-11-12T08:28:08+00:00",
+      "complexity": "MEDIUM: route behavior is bounded and simple to probe, but a useful playback candidate needs a browser audio experiment, exact CSP/origin behavior, clean failure UX, coordination and actual host evidence.",
+      "evidence": [
+        "Read-only reference inspection found no AGENTS.md in the reference repo file inventory. Model.js documents official relay URLs without ?client=direct and a redirect-following mpv design; Player.qml implements one live audio backend with error reporting and retry behavior.",
+        "Primary source: NTS Support, TuneIn article modified 2025-10-15, lists NTS1 https://stream-relay-geo.ntslive.net/stream?client=direct and NTS2 https://stream-relay-geo.ntslive.net/stream2?client=direct as live stream links: https://ntslive.freshdesk.com/support/solutions/articles/77000587257-tunein",
+        "On 2026-11-12 from this shell network vantage, a bounded Node fetch used redirect:manual, Range bytes=0-63, 8-second timeout per hop and maximum five hops. All four endpoints (both channels with and without ?client=direct) returned the same shape: relay 302 -> https://streams.radiomast.io/nts1 or /nts2 (302) -> https://audio-edge-kkqan.sin.d.radiomast.io/nts1 or /nts2 (200 audio/mpeg). This is direct HTTP route evidence only, one vantage/time; no bytes were consumed/decoded and it does not prove browser playback.",
+        "Local Chromium is installed. A bounded headless audio-element dump-dom experiment did not return output within 30 seconds; no browser media result is claimed. No ChatGPT host/CSP/audible playback result was obtained."
+      ],
+      "open_questions": [
+        "Can ChatGPT MCP Apps audio playback follow the official relay redirect under a finite and supportable resourceDomains/CSP policy for both channels?",
+        "Does a bounded NTS-specific route through the stable relay and streams.radiomast.io work without admitting arbitrary dynamic edge origins, or is a narrowly scoped intermediary needed?",
+        "What are the actual host results for Play, Pause, resume, error presentation, and playback persistence/coordination?"
+      ],
+      "recommendation": "SPEC",
+      "relevant_code": [
+        "/home/sam/omarchy-nts-radio-audio-handoff/Model.js: STREAM_ENDPOINTS defines https://stream-relay-geo.ntslive.net/stream and /stream2 without query parameters; comments say mpv follows the geo relay redirect so hosts can move.",
+        "/home/sam/omarchy-nts-radio-audio-handoff/Player.qml: single mpv child process handles live audio, IPC pause/volume state, stream switching and live rejoin; process stderr/exit populate a user-facing error and live failures retry with capped exponential backoff (5s × 3^retryCount, max 60s).",
+        "factory/work-items/DIAL-009/TECH.md: approved prior gate keeps NTS link-only pending a finite redirect route and real ChatGPT host CSP/audio checks; current implementation has no NTS media admission.",
+        "factory/work-items/DIAL-009/evidence/run-77886707bfd8/verification.md: DIAL-009 independent Verify states ChatGPT host audio/CSP/layout/Pause/resume evidence is unavailable and BLOCKED."
+      ],
+      "risks": [
+        "The redirect edge hostname is dynamic by design according to the reference's mpv comments; one observed edge hostname cannot safely be treated as durable.",
+        "CSP may reject a redirect destination even when the official relay is admitted; this shell probe does not model MCP Apps CSP or host sandboxing.",
+        "Desktop mpv success or raw audio/mpeg HTTP response cannot establish ChatGPT audio-element Play/Pause/resume, audible output, persistence, or coordination.",
+        "Broad wildcard Radiomast media permission would expand policy beyond NTS; any necessary broader surface needs an explicit, reviewed NTS-specific route design and clean failure fallback."
+      ],
+      "role": "Triage",
+      "run_id": "run-c7ce036cff56",
+      "scope": "Read-only triage of the owner-provided Omarchy NTS client and prior DIAL-009 NTS gate; bounded redirect route probe for NTS1/2, with assessment of browser and ChatGPT playback evidence. No repository files changed.",
+      "work_item": "DIAL-010"
+    },
+    {
+      "agent": "/root/dial010_spec",
+      "at": "2026-11-12T08:31:49+00:00",
+      "documents": [
+        "PRODUCT.md",
+        "TECH.md"
+      ],
+      "evidence": [
+        "Owner reference read-only: Model.js defines https://stream-relay-geo.ntslive.net/stream and /stream2; Player.qml uses a single redirect-following mpv backend with error state and capped live reconnection.",
+        "NTS primary source https://ntslive.freshdesk.com/support/solutions/articles/77000587257-tunein lists the same channel paths with ?client=direct as its published custom-player URLs.",
+        "Triage's 2026-11-12 bounded direct HTTP route probe observed relay 302 -> streams.radiomast.io 302 -> audio-edge-kkqan.sin.d.radiomast.io 200 audio/mpeg for both channels.",
+        "Spec independently repeated both routes at 2026-11-12 08:29 UTC from the same shell/network vantage with manual redirects, a five-hop cap, Range bytes=0-63, and an eight-second per-hop deadline; both again returned the same three-hop route and final 200 audio/mpeg. No audio bytes were decoded or heard.",
+        "Current DIAL-009 code has NTS link-only UI in public/discovery.html and src/player.ts, one audio element/controller/coordinator, and finite CSP in src/server.ts. DIAL-009 Verify recorded real ChatGPT host audio/CSP as BLOCKED."
+      ],
+      "owner_review": "Approve the exact PRODUCT.md and TECH.md hashes before build. This spec permits experimental Play in the existing NTS panel with only three observed NTS CSP origins, explicitly superseding DIAL-009's pre-enable host-proof gate for this experiment. Host audible Play/Pause/Play-again and CSP must be independently tested after an authorized connection; missing evidence remains BLOCKED. No production files changed, merged, or deployed.",
+      "product_sha256": "787490880e3bebba758147156b0525affebbca15e83837311d2ecf6989db751f",
+      "role": "Spec",
+      "run_id": "run-6d6350ae8110",
+      "tech_sha256": "878b72aec6c5b354d30747ce07eb34dda9b3574584ea19c15970467b294220d3",
+      "work_item": "DIAL-010"
+    }
+  ],
+  "resume_stage": null,
+  "runs": [
+    {
+      "agent": "/root/dial010_triage",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 161,
+      "ended_at": "2026-11-12T08:28:08+00:00",
+      "harness": "current-collaboration",
+      "id": "run-c7ce036cff56",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "SPEC",
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "Read-only reference-driven NTS live playback and browser redirect/CSP feasibility triage",
+      "started_at": "2026-11-12T08:25:27+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial010_spec",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 209,
+      "ended_at": "2026-11-12T08:31:49+00:00",
+      "harness": "current-collaboration",
+      "id": "run-6d6350ae8110",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Spec",
+      "selection_reason": "Design concrete NTS-only playback experiment from native reference and observed finite redirect route",
+      "started_at": "2026-11-12T08:28:20+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "WAITING_FOR_SPEC_APPROVAL",
+  "title": "Prove NTS in-app playback using Omarchy reference",
+  "updated_at": "2026-11-12T08:31:49+00:00"
+}

@@ -1,0 +1,33 @@
+{
+  "agent": "/root/dial010_triage",
+  "at": "2026-11-12T08:28:08+00:00",
+  "complexity": "MEDIUM: route behavior is bounded and simple to probe, but a useful playback candidate needs a browser audio experiment, exact CSP/origin behavior, clean failure UX, coordination and actual host evidence.",
+  "evidence": [
+    "Read-only reference inspection found no AGENTS.md in the reference repo file inventory. Model.js documents official relay URLs without ?client=direct and a redirect-following mpv design; Player.qml implements one live audio backend with error reporting and retry behavior.",
+    "Primary source: NTS Support, TuneIn article modified 2025-10-15, lists NTS1 https://stream-relay-geo.ntslive.net/stream?client=direct and NTS2 https://stream-relay-geo.ntslive.net/stream2?client=direct as live stream links: https://ntslive.freshdesk.com/support/solutions/articles/77000587257-tunein",
+    "On 2026-11-12 from this shell network vantage, a bounded Node fetch used redirect:manual, Range bytes=0-63, 8-second timeout per hop and maximum five hops. All four endpoints (both channels with and without ?client=direct) returned the same shape: relay 302 -> https://streams.radiomast.io/nts1 or /nts2 (302) -> https://audio-edge-kkqan.sin.d.radiomast.io/nts1 or /nts2 (200 audio/mpeg). This is direct HTTP route evidence only, one vantage/time; no bytes were consumed/decoded and it does not prove browser playback.",
+    "Local Chromium is installed. A bounded headless audio-element dump-dom experiment did not return output within 30 seconds; no browser media result is claimed. No ChatGPT host/CSP/audible playback result was obtained."
+  ],
+  "open_questions": [
+    "Can ChatGPT MCP Apps audio playback follow the official relay redirect under a finite and supportable resourceDomains/CSP policy for both channels?",
+    "Does a bounded NTS-specific route through the stable relay and streams.radiomast.io work without admitting arbitrary dynamic edge origins, or is a narrowly scoped intermediary needed?",
+    "What are the actual host results for Play, Pause, resume, error presentation, and playback persistence/coordination?"
+  ],
+  "recommendation": "SPEC",
+  "relevant_code": [
+    "/home/sam/omarchy-nts-radio-audio-handoff/Model.js: STREAM_ENDPOINTS defines https://stream-relay-geo.ntslive.net/stream and /stream2 without query parameters; comments say mpv follows the geo relay redirect so hosts can move.",
+    "/home/sam/omarchy-nts-radio-audio-handoff/Player.qml: single mpv child process handles live audio, IPC pause/volume state, stream switching and live rejoin; process stderr/exit populate a user-facing error and live failures retry with capped exponential backoff (5s × 3^retryCount, max 60s).",
+    "factory/work-items/DIAL-009/TECH.md: approved prior gate keeps NTS link-only pending a finite redirect route and real ChatGPT host CSP/audio checks; current implementation has no NTS media admission.",
+    "factory/work-items/DIAL-009/evidence/run-77886707bfd8/verification.md: DIAL-009 independent Verify states ChatGPT host audio/CSP/layout/Pause/resume evidence is unavailable and BLOCKED."
+  ],
+  "risks": [
+    "The redirect edge hostname is dynamic by design according to the reference's mpv comments; one observed edge hostname cannot safely be treated as durable.",
+    "CSP may reject a redirect destination even when the official relay is admitted; this shell probe does not model MCP Apps CSP or host sandboxing.",
+    "Desktop mpv success or raw audio/mpeg HTTP response cannot establish ChatGPT audio-element Play/Pause/resume, audible output, persistence, or coordination.",
+    "Broad wildcard Radiomast media permission would expand policy beyond NTS; any necessary broader surface needs an explicit, reviewed NTS-specific route design and clean failure fallback."
+  ],
+  "role": "Triage",
+  "run_id": "run-c7ce036cff56",
+  "scope": "Read-only triage of the owner-provided Omarchy NTS client and prior DIAL-009 NTS gate; bounded redirect route probe for NTS1/2, with assessment of browser and ChatGPT playback evidence. No repository files changed.",
+  "work_item": "DIAL-010"
+}

@@ -1,0 +1,21 @@
+{
+  "agent": "/root/dial010_spec",
+  "candidate": null,
+  "contract": "factory/agents/spec/agent.md",
+  "criteria": [
+    "Inspect owner omarchy-nts-radio reference and document its actual NTS live stream URLs, playback backend and relevant failure/recovery handling.",
+    "Establish a bounded NTS1/2 in-app playback experiment and justified finite stream/redirect/CSP policy using actual primary-source and runtime evidence, preserving clean UI and playback coordination.",
+    "Independently Review and Verify any implemented exact candidate, separating direct HTTP/browser checks from actual ChatGPT audible Play/Pause/resume and host CSP evidence; missing host evidence stays BLOCKED."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Use owner omarchy-nts-radio repo as read-only reference to enable NTS1/2 playback in Dial through a focused compatibility experiment; no proxy or broad policy change without concrete reviewed design.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "high",
+  "role": "Spec",
+  "run_id": "run-6d6350ae8110",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "PLANNING",
+  "work_item": "DIAL-010"
+}

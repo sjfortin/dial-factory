@@ -9,3 +9,9 @@ Countries/NTS navigation and16-country select are implemented; NTS1/2 remain lin
 DIAL-009 WAITING_FOR_HUMAN resumeVERIFYING: actual ChatGPT host playback/CSP/layout and continuity evidence unavailable. Owner subsequently approved push/merge/rollout. PR7 merged at c93da8272d7361bc6d21ce00f08bb1a6a5da3a20; existing Tailscale endpoint now serves country-v12 via transient user unit dial-test.service (not reboot-autostart). Public MCP resource/tools and US11/AU1/SE0 real lookups passed. See evidence/rollout.md and rollout-check.json. Capture real dated host QA next; checklist evidence/host-qa-checklist.md remains planned checks only. Do not claim completionPASS or automatic hosting migration.
 
 Original Review run-b4c7d4b1d6f1 failed with actual harness usage limit, no report. Owner requested resume; same approved model retried. Preserve real dispatches, failed verification and context-loss notes. Usage/cost remain unavailable. No automatic merge/publication/deployment.
+
+## NTS experiment next — DIAL-010
+
+Owner requested focused NTS playback and pointed to /home/sam/omarchy-nts-radio-audio-handoff (origin sjfortin/omarchy-nts-radio, inspected read-only HEAD9fcb8dd). Triage and Spec observed both official relay routes return302 via streams.radiomast.io to audio-edge-kkqan.sin.d.radiomast.io then200audio/mpeg, at two times on this network. Native reference uses mpv redirect-following, not browser evidence. No ChatGPT NTS audio proven.
+
+DIAL-010 WAITING_FOR_SPEC_APPROVAL: PRODUCT/TECH now propose experimental Play in existing NTS panel using fixed official NTS1/2 URLs, currentcontroller/coordinator, three exact observed CSP origins, no country-policy expansion/proxy/wildcard, clean fallback if another edge is selected. This explicitly changes DIAL009 pre-enable gate only for obtaining host evidence. Exact approval required before implementation; no production edits or rollout yet. Scope and specs are ready for owner review.
