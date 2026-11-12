@@ -91,6 +91,7 @@ export async function exerciseDeliveredScript(script) {
   const ntsPlayCalls = nodes['#radio'].playCalls;
   nodes['#countries-tab'].click();
   assert.equal(nodes['#radio'].playCalls, ntsPlayCalls, 'tab changes never autoplay');
+  assert.equal(nodes['#country-attribution'].hidden, true, 'NTS disclosure stays hidden on Countries tab');
   nodes['#nts-tab'].click();
   nodes['#toggle'].click(); await tick();
   assert.equal(nodes['#status'].dataset.state, 'playing');
@@ -100,6 +101,10 @@ export async function exerciseDeliveredScript(script) {
   nodes['#toggle'].click(); await tick();
   assert.equal(nodes['#status'].dataset.state, 'playing');
   assert.equal(nodes['#radio'].playCalls, ntsPlayCalls + 2);
+  nodes['#countries-tab'].click();
+  assert.equal(nodes['#country-attribution'].hidden, true, 'playing NTS keeps Radio Browser disclosure hidden on Countries tab');
+  assert.equal(nodes['#status'].dataset.state, 'playing', 'tab change preserves NTS playback');
+  nodes['#nts-tab'].click();
   ntsButtons[1].click(); await tick();
   assert.equal(nodes['#radio'].paused, true, 'switch stops the previous NTS stream');
   assert.equal(nodes['#radio'].src, 'https://stream-relay-geo.ntslive.net/stream2?client=direct');
@@ -113,7 +118,16 @@ export async function exerciseDeliveredScript(script) {
   assert.equal(nodes['#status'].dataset.state, 'playing', 'Play retries the selected NTS channel');
   assert.equal(sent.filter(item => item.method === 'tools/call').length, callsBeforeNts, 'NTS does not report a Radio Browser click');
   nodes['#countries-tab'].click();
+  assert.equal(nodes['#country-attribution'].hidden, true);
   notify(result([row(3, 'GB')], { countryCode: 'GB', partial: true })); await tick();
+  assert.equal(nodes['#country-attribution'].hidden, false, 'country catalog attribution is visible without a selection');
+  nodes['#nts-tab'].click();
+  assert.equal(nodes['#country-attribution'].hidden, true, 'unselected country catalog disclosure is hidden while browsing NTS');
+  nodes['#countries-tab'].click();
+  nodes['#stations'].children[0].children[0].click();
+  nodes['#nts-tab'].click();
+  assert.equal(nodes['#country-attribution'].hidden, false, 'selected country keeps its disclosure while browsing NTS');
+  nodes['#countries-tab'].click();
   nodes['#retry-scan'].click(); await tick();
   const canceledRetry = delayed.shift();
   assert.equal(nodes['#retry-scan'].disabled, true);

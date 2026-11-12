@@ -32,9 +32,10 @@ const player = installPlayer(audio, toggle, status, {
   }
 });
 if (list && summary) {
-  let countrySelected = false;
+  let selectedSource: 'country' | 'nts' | null = null;
   const catalog = createStationCatalog(list, summary, toggle, (row) => {
-    countrySelected = true;
+    selectedSource = 'country';
+    if (countryAttribution) countryAttribution.hidden = false;
     ntsPanel?.querySelectorAll<HTMLButtonElement>('.nts-option').forEach(option => option.setAttribute('aria-pressed', 'false'));
     player.selectStation(row);
     if (stationTitle) stationTitle.textContent = row.name;
@@ -46,7 +47,7 @@ if (list && summary) {
   const showCollection = (collection: 'countries' | 'nts') => {
     if (countriesPanel) countriesPanel.hidden = collection !== 'countries';
     if (ntsPanel) ntsPanel.hidden = collection !== 'nts';
-    if (countryAttribution) countryAttribution.hidden = collection !== 'countries' && !countrySelected;
+    if (countryAttribution) countryAttribution.hidden = selectedSource === 'nts' || (collection !== 'countries' && selectedSource !== 'country');
     countriesTab?.setAttribute('aria-selected', String(collection === 'countries'));
     ntsTab?.setAttribute('aria-selected', String(collection === 'nts'));
   };
@@ -59,7 +60,7 @@ if (list && summary) {
     const channel = button.dataset.channel;
     if (channel !== '1' && channel !== '2') return;
     const selection = NTS_CHANNELS[channel];
-    countrySelected = false;
+    selectedSource = 'nts';
     catalog.clearSelected();
     player.selectStation({ ...selection, source: 'nts' });
     toggle.disabled = false;
@@ -70,7 +71,7 @@ if (list && summary) {
   }));
   function acceptInitial(result: unknown): boolean {
     if (catalog.receive(result) !== 'initial') return false;
-    countrySelected = false;
+    selectedSource = null;
     ntsPanel?.querySelectorAll<HTMLButtonElement>('.nts-option').forEach(option => option.setAttribute('aria-pressed', 'false'));
     player.clearSelection();
     if (stationTitle) stationTitle.textContent = 'Choose a station';
