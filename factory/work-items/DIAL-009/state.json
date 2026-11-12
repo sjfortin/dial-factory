@@ -379,6 +379,19 @@
       "seq": 39,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-12T08:04:37+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approved",
+      "kind": "intervention",
+      "possible_improvement": "Keep rollout authorization distinct from successful host verification.",
+      "question": "Approve pushing/merging candidate and updating existing testing endpoint for QA?",
+      "reason": "Owner explicitly approved pushing merging and rolling reviewed candidate to existing endpoint for host QA",
+      "seq": 40,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-009"
     }
   ],
   "final_result": null,
@@ -394,6 +407,17 @@
       "question": "Approve coverage/NTS PRODUCT.md and TECH.md for implementation?",
       "reason": "Owner approved new coverage/NTS specs and requested implementation",
       "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-009"
+    },
+    {
+      "at": "2026-11-12T08:04:37+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approved",
+      "possible_improvement": "Keep rollout authorization distinct from successful host verification.",
+      "question": "Approve pushing/merging candidate and updating existing testing endpoint for QA?",
+      "reason": "Owner explicitly approved pushing merging and rolling reviewed candidate to existing endpoint for host QA",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-009"
     }
   ],
@@ -1085,5 +1109,5 @@
   },
   "state": "WAITING_FOR_HUMAN",
   "title": "Expand station and country coverage including NTS Radio",
-  "updated_at": "2026-11-12T08:02:53+00:00"
+  "updated_at": "2026-11-12T08:04:37+00:00"
 }
