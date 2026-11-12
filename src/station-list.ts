@@ -1,4 +1,4 @@
-import { parseMediaUrl } from './media-policy.js';
+import { EXISTING_MEDIA_ORIGINS, matchesCountryCandidate, parseMediaUrl } from './media-policy.js';
 
 export type Row = { id: string; name: string; countryCode: string; streamUrl: string; origin: string; codec?: string; bitrate?: number; clickToken: string };
 type Window = { pageIndex: number; offset: number; searchedCount: number; success: boolean };
@@ -9,7 +9,7 @@ function safeRow(value: unknown, countryCode: string): value is Row {
   const row = value as Partial<Row>;
   if (typeof row.id !== 'string' || !UUID.test(row.id) || typeof row.name !== 'string' || !row.name.trim() || typeof row.streamUrl !== 'string' || typeof row.origin !== 'string' || typeof row.clickToken !== 'string' || row.countryCode !== countryCode || row.codec !== 'MP3') return false;
   const url = parseMediaUrl(row.streamUrl);
-  return url !== null && url.origin === row.origin;
+  return url !== null && url.origin === row.origin && (EXISTING_MEDIA_ORIGINS.includes(url.origin as typeof EXISTING_MEDIA_ORIGINS[number]) || matchesCountryCandidate(row.id, row.countryCode, row.streamUrl));
 }
 
 function validResult(value: unknown): value is Results {
@@ -120,7 +120,8 @@ export function createStationCatalog(list: HTMLElement, summary: HTMLElement, to
     return true;
   }
   function error(message: string) { loadError = message; paint(); }
-  return { receive, reveal, error, get generation() { return generation; }, get country() { return country; }, get canMore() { return visibleCount < rows.length; }, get canRetry() { return scanState === 'partial'; }, get rows() { return [...rows]; }, get selectedId() { return selectedId; } };
+  function clearSelected() { selectedId = ''; paint(); }
+  return { receive, reveal, error, clearSelected, get generation() { return generation; }, get country() { return country; }, get canMore() { return visibleCount < rows.length; }, get canRetry() { return scanState === 'partial'; }, get rows() { return [...rows]; }, get selectedId() { return selectedId; } };
 }
 
 export function renderStations(value: unknown, list: HTMLElement, summary: HTMLElement, toggle: HTMLButtonElement, select: (row: Row) => void) {

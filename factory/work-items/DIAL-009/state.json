@@ -128,6 +128,270 @@
       "seq": 13,
       "terminal_failure_reason": null,
       "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "at": "2026-11-12T04:04:40+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-60ac29683d24",
+      "seq": 14
+    },
+    {
+      "at": "2026-11-12T04:13:22+00:00",
+      "attempt": 1,
+      "candidate_commit": "8611672830c03bba7b20cce42e4f715bcb2b245b",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-60ac29683d24",
+      "seq": 15
+    },
+    {
+      "at": "2026-11-12T04:13:22+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 16,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "at": "2026-11-12T04:13:23+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-b4c7d4b1d6f1",
+      "seq": 17
+    },
+    {
+      "at": "2026-11-12T07:43:21+00:00",
+      "kind": "run_closed",
+      "reason": "Actual Review worker turn failed with harness usage limit before a report; owner has now requested resuming and retrying the same approved model.",
+      "result": "BLOCKED",
+      "run_id": "run-b4c7d4b1d6f1",
+      "seq": 18
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "at": "2026-11-12T07:43:21+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-145978c84565",
+      "seq": 19
+    },
+    {
+      "at": "2026-11-12T07:46:03+00:00",
+      "attempt": 1,
+      "candidate_commit": "8611672830c03bba7b20cce42e4f715bcb2b245b",
+      "kind": "reported",
+      "result": "REVISE",
+      "role": "Review",
+      "run_id": "run-145978c84565",
+      "seq": 20
+    },
+    {
+      "at": "2026-11-12T07:46:03+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 21,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "at": "2026-11-12T07:46:03+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-7d26c91d6cab",
+      "seq": 22
+    },
+    {
+      "at": "2026-11-12T07:49:35+00:00",
+      "attempt": 2,
+      "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-7d26c91d6cab",
+      "seq": 23
+    },
+    {
+      "at": "2026-11-12T07:49:35+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 24,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "at": "2026-11-12T07:49:36+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-410decd56085",
+      "seq": 25
+    },
+    {
+      "at": "2026-11-12T07:50:51+00:00",
+      "attempt": 2,
+      "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-410decd56085",
+      "seq": 26
+    },
+    {
+      "at": "2026-11-12T07:50:51+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 27,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-12T07:50:51+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-fc56cbb3740c",
+      "seq": 28
+    },
+    {
+      "at": "2026-11-12T07:56:14+00:00",
+      "attempt": 2,
+      "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+      "kind": "reported",
+      "result": "FAIL",
+      "role": "Verify",
+      "run_id": "run-fc56cbb3740c",
+      "seq": 29
+    },
+    {
+      "at": "2026-11-12T07:56:15+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 30,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "at": "2026-11-12T07:56:15+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-7093cf8abdbd",
+      "seq": 31
+    },
+    {
+      "at": "2026-11-12T07:58:18+00:00",
+      "attempt": 3,
+      "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-7093cf8abdbd",
+      "seq": 32
+    },
+    {
+      "at": "2026-11-12T07:58:18+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 33,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "at": "2026-11-12T07:58:19+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-1165f955264d",
+      "seq": 34
+    },
+    {
+      "at": "2026-11-12T07:59:35+00:00",
+      "attempt": 3,
+      "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-1165f955264d",
+      "seq": 35
+    },
+    {
+      "at": "2026-11-12T07:59:35+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 36,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-12T07:59:35+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-77886707bfd8",
+      "seq": 37
+    },
+    {
+      "at": "2026-11-12T08:02:52+00:00",
+      "attempt": 3,
+      "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-77886707bfd8",
+      "seq": 38
+    },
+    {
+      "at": "2026-11-12T08:02:53+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 39,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-12T08:04:37+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approved",
+      "kind": "intervention",
+      "possible_improvement": "Keep rollout authorization distinct from successful host verification.",
+      "question": "Approve pushing/merging candidate and updating existing testing endpoint for QA?",
+      "reason": "Owner explicitly approved pushing merging and rolling reviewed candidate to existing endpoint for host QA",
+      "seq": 40,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-009"
     }
   ],
   "final_result": null,
@@ -143,6 +407,17 @@
       "question": "Approve coverage/NTS PRODUCT.md and TECH.md for implementation?",
       "reason": "Owner approved new coverage/NTS specs and requested implementation",
       "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-009"
+    },
+    {
+      "at": "2026-11-12T08:04:37+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approved",
+      "possible_improvement": "Keep rollout authorization distinct from successful host verification.",
+      "question": "Approve pushing/merging candidate and updating existing testing endpoint for QA?",
+      "reason": "Owner explicitly approved pushing merging and rolling reviewed candidate to existing endpoint for host QA",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-009"
     }
   ],
@@ -210,9 +485,353 @@
       "run_id": "run-4972640e22f1",
       "tech_sha256": "8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc",
       "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "ambiguities": [],
+      "at": "2026-11-12T04:13:22+00:00",
+      "attempt": 1,
+      "blockers": [
+        "NTS in-player Play remains unavailable: the approved finite redirect route and real ChatGPT host CSP/audio checks for both channels are absent. Official-site links are the specified fallback.",
+        "Fresh independent directory/direct stream probes, host CSP, audible Play/Pause/resume, and real host layout evidence remain for independent Verify; unit tests and local Chromium screenshots do not establish them."
+      ],
+      "candidate_commit": "8611672830c03bba7b20cce42e4f715bcb2b245b",
+      "change_summary": "Added the approved 16 UUID/country/exact URL candidate admissions to the existing three-window country scan and browser validator; expanded the finite CSP origins only for those URLs. Added a compact 16-country picker and Countries/NTS navigation. NTS 1 and 2 are attributed editorial channels with official-site links and a clear link-only state because the in-player compatibility gate is unmet. Preserved the existing audio controller, retry, reveal, click-token and coordination paths.",
+      "decisions": [
+        "Require a current matching Radio Browser url_resolved row for every new-origin candidate; reject changed URLs, country, codec, explicit ports, credentials, fragments and playlists. Do not hardcode station rows.",
+        "Keep NTS outside the country catalog and click-reporting path. Selecting NTS stops any old source and disables in-player Play; merely changing the collection does not start or stop audio.",
+        "Keep the Radio Browser click disclosure visible while a country station remains selected, even if the NTS collection is being browsed."
+      ],
+      "notes": "No merge, push, publication or deployment. Unrelated docs, DIAL-008 evidence and DIAL-009 lifecycle files were excluded from the candidate commit.",
+      "role": "Implement",
+      "run_id": "run-60ac29683d24",
+      "tests": [
+        "npm test: PASS, 38 tests, 0 failures; includes TypeScript build, all 16 exact candidate fixtures, changed-URL/country/codec rejection, browser revalidation, delivered MCP resource/CSP, NTS link-only and country-picker UI harness, and DIAL-008 scan/retry/playback regressions.",
+        "git diff --check: PASS, no whitespace errors before candidate commit.",
+        "Local Chromium screenshot check: 540 px light Countries, 320 px dark Countries, and 320 px light NTS previews rendered without visible overflow; files /tmp/dial009-light.png, /tmp/dial009-dark-narrow.png, /tmp/dial009-nts-narrow.png. These are local layout checks, not ChatGPT host evidence."
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "architecture": [
+        "Existing collector/controller retained; additional URL registry shared by discovery, browser validation and finite resource CSP. country-v11 invalidates the older UI cache.",
+        "Country selection adds asynchronous calls to the same initial-result tool. Its promise serial guards do not cover notifications after request completion, and canceling an old retry does not always refresh controls."
+      ],
+      "at": "2026-11-12T07:46:03+00:00",
+      "attempt": 1,
+      "candidate_commit": "8611672830c03bba7b20cce42e4f715bcb2b245b",
+      "complexity": [
+        "Policy addition is bounded and maintainable. Picker request, retry request and unsolicited initial notification lifecycles need unified stale-result handling and consistent cleanup."
+      ],
+      "correctness": [
+        "Server requires matching current provider row, UUID, country, MP3 codec and exact resolved URL for added origins. Browser revalidates identity/URL; old-origin policy remains unchanged.",
+        "Known-choice reveal, partial scan, merged cap summaries, retry selection retention, signed click reporting and playback coordinator regressions pass.",
+        "Local delivered-bundle probes reproduced late initial notification replacing a newer playing catalog, and disabled Retry persisting after invalid country response plus completion of canceled old retry.",
+        "NTS selection clears the existing player source and disables Play; collection navigation alone does not play audio. Radio Browser disclosure remains while a country selection is active."
+      ],
+      "findings": [
+        "P2 — src/player.ts:101,130-137: Guard app-originated initial result notifications after the request promise finishes. activeCountryRequest is cleared in finally, after which any kind=initial notification is accepted unconditionally. A delayed/duplicate host notification from an older picker request can overwrite the newer country and call player.clearSelection, stopping newer playback. Delivered-bundle probe shows US playing becoming GB idle with source removed. Promise serial checks do not protect this route. Distinguish/correlate picker completions from fresh chat-originated results, and test late and duplicate notifications after the latest picker promise has settled, including same-country results.",
+        "P2 — src/player.ts:87-101,128: Restore usable controls on country-request failure. Starting a country request clears pending but never refreshes controls; if an old Retry was in flight, its button is disabled and its finally no longer matches pending. When the new country request fails or returns malformed data, no acceptInitial/refreshControls occurs, leaving Retry disabled indefinitely despite a retained partial catalog. The selector also remains on the failed country while old-country choices remain, so the instruction to choose the same country again does not trigger a native change event. Reconcile selector and retained catalog, offer a real retry path, and refresh controls on cancellation/failure; add a delayed Retry plus failed picker regression."
+      ],
+      "recommendation": "REVISE",
+      "requirements": [
+        "Read bootstrap contract, Review role, approved DIAL-009 PRODUCT/TECH, current dispatch packet and Implement report run-60ac29683d24. HEAD equals candidate; both spec SHA-256 hashes match approval.",
+        "Country registry exactly matches all 16 approved UUID/country/URL tuples (programmatic extraction comparison: True, 16/16). No broader country scan budget or wildcard media trust added.",
+        "NTS correctly uses specified link-only fallback with two editorial channels, official links and unavailable in-player controls. No NTS host compatibility pass inferred.",
+        "Two country-picker lifecycle defects remain under approved stale-result and recoverable-error requirements. Fresh independent directory/direct probes and actual ChatGPT host verification remain for Verify; Review did not substitute fixtures for those."
+      ],
+      "role": "Review",
+      "run_id": "run-145978c84565",
+      "security": [
+        "Exact candidate tuples and URL parsing deny changed path/query, credentials, explicit port, fragment and playlist URLs on new origins. CSP contains finite origins and no NTS relay or wildcard expansion.",
+        "Every country catalog route to player selection passes safeRow; fixed player path unchanged. Provider names remain textContent. NTS does not create click tokens or report Radio Browser plays.",
+        "No merge, push, publication, deployment or lifecycle writes by Review."
+      ],
+      "tests": [
+        "npm test independently rerun under current dispatch: PASS; build and 38 tests, 0 failures.",
+        "git diff --check: PASS. No production edits; remaining worktree changes are Foreman docs/lifecycle evidence.",
+        "/tmp/dial009-review-race.mjs: temporary copy of delivered UI harness with additional notification. Observed BEFORE_LATE_INITIAL US playing https://audio.bfmtv.com/50.mp3; AFTER_LATE_INITIAL GB idle with empty audio source.",
+        "/tmp/dial009-review-error.mjs: temporary harness with pending partial-GB Retry followed by invalid US picker response. Observed load-error text, selector US, retry disabled true; old retry completion leaves disabled true.",
+        "Local Chromium static-DOM measurement: country select 44 px high, NTS action links 44 px, NTS selection rows 48.48 px. No finding against those target heights. Headless requested width was not relied on as proof of a true 320 px viewport.",
+        "Inspected existing local 320 px dark Countries and light NTS preview PNGs: compact layout, legible text and no evident horizontal overflow. These are local artifacts, not independent host layout proof.",
+        "No fresh live catalog/direct stream probe or actual ChatGPT host audio/CSP/layout test performed by Review. Host checks remain BLOCKED."
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "ambiguities": [],
+      "at": "2026-11-12T07:49:35+00:00",
+      "attempt": 2,
+      "blockers": [
+        "Independent Review and Verify of this exact revision are pending. NTS in-player audio remains link-only because its approved finite redirect route and actual ChatGPT host CSP/audio evidence are absent.",
+        "Fresh independent directory/direct probes and real ChatGPT host playback/layout evidence remain for Verify; this revision does not claim them."
+      ],
+      "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+      "change_summary": "Fixed country-picker result ordering and failed-request recovery. Picker calls now send a bounded requestId that the country tool echoes; the UI applies only the matching promise, ignores all picker-originated initial notifications, and still accepts fresh chat-originated initial results. Failed or malformed picker responses restore the retained country selector and usable Retry control after an old pending Retry is canceled. Bumped the discovery resource URI to invalidate the prior UI cache.",
+      "decisions": [
+        "Use an echoed requestId to distinguish app picker results from chat-originated country tool results without suppressing legitimate same-country chat results.",
+        "A fresh chat-originated result supersedes an in-flight picker request; later picker promise settlement or notification cannot replace it.",
+        "A failed picker leaves the retained catalog and audio intact, restores its country in the select, and refreshes More/Retry state once the request settles."
+      ],
+      "notes": "This is a new commit after reviewed candidate 8611672830c03bba7b20cce42e4f715bcb2b245b. No merge, push, publication or deployment; lifecycle and unrelated files excluded.",
+      "role": "Implement",
+      "run_id": "run-7d26c91d6cab",
+      "tests": [
+        "npm test: PASS, 38 tests and 0 failures; TypeScript build and delivered browser bundle tests include late old and duplicate same-country picker notifications after newer playback, fresh same-country chat result, fresh chat result superseding an in-flight picker, and rejected picker with pending Retry plus late canceled Retry completion.",
+        "HTTP MCP integration: PASS; country tool echoes requestId and discovery UI resource URI is country-v12.html.",
+        "git diff --check: PASS, no whitespace errors before commit."
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "architecture": [
+        "Optional bounded requestId is echoed by country tool and consumed only by its matching picker promise. All picker-tagged notifications are ignored, including duplicates arriving after promise settlement. Fresh untagged chat results supersede pending picker requests.",
+        "Country resource bumps to country-v12. No additional provider/media permissions, dependency, controller, or storage."
+      ],
+      "at": "2026-11-12T07:50:51+00:00",
+      "attempt": 2,
+      "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+      "complexity": [
+        "Revision is focused on correlation and cleanup with bounded metadata and regression coverage; no unnecessary architectural changes."
+      ],
+      "correctness": [
+        "Inspected production diff: request serial plus country/requestId matching guards picker promise results; old finally callbacks cannot reset newer state.",
+        "Failure/malformed response restores select to catalog.country and refreshes Retry/More controls. Pending old retry is canceled logically and cannot mutate the retained list on later completion.",
+        "Fresh same-country chat results still apply, and chat results arriving during a picker request invalidate that picker. No remaining review findings."
+      ],
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": [
+        "Read current dispatch, Implement revision report and exact commit diff. Previously read bootstrap, Review role, approved PRODUCT/TECH remain applicable. HEAD matches candidate and both spec hashes still match approval.",
+        "Both attempt-1 P2 findings resolved. Picker-originated notifications are distinguishable from fresh chat results; failed picker requests reconcile selector/control state with the retained catalog.",
+        "Approved finite 16-tuple registry, bounded collector, link-only NTS gate, attribution, 44 px primary targets and DIAL-008 behavior remain unchanged by this revision.",
+        "Code-review acceptance does not establish fresh directory/direct stream evidence or real ChatGPT host CSP/audio/layout. Those remain independent Verify/owner gates; absent host QA remains BLOCKED."
+      ],
+      "role": "Review",
+      "run_id": "run-410decd56085",
+      "security": [
+        "Exact 16 approved tuples, browser identity/URL revalidation, finite CSP and NTS link-only policy unchanged from independently inspected attempt 1.",
+        "RequestId is limited to 80 characters by server schema, echoed as structured data and never interpreted as a URL or HTML. Safe text and signed Radio Browser click path unchanged.",
+        "No merge, push, publication or deployment performed."
+      ],
+      "tests": [
+        "npm test independently run at exact candidate: PASS; TypeScript/esbuild build and 38 tests, zero failures.",
+        "Delivered-bundle harness covers late old/duplicate same-country picker notifications after newer playback, fresh same-country chat result, fresh chat superseding pending picker, rejected picker during pending Retry, and late canceled Retry completion.",
+        "Additional read-only temporary harness /tmp/dial009-review-malformed.mjs replaces rejection with malformed response carrying the matching requestId: PASS; retained-country restoration, enabled Retry and all continuation assertions pass.",
+        "HTTP MCP integration confirms requestId echo and country-v12 resource. Registry/browser policy, provider bounds, reveal/retry, token and playback coordination regressions all pass.",
+        "git diff --check: PASS. Worktree only has unrelated Foreman docs/lifecycle/evidence changes; no Review production or lifecycle edits.",
+        "No new live directory or direct stream requests, local screenshots, or ChatGPT host playback/layout checks performed in this revision review. Prior static target/layout inspection applies to unchanged HTML only; it is not host evidence."
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-12T07:56:14+00:00",
+      "attempt": 2,
+      "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+      "criteria": [
+        {
+          "criterion": "Measure dated compatible station candidates for existing countries and propose additional countries with evidence and explicit coverage gaps.",
+          "evidence": "Fresh scans completed for all 16 countries and counted US 11, FR 5, JP 2, GB 6, CA 3, DE 1, ES 1, IT 8, AU 1, BR 1, MX 1, KR 1, IN 1, ZA 2, NL 1, SE 1; all exact provider tuples matched. However, the SE tuple for Bandit Classic Rock (UUID 40dfa430-7988-4b02-ae1b-ce5fe8b5aad3; https://wr11-ice.stream.khz.se/wr11_mp3) failed the fresh direct check with HTTP 500/no bytes and remains admitted in the catalog. The measured evidence therefore identifies an explicit coverage gap that the current candidate set has not excluded; this criterion is FAIL pending the spec-required removal/revision through Implement and Review. Existing-country drift vs DIAL-008 2026-11-12 03:43Z counts is +1 for each of the eight existing countries. No replacement URL was tested.",
+          "method": "Fresh bounded live scans via built dist/discovery.js over all 16 fixed countries; recorded each scan’s three window outcomes and exact candidate UUID/country/codec/url row match. Compared existing-country counts with the recorded DIAL-008 2026-11-12 03:43 UTC observation.",
+          "result": "FAIL"
+        },
+        {
+          "criterion": "Investigate official NTS Radio channels, stream compatibility, attribution and country versus editorial identity; propose clean discoverability without misleading location labels.",
+          "evidence": "Approved spec identifies NTS 1/2 as editorial channels, cites official support/live links and keeps them country-free. UI renders NTS 1 and NTS 2 with official NTS links and an honest “In-player listening is unavailable” state; selecting NTS disables Play, hides Radio Browser disclosure and makes no Radio Browser click call. Tests assert this isolation. No NTS audio URL was enabled or substituted.",
+          "method": "Reviewed approved PRODUCT/TECH and NTS UI source/tests on the candidate; full `npm test` exercises NTS behavior.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Produce bounded product and technical specs preserving minimal ChatGPT desktop UI, finite stream policy, playback coordination and DIAL-008 behavior; require owner approval before production changes.",
+          "evidence": "PRODUCT.md SHA-256 41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b and TECH.md SHA-256 8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc match owner-approved hashes in the Verify packet. Candidate binds the exact picker/recovery revision to that spec; no production edit was made by Verify.",
+          "method": "Verified current PRODUCT.md and TECH.md SHA-256 against the dispatch approval and inspected the reviewed candidate, full tests, and accepted Review report.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Independent Review and Verify must separate catalog admission, stream reachability and actual ChatGPT playback evidence for any implemented candidate.",
+          "evidence": "Review identity /root/dial008_review_recovered accepted exact candidate a840fda41a86063809bb71b0dc60e744bed7461d; Verify identity is /root/dial008_verify. Catalog and direct probe results are reported separately from actual ChatGPT host CSP/audio/layout, which are explicitly BLOCKED because no host session/evidence was available.",
+          "method": "Compared independent Review report run-410decd56085 and this Verify run against the same candidate; collected catalog, direct HTTP/bytes and host evidence separately.",
+          "result": "PASS"
+        }
+      ],
+      "overall": "FAIL",
+      "role": "Verify",
+      "run_id": "run-fc56cbb3740c",
+      "spec_acceptance": [
+        {
+          "criterion": "The 16-country picker and country tool expose the researched countries, with exact-country MP3 results only. The 16 candidate UUID/URL pairs are admitted only while their current provider rows still match the fixed policy. For each country, fresh evidence records directory presence, exclusion, count, and any drift; missing pairs are explicit gaps.",
+          "evidence": "The 16-country picker codes and country tool are present; all 16 scans were complete, every current row matched its fixed tuple, and all 16 appeared in results. Current counts and drift are in evidence JSON. No missing pair, URL substitution, or broad origin admission was observed.",
+          "method": "Freshly scanned all 16 picker countries and compared each current provider row to the fixed UUID/country/MP3/exact-url tuple; recorded counts and existing-country drift.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "A fresh independent direct probe for each admitted pair records status, content type, redirect behavior and capped MP3 bytes. A direct probe is not called ChatGPT playback. Changes to any URL/origin require new spec approval, not an automatic substitution.",
+          "evidence": "All 16 admitted pairs were probed. Fifteen returned 200/206, audio/mpeg, 256 bytes, and MPEG frame sync; none redirected. The SE pair Bandit Classic Rock (UUID 40dfa430-7988-4b02-ae1b-ce5fe8b5aad3; https://wr11-ice.stream.khz.se/wr11_mp3) returned HTTP 500, no content type, no bytes, and no redirect. The same exact provider tuple remains admitted in the fresh SE catalog result (`admitted: true`). This conflicts with the approved spec’s no-quiet-substitution/failed-candidate exclusion gate. Evidence supports routing this pair back through Implement and fresh Review/Verify; no replacement URL was tried.",
+          "method": "For every currently admitted pair, sent one GET with Range bytes=0-255, `redirect: manual`, 8-second abort and read cap of 256 bytes. Recorded status/content-type/location/bytes and MPEG frame sync.",
+          "result": "FAIL"
+        },
+        {
+          "criterion": "Country scans preserve the DIAL-008 limits, 8-item local reveal, known-choice More, partial/manual Retry, stale-result guards, safe text, selection/audio continuity, exact CSP, signed click reporting and its disclosure.",
+          "evidence": "`npm test` passes 38/38. Coverage includes exact 16-pair gating, DIAL-008 bounded three-window collector, 30 cap, local More/retry, stale guards, safe browser catalog, source switching and playback coordination. This attempt changed only player/server request-correlation and tests; latest Review confirms CSP/media policy unchanged. Real host CSP remains unverified.",
+          "method": "Ran full suite on exact candidate; reviewed the accepted Review report and changed-file list for DIAL-008 policy/CSP changes.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "NTS 1 and NTS 2 are plainly discoverable as NTS editorial channels with the official link and no country claim. In-player controls are enabled only after the narrow compatibility gate passes. Otherwise both official links and an honest unavailable state work. NTS plays never report a Radio Browser click.",
+          "evidence": "NTS 1/2 appear in a distinct editorial collection with official NTS links and no country labels. The unresolved compatibility gate is implemented as link-only: NTS selection disables Play, displays unavailable status, hides Radio Browser attribution and emits no Radio Browser click tool call; UI test confirms the call count does not change.",
+          "method": "Inspected public/discovery.html and src/player.ts; full UI harness assertions cover NTS switching.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "The player is compact, keyboard accessible, usable at narrow and desktop widths in light/dark host themes, and has clear Play/Pause and failure states. Independent Review and Verify bind to the exact candidate commit. Verify records catalog admission, direct reachability, CSP, and actual ChatGPT audio separately; absent host playback or layout evidence is BLOCKED, never inferred from unit tests.",
+          "evidence": "Local markup/tests exercise semantic tabs, keyboard tab navigation, 44px link targets and explicit Play/Pause/error states, but no ChatGPT host UI session was available for narrow/desktop light/dark layout, actual audio, CSP, Pause/resume, or audible continuity. Those host checks cannot be inferred from unit tests or direct MP3 bytes.",
+          "method": "Reviewed responsive/keyboard markup and automated tests; searched for actual ChatGPT host playback/CSP/layout evidence in this run.",
+          "result": "BLOCKED"
+        }
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "ambiguities": [],
+      "at": "2026-11-12T07:58:18+00:00",
+      "attempt": 3,
+      "blockers": [
+        "Independent Review and fresh Verify of candidate d4da1f9d1c9bb4c509bd35789fcb676607c3fbde remain pending; stream health can change between observations.",
+        "The SE researched pair remains a coverage gap. No replacement URL was tested or approved; actual ChatGPT host CSP/audio/layout evidence remains unavailable, and NTS remains link-only under its separate compatibility gate."
+      ],
+      "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+      "change_summary": "Excluded the SE Bandit Classic Rock UUID/exact URL pair after independent Verify observed HTTP 500 and zero bytes. The now-unused wr11-ice.stream.khz.se origin drops from the derived finite CSP. Kept the 16-country picker and SE bounded country lookup; documented the explicit SE coverage gap without changing the approved PRODUCT/TECH revisions or substituting a stream.",
+      "decisions": [
+        "Removed only the failed SE pair from the active exact candidate registry; the remaining 15 approved pairs stay unchanged.",
+        "Retained Sweden in the UI and ISO country tool. The existing bounded scan reports no compatible choices for the scanned windows when the failed row is the only lead.",
+        "Recorded Verify timestamp, catalog/direct distinction, HTTP 500/no-byte observation and no-substitution status in docs/DIAL-009-CANDIDATE-STATUS.md."
+      ],
+      "notes": "New candidate commit after Verify FAIL on a840fda41a86063809bb71b0dc60e744bed7461d. No merge, push, publication or deployment. Lifecycle/evidence and unrelated worktree files excluded.",
+      "role": "Implement",
+      "run_id": "run-7093cf8abdbd",
+      "tests": [
+        "npm test: PASS, 39 tests and 0 failures; TypeScript build and all DIAL-008/DIAL-009 regression checks pass.",
+        "Focused SE fixture: PASS; matching Bandit directory row yields no_supported_stations with complete scan and zero admitted stations; parseMediaUrl and candidate binding reject the URL, and its origin is absent from MEDIA_ORIGINS/CSP.",
+        "Remaining 15 exact candidate fixture pairs: PASS; each still requires a current matching directory row.",
+        "git diff --check: PASS, no whitespace errors before commit."
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "architecture": [
+        "Only active registry data, explanatory documentation and exclusion tests changed. Derived MEDIA_ORIGINS removes the unused SE origin without introducing alternative origins or URLs.",
+        "Collector, country picker, playback controller, request correlation and NTS fallback code are unchanged from accepted attempt 2."
+      ],
+      "at": "2026-11-12T07:59:35+00:00",
+      "attempt": 3,
+      "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+      "complexity": [
+        "Minimal spec-authorized exclusion with focused tests and truthful coverage documentation; no unrelated scope introduced."
+      ],
+      "correctness": [
+        "SE URL no longer passes browser URL policy or UUID/country binding. Matching SE directory fixture returns complete no_supported_stations rather than inventing an alternative.",
+        "Country picker still exposes Sweden and server integration checks that option. Coverage-gap document references the actual prior Verify evidence; no new direct observation is falsely claimed.",
+        "Remaining 15 exact pairs retain current-row admission checks and all prior regression tests pass."
+      ],
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": [
+        "Read dispatch, Implement exclusion report, exact candidate diff, prior Verify report run-fc56cbb3740c and its recorded direct-probe evidence. Previously read bootstrap/Review contracts and approved PRODUCT/TECH apply; both spec hashes still match approval and HEAD matches candidate.",
+        "Approved failure handling explicitly requires exclusion of failed stream candidates without silent substitution. This revision removes only the failed SE Bandit tuple and its unique derived origin; remaining 15 approved tuples are unchanged.",
+        "16-country picker and SE bounded lookup remain intact. docs/DIAL-009-CANDIDATE-STATUS.md accurately distinguishes the recorded SE directory presence from HTTP 500/zero-byte direct failure and states an explicit coverage gap.",
+        "Prior request correlation/error-recovery fixes, finite policy, DIAL-008 behavior and link-only NTS remain intact. This is code-review acceptance; fresh Verify and unavailable host QA remain separate gates."
+      ],
+      "role": "Review",
+      "run_id": "run-1165f955264d",
+      "security": [
+        "Policy narrows; no wildcard, replacement host, arbitrary URL, proxy, codec or CSP permission added. Browser and server share the reduced registry.",
+        "Safe text, signed click attribution and NTS isolation unchanged. No merge, push, publication or deployment."
+      ],
+      "tests": [
+        "npm test independently run on exact candidate: PASS; TypeScript/esbuild build and 39 tests, zero failures.",
+        "Independent direct assertions against built policy: matchesCountryCandidate(SE UUID, SE, exact URL) is false; parseMediaUrl(exact SE URL) is null; SE origin absent; 15 registry entries remain.",
+        "New fixture confirms complete SE scan with failed candidate row returns no_supported_stations and zero admitted choices. Integration confirms finite CSP exclusion and retained Sweden picker option.",
+        "git diff --check: PASS. Spec hashes unchanged. No production edits or lifecycle writes by Review.",
+        "No fresh live provider/direct stream/host checks performed in this Review. Prior Verify HTTP 500 evidence is historical evidence motivating exclusion, not a new probe result. Host CSP/audio/layout remain BLOCKED."
+      ],
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-12T08:02:52+00:00",
+      "attempt": 3,
+      "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+      "criteria": [
+        {
+          "criterion": "Measure dated compatible station candidates for existing countries and propose additional countries with evidence and explicit coverage gaps.",
+          "evidence": "At 2026-11-12T08:00:45Z–08:00:54Z, all 16 country scans completed all three provider windows. Counts: US 11, FR 5, JP 2, GB 6, CA 3, DE 1, ES 1, IT 8, AU 1, BR 1, MX 1, KR 1, IN 1, ZA 2, NL 1, SE 0. The 15 active exact UUID/URL pairs remain admitted; SE returns no_supported_stations after 150 rows. The Sweden picker option remains available. The prior failed SE tuple is absent from registry, exact match binding, parser admission and derived media origins. The status doc records the explicit gap; no substitute was added.",
+          "method": "Fresh bounded scan of the 16-country picker through built dist/discovery.js; checked exact active registry size, removed tuple policy, picker option, complete scan windows and result counts.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Investigate official NTS Radio channels, stream compatibility, attribution and country versus editorial identity; propose clean discoverability without misleading location labels.",
+          "evidence": "NTS 1/2 remain separate editorial choices with the official NTS link and no country claim. NTS playback remains link-only pending its separate compatibility gate; selecting it disables Play and sends no Radio Browser click call. The full test suite passed these UI and click-isolation checks.",
+          "method": "Reviewed approved PRODUCT/TECH and the NTS UI/test evidence on the candidate.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Produce bounded product and technical specs preserving minimal ChatGPT desktop UI, finite stream policy, playback coordination and DIAL-008 behavior; require owner approval before production changes.",
+          "evidence": "PRODUCT.md SHA-256 41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b and TECH.md SHA-256 8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc match owner-approved hashes. Exact commit d4da1f9d1c9bb4c509bd35789fcb676607c3fbde passes build and 39 tests (0 failed), including failed-SE exclusion/origin removal, preserved fifteen tuples, and DIAL-008 limits, reveal/retry, stale guards and coordination. Review run-1165f955264d ACCEPTed this candidate.",
+          "method": "Verified spec approval hashes and ran `npm test` on the exact candidate; inspected independent accepted Review.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Independent Review and Verify must separate catalog admission, stream reachability and actual ChatGPT playback evidence for any implemented candidate.",
+          "evidence": "Review run-1165f955264d (agent /root/dial008_review_recovered) ACCEPTed exact commit d4da1f9d1c9bb4c509bd35789fcb676607c3fbde; Verify is /root/dial008_verify. Current catalog is measured independently. Direct-byte observations for the fifteen unchanged exact URLs are explicitly carried forward from the 2026-11-12T07:52Z bounded probe record; the exclusion-only commit changes no remaining URL. Actual ChatGPT host playback, CSP and layout were not available and remain BLOCKED.",
+          "method": "Compared Review and Verify identities against the same exact candidate; separated current catalog scans, unchanged-URL prior direct probes and host evidence.",
+          "result": "BLOCKED"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-77886707bfd8",
+      "spec_acceptance": [
+        {
+          "criterion": "The 16-country picker and country tool expose the researched countries, with exact-country MP3 results only. The 16 candidate UUID/URL pairs are admitted only while their current provider rows still match the fixed policy. For each country, fresh evidence records directory presence, exclusion, count, and any drift; missing pairs are explicit gaps.",
+          "evidence": "All 16 scans completed; the 15 active candidate tuples remain exact and admitted, and the Sweden picker still works. SE had zero compatible results after three successful windows. The former SE UUID/URL is not in the active registry, matchesCountryCandidate is false, parseMediaUrl rejects it, and its origin is absent from MEDIA_ORIGINS. The explicit gap/no-substitution status is documented in docs/DIAL-009-CANDIDATE-STATUS.md.",
+          "method": "Freshly scanned all 16 countries and inspected the exact active registry/parser/CSP policy and Sweden picker.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "A fresh independent direct probe for each admitted pair records status, content type, redirect behavior and capped MP3 bytes. A direct probe is not called ChatGPT playback. Changes to any URL/origin require new spec approval, not an automatic substitution.",
+          "evidence": "All fifteen remaining UUIDs and exact URLs are unchanged from the prior Verify at 2026-11-12T07:52Z. Each prior no-redirect GET read at most 256 bytes and returned 200/206, audio/mpeg, 256 bytes, with MPEG frame sync. Those dated direct observations are carried forward, not represented as a new check. The SE URL was not retried. Direct bytes still do not establish host playback.",
+          "method": "Verified the fifteen remaining registry tuples/URLs are byte-for-byte equal to the prior Verify’s admitted tuples and checked each prior capped direct result; preserved the original timestamp and result for each.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Country scans preserve the DIAL-008 limits, 8-item local reveal, known-choice More, partial/manual Retry, stale-result guards, safe text, selection/audio continuity, exact CSP, signed click reporting and its disclosure.",
+          "evidence": "`npm test` passes 39/39. Focused tests confirm DIAL-008 bounds/reveal/retry/stale guards, all fifteen exact tuples, SE exclusion and no-SE-origin CSP, and playback coordination. This commit only removes SE tuple and adds truthful evidence/tests/docs; no other media origin or policy was broadened.",
+          "method": "Ran full suite on exact candidate and inspected latest accepted Review and commit diff.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "NTS 1 and NTS 2 are plainly discoverable as NTS editorial channels with the official link and no country claim. In-player controls are enabled only after the narrow compatibility gate passes. Otherwise both official links and an honest unavailable state work. NTS plays never report a Radio Browser click.",
+          "evidence": "NTS editorial collection remains separate and link-only, with official links, no country label and no Radio Browser click reporting. In-player NTS controls remain unavailable pending its independent gate; no NTS URL or origin is enabled.",
+          "method": "Inspected NTS markup/player implementation and full UI harness tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "The player is compact, keyboard accessible, usable at narrow and desktop widths in light/dark host themes, and has clear Play/Pause and failure states. Independent Review and Verify bind to the exact candidate commit. Verify records catalog admission, direct reachability, CSP, and actual ChatGPT audio separately; absent host playback or layout evidence is BLOCKED, never inferred from unit tests.",
+          "evidence": "No live ChatGPT host session or screenshots were available. Actual audio, host CSP, Pause/resume and narrow/desktop light/dark layout remain unverified. Local tests and direct bytes are not treated as host evidence.",
+          "method": "Checked available host evidence for this Verify run.",
+          "result": "BLOCKED"
+        }
+      ],
+      "work_item": "DIAL-009"
     }
   ],
-  "resume_stage": null,
+  "resume_stage": "VERIFYING",
   "runs": [
     {
       "agent": "/root/dial009_triage",
@@ -279,6 +898,204 @@
       "started_at": "2026-11-12T03:37:51+00:00",
       "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 522,
+      "ended_at": "2026-11-12T04:13:22+00:00",
+      "harness": "current-collaboration",
+      "id": "run-60ac29683d24",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Implement",
+      "selection_reason": "Implement owner-approved exact station registry, compact country picker and NTS collection with explicit compatibility gate",
+      "started_at": "2026-11-12T04:04:40+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "attempt": 1,
+      "cost": null,
+      "duration_seconds": 12598,
+      "ended_at": "2026-11-12T07:43:21+00:00",
+      "harness": "current-collaboration",
+      "id": "run-b4c7d4b1d6f1",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Review",
+      "selection_reason": "Independent exact-candidate review of approved coverage registry and minimal Countries/NTS UI",
+      "started_at": "2026-11-12T04:13:23+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "attempt": 1,
+      "cost": null,
+      "duration_seconds": 162,
+      "ended_at": "2026-11-12T07:46:03+00:00",
+      "harness": "current-collaboration",
+      "id": "run-145978c84565",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "REVISE",
+      "retry_of": "run-b4c7d4b1d6f1",
+      "role": "Review",
+      "selection_reason": "Owner requested resumption after usage-limit failure; retry independent Review with same model and exact candidate",
+      "started_at": "2026-11-12T07:43:21+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 212,
+      "ended_at": "2026-11-12T07:49:35+00:00",
+      "harness": "current-collaboration",
+      "id": "run-7d26c91d6cab",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": "run-60ac29683d24",
+      "role": "Implement",
+      "selection_reason": "Fix independently reproduced late-country response and failed-picker recovery defects",
+      "started_at": "2026-11-12T07:46:03+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 75,
+      "ended_at": "2026-11-12T07:50:51+00:00",
+      "harness": "current-collaboration",
+      "id": "run-410decd56085",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": "run-145978c84565",
+      "role": "Review",
+      "selection_reason": "Fresh independent review of request correlation and picker failure recovery fixes",
+      "started_at": "2026-11-12T07:49:36+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 323,
+      "ended_at": "2026-11-12T07:56:14+00:00",
+      "harness": "current-collaboration",
+      "id": "run-fc56cbb3740c",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "FAIL",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Independent exact-candidate automated behavior and fresh 16-country catalog/direct-stream evidence, preserving missing host QA as BLOCKED",
+      "started_at": "2026-11-12T07:50:51+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial009_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 123,
+      "ended_at": "2026-11-12T07:58:18+00:00",
+      "harness": "current-collaboration",
+      "id": "run-7093cf8abdbd",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": "run-7d26c91d6cab",
+      "role": "Implement",
+      "selection_reason": "Verification found Sweden candidate HTTP500 yet admitted; remove failed admission and unused origin per approved spec without substitution",
+      "started_at": "2026-11-12T07:56:15+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "attempt": 3,
+      "cost": null,
+      "duration_seconds": 76,
+      "ended_at": "2026-11-12T07:59:35+00:00",
+      "harness": "current-collaboration",
+      "id": "run-1165f955264d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": "run-410decd56085",
+      "role": "Review",
+      "selection_reason": "Review fresh exact candidate excluding failed Sweden admission and unused CSP origin after verification failure",
+      "started_at": "2026-11-12T07:58:19+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "attempt": 3,
+      "cost": null,
+      "duration_seconds": 197,
+      "ended_at": "2026-11-12T08:02:52+00:00",
+      "harness": "current-collaboration",
+      "id": "run-77886707bfd8",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": "run-fc56cbb3740c",
+      "role": "Verify",
+      "selection_reason": "Independent verification of reviewed failed-candidate exclusion with preserved country UX and honest host limits",
+      "started_at": "2026-11-12T07:59:35+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
@@ -290,7 +1107,7 @@
     },
     "mode": "approved"
   },
-  "state": "BUILDING",
+  "state": "WAITING_FOR_HUMAN",
   "title": "Expand station and country coverage including NTS Radio",
-  "updated_at": "2026-11-12T04:04:25+00:00"
+  "updated_at": "2026-11-12T08:04:37+00:00"
 }

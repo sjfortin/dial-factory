@@ -6,7 +6,7 @@ import { Script } from 'node:vm';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
 import { exerciseDeliveredScript } from './ui-harness.js';
-import { MEDIA_ORIGINS } from '../dist/media-policy.js';
+import { COUNTRY_CANDIDATES, EXISTING_MEDIA_ORIGINS, MEDIA_ORIGINS } from '../dist/media-policy.js';
 
 test('HTTP MCP tool returns the station and its renderable UI resource', async (t) => {
   const port = 20000 + Math.floor(Math.random() * 30000);
@@ -59,10 +59,12 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.ok(findTool);
   const invalid = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'ZZ' } });
   assert.equal(invalid.structuredContent.status, 'invalid_country');
+  const pickerResult = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'ZZ', requestId: 'picker-42' } });
+  assert.equal(pickerResult.structuredContent.requestId, 'picker-42');
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
-  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v10.html');
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v12.html');
   assert.match(resource.contents[0].text, /class="card"/);
   assert.match(resource.contents[0].text, /prefers-color-scheme: dark/);
   for (const deliveredHtml of [resource.contents[0].text, countryResource.contents[0].text]) {
@@ -77,7 +79,7 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
     connectDomains: [],
     resourceDomains: [...MEDIA_ORIGINS]
   });
-  assert.deepEqual(MEDIA_ORIGINS, [
+  assert.deepEqual(EXISTING_MEDIA_ORIGINS, [
     'https://stream.radioparadise.com',
     'https://audio.bfmtv.com',
     'https://media-ssl.musicradio.com',
@@ -88,6 +90,13 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
     'https://listen.181fm.com',
     'https://streams.radio.co'
   ]);
+  assert.deepEqual(MEDIA_ORIGINS, [...EXISTING_MEDIA_ORIGINS, ...new Set(COUNTRY_CANDIDATES.map(([, , url]) => new URL(url).origin))]);
+  assert.ok(!MEDIA_ORIGINS.some(origin => origin.includes('*') || origin.includes('radiomast')));
+  assert.equal(MEDIA_ORIGINS.includes('https://wr11-ice.stream.khz.se'), false);
+  assert.match(countryResource.contents[0].text, /id="country-select"/);
+  assert.match(countryResource.contents[0].text, /<option value="SE">Sweden<\/option>/);
+  assert.match(countryResource.contents[0].text, /id="nts-panel"/);
+  assert.match(countryResource.contents[0].text, /In-player listening is unavailable/);
   const moreTool = tools.tools.find(entry => entry.name === 'retry_stations_by_country');
   assert.ok(moreTool);
   assert.deepEqual(moreTool._meta.ui.visibility, ['app']);

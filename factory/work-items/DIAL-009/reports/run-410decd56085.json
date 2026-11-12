@@ -1,0 +1,42 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "architecture": [
+    "Optional bounded requestId is echoed by country tool and consumed only by its matching picker promise. All picker-tagged notifications are ignored, including duplicates arriving after promise settlement. Fresh untagged chat results supersede pending picker requests.",
+    "Country resource bumps to country-v12. No additional provider/media permissions, dependency, controller, or storage."
+  ],
+  "at": "2026-11-12T07:50:51+00:00",
+  "attempt": 2,
+  "candidate_commit": "a840fda41a86063809bb71b0dc60e744bed7461d",
+  "complexity": [
+    "Revision is focused on correlation and cleanup with bounded metadata and regression coverage; no unnecessary architectural changes."
+  ],
+  "correctness": [
+    "Inspected production diff: request serial plus country/requestId matching guards picker promise results; old finally callbacks cannot reset newer state.",
+    "Failure/malformed response restores select to catalog.country and refreshes Retry/More controls. Pending old retry is canceled logically and cannot mutate the retained list on later completion.",
+    "Fresh same-country chat results still apply, and chat results arriving during a picker request invalidate that picker. No remaining review findings."
+  ],
+  "findings": [],
+  "recommendation": "ACCEPT",
+  "requirements": [
+    "Read current dispatch, Implement revision report and exact commit diff. Previously read bootstrap, Review role, approved PRODUCT/TECH remain applicable. HEAD matches candidate and both spec hashes still match approval.",
+    "Both attempt-1 P2 findings resolved. Picker-originated notifications are distinguishable from fresh chat results; failed picker requests reconcile selector/control state with the retained catalog.",
+    "Approved finite 16-tuple registry, bounded collector, link-only NTS gate, attribution, 44 px primary targets and DIAL-008 behavior remain unchanged by this revision.",
+    "Code-review acceptance does not establish fresh directory/direct stream evidence or real ChatGPT host CSP/audio/layout. Those remain independent Verify/owner gates; absent host QA remains BLOCKED."
+  ],
+  "role": "Review",
+  "run_id": "run-410decd56085",
+  "security": [
+    "Exact 16 approved tuples, browser identity/URL revalidation, finite CSP and NTS link-only policy unchanged from independently inspected attempt 1.",
+    "RequestId is limited to 80 characters by server schema, echoed as structured data and never interpreted as a URL or HTML. Safe text and signed Radio Browser click path unchanged.",
+    "No merge, push, publication or deployment performed."
+  ],
+  "tests": [
+    "npm test independently run at exact candidate: PASS; TypeScript/esbuild build and 38 tests, zero failures.",
+    "Delivered-bundle harness covers late old/duplicate same-country picker notifications after newer playback, fresh same-country chat result, fresh chat superseding pending picker, rejected picker during pending Retry, and late canceled Retry completion.",
+    "Additional read-only temporary harness /tmp/dial009-review-malformed.mjs replaces rejection with malformed response carrying the matching requestId: PASS; retained-country restoration, enabled Retry and all continuation assertions pass.",
+    "HTTP MCP integration confirms requestId echo and country-v12 resource. Registry/browser policy, provider bounds, reveal/retry, token and playback coordination regressions all pass.",
+    "git diff --check: PASS. Worktree only has unrelated Foreman docs/lifecycle/evidence changes; no Review production or lifecycle edits.",
+    "No new live directory or direct stream requests, local screenshots, or ChatGPT host playback/layout checks performed in this revision review. Prior static target/layout inspection applies to unchanged HTML only; it is not host evidence."
+  ],
+  "work_item": "DIAL-009"
+}

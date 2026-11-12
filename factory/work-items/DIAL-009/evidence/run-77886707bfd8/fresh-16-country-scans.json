@@ -1,0 +1,513 @@
+{
+  "started": "2026-11-12T08:00:45.703Z",
+  "finished": "2026-11-12T08:00:54.234Z",
+  "commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+  "codes": [
+    "US",
+    "FR",
+    "JP",
+    "GB",
+    "CA",
+    "DE",
+    "ES",
+    "IT",
+    "AU",
+    "BR",
+    "MX",
+    "KR",
+    "IN",
+    "ZA",
+    "NL",
+    "SE"
+  ],
+  "activeCandidateCount": 15,
+  "activeCountryCandidates": [
+    {
+      "country": "US",
+      "uuid": "cd477c35-d625-11e8-a54a-52543be04c81",
+      "url": "https://streaming.radiostreamlive.com/miamibeachradio_devices"
+    },
+    {
+      "country": "FR",
+      "uuid": "c5bc6ba3-5adf-4bb6-8982-82d53a682799",
+      "url": "https://jazz-wr17.ice.infomaniak.ch/jazz-wr17-128.mp3"
+    },
+    {
+      "country": "JP",
+      "uuid": "5a2cbfe7-0518-44e9-aca6-0fd41e466ff0",
+      "url": "https://s10.webradio-hosting.com/proxy/fredradiojp/stream"
+    },
+    {
+      "country": "GB",
+      "uuid": "9619e7d7-0601-11e8-ae97-52543be04c81",
+      "url": "https://listen-msmn.sharp-stream.com/nme1.mp3"
+    },
+    {
+      "country": "CA",
+      "uuid": "c682befa-3e57-4db1-b1f2-dfcedb93f4d0",
+      "url": "https://s3.radio.co/s3b10a57ef/listen"
+    },
+    {
+      "country": "DE",
+      "uuid": "6cddaca1-f2c1-11e8-a471-52543be04c81",
+      "url": "https://0n-70s.radionetz.de/0n-70s.mp3"
+    },
+    {
+      "country": "ES",
+      "uuid": "f3081f41-531f-4e38-88bc-8e1a699635c4",
+      "url": "https://c6.auracast.net/radio/8090/radio.mp3"
+    },
+    {
+      "country": "IT",
+      "uuid": "4df24bb0-2794-498f-bdc0-0c3d6b71ed95",
+      "url": "https://discofunk.streamingmedia.it/play"
+    },
+    {
+      "country": "AU",
+      "uuid": "3af3be8d-da3e-4051-a604-d5958f410732",
+      "url": "https://theproganrockmachine.out.airtime.pro/theproganrockmachine_b"
+    },
+    {
+      "country": "BR",
+      "uuid": "193e3072-b88d-4e33-90e7-fb1564713e95",
+      "url": "https://stream02.ouveai.com.br/8034/stream"
+    },
+    {
+      "country": "MX",
+      "uuid": "7a163be5-9e29-11e9-a787-52543be04c81",
+      "url": "https://s3.radio.co/s2c1cebae5/listen"
+    },
+    {
+      "country": "KR",
+      "uuid": "7a72aa80-3902-4d73-a548-db81ac780240",
+      "url": "https://antares.dribbcast.com/proxy/kpop?mp=/s"
+    },
+    {
+      "country": "IN",
+      "uuid": "0db90d9a-4ecc-450c-b8fa-695405b24587",
+      "url": "https://drive.uber.radio/uber/bollywood2010s/icecast.audio"
+    },
+    {
+      "country": "ZA",
+      "uuid": "dd493e42-1c7c-4256-8277-53cf61452d88",
+      "url": "https://live.ecr.co.za/ecrgoldhigh.mp3"
+    },
+    {
+      "country": "NL",
+      "uuid": "0c62b9d7-8de0-4693-9842-6bf9b50229d3",
+      "url": "https://icecast.omroep.nl/3fm-bb-mp3"
+    }
+  ],
+  "removedCandidate": {
+    "country": "SE",
+    "uuid": "40dfa430-7988-4b02-ae1b-ce5fe8b5aad3",
+    "url": "https://wr11-ice.stream.khz.se/wr11_mp3"
+  },
+  "removedPolicy": {
+    "registryContains": false,
+    "matchesCandidate": false,
+    "parseMediaUrlAccepted": false,
+    "originInMediaPolicy": false
+  },
+  "swedenPickerOption": true,
+  "results": {
+    "FR": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 5,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "c5bc6ba3-5adf-4bb6-8982-82d53a682799"
+      ]
+    },
+    "GB": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 6,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "9619e7d7-0601-11e8-ae97-52543be04c81"
+      ]
+    },
+    "US": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 11,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "cd477c35-d625-11e8-a54a-52543be04c81"
+      ]
+    },
+    "JP": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 2,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 17,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "5a2cbfe7-0518-44e9-aca6-0fd41e466ff0"
+      ]
+    },
+    "ES": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "f3081f41-531f-4e38-88bc-8e1a699635c4"
+      ]
+    },
+    "CA": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 3,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "c682befa-3e57-4db1-b1f2-dfcedb93f4d0"
+      ]
+    },
+    "DE": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "6cddaca1-f2c1-11e8-a471-52543be04c81"
+      ]
+    },
+    "IT": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 8,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "4df24bb0-2794-498f-bdc0-0c3d6b71ed95"
+      ]
+    },
+    "AU": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "3af3be8d-da3e-4051-a604-d5958f410732"
+      ]
+    },
+    "BR": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "193e3072-b88d-4e33-90e7-fb1564713e95"
+      ]
+    },
+    "MX": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "7a163be5-9e29-11e9-a787-52543be04c81"
+      ]
+    },
+    "KR": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 27,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 0,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "7a72aa80-3902-4d73-a548-db81ac780240"
+      ]
+    },
+    "IN": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "0db90d9a-4ecc-450c-b8fa-695405b24587"
+      ]
+    },
+    "ZA": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 2,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "dd493e42-1c7c-4256-8277-53cf61452d88"
+      ]
+    },
+    "NL": {
+      "status": "ok",
+      "scanState": "complete",
+      "count": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": [
+        "0c62b9d7-8de0-4693-9842-6bf9b50229d3"
+      ]
+    },
+    "SE": {
+      "status": "no_supported_stations",
+      "scanState": "complete",
+      "count": 0,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "admittedCandidateIds": []
+    }
+  }
+}

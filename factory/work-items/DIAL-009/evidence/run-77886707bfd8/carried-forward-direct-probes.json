@@ -1,0 +1,261 @@
+{
+  "carried_forward_from": "2026-11-12T07:52:33.918Z",
+  "justification": "Exact UUID and URLs of the remaining fifteen approved pairs match prior Verify data. The accepted attempt 3 diff removes only SE; no remaining URL or policy tuple changed. No direct probe was repeated.",
+  "probes": [
+    {
+      "country": "US",
+      "uuid": "cd477c35-d625-11e8-a54a-52543be04c81",
+      "url": "https://streaming.radiostreamlive.com/miamibeachradio_devices",
+      "direct": {
+        "status": 206,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 90 60 c6 80 02 fb",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "FR",
+      "uuid": "c5bc6ba3-5adf-4bb6-8982-82d53a682799",
+      "url": "https://jazz-wr17.ice.infomaniak.ch/jazz-wr17-128.mp3",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 94 64 ed 80 03 63",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "JP",
+      "uuid": "5a2cbfe7-0518-44e9-aca6-0fd41e466ff0",
+      "url": "https://s10.webradio-hosting.com/proxy/fredradiojp/stream",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 e6 8f f6 51",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "GB",
+      "uuid": "9619e7d7-0601-11e8-ae97-52543be04c81",
+      "url": "https://listen-msmn.sharp-stream.com/nme1.mp3",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fa 92 00 aa 0b d0 80",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "CA",
+      "uuid": "c682befa-3e57-4db1-b1f2-dfcedb93f4d0",
+      "url": "https://s3.radio.co/s3b10a57ef/listen",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 a0 00 03 5e",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "DE",
+      "uuid": "6cddaca1-f2c1-11e8-a471-52543be04c81",
+      "url": "https://0n-70s.radionetz.de/0n-70s.mp3",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 60 00 00 02 f8",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "ES",
+      "uuid": "f3081f41-531f-4e38-88bc-8e1a699635c4",
+      "url": "https://c6.auracast.net/radio/8090/radio.mp3",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 7f 80 f4 09",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "IT",
+      "uuid": "4df24bb0-2794-498f-bdc0-0c3d6b71ed95",
+      "url": "https://discofunk.streamingmedia.it/play",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb b4 04 f5 80 04 8b",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "AU",
+      "uuid": "3af3be8d-da3e-4051-a604-d5958f410732",
+      "url": "https://theproganrockmachine.out.airtime.pro/theproganrockmachine_b",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 52 44 ea 8f f1 3f",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "BR",
+      "uuid": "193e3072-b88d-4e33-90e7-fb1564713e95",
+      "url": "https://stream02.ouveai.com.br/8034/stream",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fa 92 00 5c b1 e6 80",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "MX",
+      "uuid": "7a163be5-9e29-11e9-a787-52543be04c81",
+      "url": "https://s3.radio.co/s2c1cebae5/listen",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 f4 80 23 4b",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "KR",
+      "uuid": "7a72aa80-3902-4d73-a548-db81ac780240",
+      "url": "https://antares.dribbcast.com/proxy/kpop?mp=/s",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb b2 64 f4 80 04 85",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "IN",
+      "uuid": "0db90d9a-4ecc-450c-b8fa-695405b24587",
+      "url": "https://drive.uber.radio/uber/bollywood2010s/icecast.audio",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 e5 00 13 13",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "ZA",
+      "uuid": "dd493e42-1c7c-4256-8277-53cf61452d88",
+      "url": "https://live.ecr.co.za/ecrgoldhigh.mp3",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 69 02 02 dd",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    },
+    {
+      "country": "NL",
+      "uuid": "0c62b9d7-8de0-4693-9842-6bf9b50229d3",
+      "url": "https://icecast.omroep.nl/3fm-bb-mp3",
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb b4 64 97 00 04 d0",
+        "hasMpegFrameSync": true,
+        "error": null
+      },
+      "observed_at": "2026-11-12T07:52:33.918Z",
+      "evidence_source": "factory/work-items/DIAL-009/evidence/run-fc56cbb3740c/live-scans-and-direct-probes.json"
+    }
+  ]
+}

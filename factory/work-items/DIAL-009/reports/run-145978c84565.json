@@ -1,0 +1,47 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "architecture": [
+    "Existing collector/controller retained; additional URL registry shared by discovery, browser validation and finite resource CSP. country-v11 invalidates the older UI cache.",
+    "Country selection adds asynchronous calls to the same initial-result tool. Its promise serial guards do not cover notifications after request completion, and canceling an old retry does not always refresh controls."
+  ],
+  "at": "2026-11-12T07:46:03+00:00",
+  "attempt": 1,
+  "candidate_commit": "8611672830c03bba7b20cce42e4f715bcb2b245b",
+  "complexity": [
+    "Policy addition is bounded and maintainable. Picker request, retry request and unsolicited initial notification lifecycles need unified stale-result handling and consistent cleanup."
+  ],
+  "correctness": [
+    "Server requires matching current provider row, UUID, country, MP3 codec and exact resolved URL for added origins. Browser revalidates identity/URL; old-origin policy remains unchanged.",
+    "Known-choice reveal, partial scan, merged cap summaries, retry selection retention, signed click reporting and playback coordinator regressions pass.",
+    "Local delivered-bundle probes reproduced late initial notification replacing a newer playing catalog, and disabled Retry persisting after invalid country response plus completion of canceled old retry.",
+    "NTS selection clears the existing player source and disables Play; collection navigation alone does not play audio. Radio Browser disclosure remains while a country selection is active."
+  ],
+  "findings": [
+    "P2 — src/player.ts:101,130-137: Guard app-originated initial result notifications after the request promise finishes. activeCountryRequest is cleared in finally, after which any kind=initial notification is accepted unconditionally. A delayed/duplicate host notification from an older picker request can overwrite the newer country and call player.clearSelection, stopping newer playback. Delivered-bundle probe shows US playing becoming GB idle with source removed. Promise serial checks do not protect this route. Distinguish/correlate picker completions from fresh chat-originated results, and test late and duplicate notifications after the latest picker promise has settled, including same-country results.",
+    "P2 — src/player.ts:87-101,128: Restore usable controls on country-request failure. Starting a country request clears pending but never refreshes controls; if an old Retry was in flight, its button is disabled and its finally no longer matches pending. When the new country request fails or returns malformed data, no acceptInitial/refreshControls occurs, leaving Retry disabled indefinitely despite a retained partial catalog. The selector also remains on the failed country while old-country choices remain, so the instruction to choose the same country again does not trigger a native change event. Reconcile selector and retained catalog, offer a real retry path, and refresh controls on cancellation/failure; add a delayed Retry plus failed picker regression."
+  ],
+  "recommendation": "REVISE",
+  "requirements": [
+    "Read bootstrap contract, Review role, approved DIAL-009 PRODUCT/TECH, current dispatch packet and Implement report run-60ac29683d24. HEAD equals candidate; both spec SHA-256 hashes match approval.",
+    "Country registry exactly matches all 16 approved UUID/country/URL tuples (programmatic extraction comparison: True, 16/16). No broader country scan budget or wildcard media trust added.",
+    "NTS correctly uses specified link-only fallback with two editorial channels, official links and unavailable in-player controls. No NTS host compatibility pass inferred.",
+    "Two country-picker lifecycle defects remain under approved stale-result and recoverable-error requirements. Fresh independent directory/direct probes and actual ChatGPT host verification remain for Verify; Review did not substitute fixtures for those."
+  ],
+  "role": "Review",
+  "run_id": "run-145978c84565",
+  "security": [
+    "Exact candidate tuples and URL parsing deny changed path/query, credentials, explicit port, fragment and playlist URLs on new origins. CSP contains finite origins and no NTS relay or wildcard expansion.",
+    "Every country catalog route to player selection passes safeRow; fixed player path unchanged. Provider names remain textContent. NTS does not create click tokens or report Radio Browser plays.",
+    "No merge, push, publication, deployment or lifecycle writes by Review."
+  ],
+  "tests": [
+    "npm test independently rerun under current dispatch: PASS; build and 38 tests, 0 failures.",
+    "git diff --check: PASS. No production edits; remaining worktree changes are Foreman docs/lifecycle evidence.",
+    "/tmp/dial009-review-race.mjs: temporary copy of delivered UI harness with additional notification. Observed BEFORE_LATE_INITIAL US playing https://audio.bfmtv.com/50.mp3; AFTER_LATE_INITIAL GB idle with empty audio source.",
+    "/tmp/dial009-review-error.mjs: temporary harness with pending partial-GB Retry followed by invalid US picker response. Observed load-error text, selector US, retry disabled true; old retry completion leaves disabled true.",
+    "Local Chromium static-DOM measurement: country select 44 px high, NTS action links 44 px, NTS selection rows 48.48 px. No finding against those target heights. Headless requested width was not relied on as proof of a true 320 px viewport.",
+    "Inspected existing local 320 px dark Countries and light NTS preview PNGs: compact layout, legible text and no evident horizontal overflow. These are local artifacts, not independent host layout proof.",
+    "No fresh live catalog/direct stream probe or actual ChatGPT host audio/CSP/layout test performed by Review. Host checks remain BLOCKED."
+  ],
+  "work_item": "DIAL-009"
+}

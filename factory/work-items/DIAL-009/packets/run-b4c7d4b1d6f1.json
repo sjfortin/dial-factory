@@ -1,0 +1,53 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "candidate": {
+    "agent": "/root/dial009_implement",
+    "ambiguities": [],
+    "at": "2026-11-12T04:13:22+00:00",
+    "attempt": 1,
+    "blockers": [
+      "NTS in-player Play remains unavailable: the approved finite redirect route and real ChatGPT host CSP/audio checks for both channels are absent. Official-site links are the specified fallback.",
+      "Fresh independent directory/direct stream probes, host CSP, audible Play/Pause/resume, and real host layout evidence remain for independent Verify; unit tests and local Chromium screenshots do not establish them."
+    ],
+    "candidate_commit": "8611672830c03bba7b20cce42e4f715bcb2b245b",
+    "change_summary": "Added the approved 16 UUID/country/exact URL candidate admissions to the existing three-window country scan and browser validator; expanded the finite CSP origins only for those URLs. Added a compact 16-country picker and Countries/NTS navigation. NTS 1 and 2 are attributed editorial channels with official-site links and a clear link-only state because the in-player compatibility gate is unmet. Preserved the existing audio controller, retry, reveal, click-token and coordination paths.",
+    "decisions": [
+      "Require a current matching Radio Browser url_resolved row for every new-origin candidate; reject changed URLs, country, codec, explicit ports, credentials, fragments and playlists. Do not hardcode station rows.",
+      "Keep NTS outside the country catalog and click-reporting path. Selecting NTS stops any old source and disables in-player Play; merely changing the collection does not start or stop audio.",
+      "Keep the Radio Browser click disclosure visible while a country station remains selected, even if the NTS collection is being browsed."
+    ],
+    "notes": "No merge, push, publication or deployment. Unrelated docs, DIAL-008 evidence and DIAL-009 lifecycle files were excluded from the candidate commit.",
+    "role": "Implement",
+    "run_id": "run-60ac29683d24",
+    "tests": [
+      "npm test: PASS, 38 tests, 0 failures; includes TypeScript build, all 16 exact candidate fixtures, changed-URL/country/codec rejection, browser revalidation, delivered MCP resource/CSP, NTS link-only and country-picker UI harness, and DIAL-008 scan/retry/playback regressions.",
+      "git diff --check: PASS, no whitespace errors before candidate commit.",
+      "Local Chromium screenshot check: 540 px light Countries, 320 px dark Countries, and 320 px light NTS previews rendered without visible overflow; files /tmp/dial009-light.png, /tmp/dial009-dark-narrow.png, /tmp/dial009-nts-narrow.png. These are local layout checks, not ChatGPT host evidence."
+    ],
+    "work_item": "DIAL-009"
+  },
+  "contract": "factory/agents/review/agent.md",
+  "criteria": [
+    "Measure dated compatible station candidates for existing countries and propose additional countries with evidence and explicit coverage gaps.",
+    "Investigate official NTS Radio channels, stream compatibility, attribution and country versus editorial identity; propose clean discoverability without misleading location labels.",
+    "Produce bounded product and technical specs preserving minimal ChatGPT desktop UI, finite stream policy, playback coordination and DIAL-008 behavior; require owner approval before production changes.",
+    "Independent Review and Verify must separate catalog admission, stream reachability and actual ChatGPT playback evidence for any implemented candidate."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Find more useful stations across existing and additional countries, include NTS Radio through a verified minimal discovery design, and retain clean ChatGPT desktop usability. Globe selection is a separate stretch proposal.",
+  "requested_model": "gpt-6-astra",
+  "requested_reasoning": "medium",
+  "role": "Review",
+  "run_id": "run-b4c7d4b1d6f1",
+  "spec": {
+    "at": "2026-11-12T04:04:25+00:00",
+    "by": "OWNER",
+    "hashes": {
+      "PRODUCT.md": "41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b",
+      "TECH.md": "8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc"
+    },
+    "mode": "approved"
+  },
+  "state": "REVIEWING",
+  "work_item": "DIAL-009"
+}
