@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { runInNewContext } from 'node:vm';
 
 class Element extends EventTarget {
-  children = []; textContent = ''; dataset = {}; attributes = {}; disabled = false; hidden = false; src = ''; value = ''; error = null; pauseCalls = 0; playCalls = 0;
+  children = []; textContent = ''; dataset = {}; attributes = {}; disabled = false; hidden = false; src = ''; value = ''; error = null; pauseCalls = 0; playCalls = 0; paused = true;
   append(...items) { this.children.push(...items); }
   replaceChildren(...items) { this.children = items; }
   setAttribute(key, value) { this.attributes[key] = value; }
@@ -10,9 +10,9 @@ class Element extends EventTarget {
   querySelector() { return null; }
   focus() {}
   removeAttribute(key) { if (key === 'src') this.src = ''; }
-  pause() { this.pauseCalls++; this.dispatchEvent(new Event('pause')); }
+  pause() { this.pauseCalls++; this.paused = true; this.dispatchEvent(new Event('pause')); }
   load() { this.error = null; }
-  play() { this.playCalls++; this.dispatchEvent(new Event('playing')); return Promise.resolve(); }
+  play() { this.playCalls++; this.paused = false; this.dispatchEvent(new Event('playing')); return Promise.resolve(); }
   click() { this.dispatchEvent(new Event('click')); }
 }
 const tick = async () => { await new Promise(resolve => setImmediate(resolve)); await new Promise(resolve => setImmediate(resolve)); };
@@ -83,10 +83,34 @@ export async function exerciseDeliveredScript(script) {
   assert.equal(nodes['#nts-panel'].hidden, false);
   assert.equal(nodes['#country-attribution'].hidden, false, 'country selection keeps its disclosure while browsing NTS');
   ntsButtons[0].click(); await tick();
-  assert.equal(nodes['#toggle'].disabled, true);
-  assert.match(nodes['#status'].textContent, /In-player listening is unavailable/);
+  assert.equal(nodes['#toggle'].disabled, false);
+  assert.equal(nodes['#radio'].src, 'https://stream-relay-geo.ntslive.net/stream?client=direct');
+  assert.equal(nodes['#status'].dataset.state, 'idle');
   assert.equal(nodes['#station-title'].textContent, 'NTS 1');
   assert.equal(nodes['#country-attribution'].hidden, true);
+  const ntsPlayCalls = nodes['#radio'].playCalls;
+  nodes['#countries-tab'].click();
+  assert.equal(nodes['#radio'].playCalls, ntsPlayCalls, 'tab changes never autoplay');
+  nodes['#nts-tab'].click();
+  nodes['#toggle'].click(); await tick();
+  assert.equal(nodes['#status'].dataset.state, 'playing');
+  assert.equal(nodes['#radio'].playCalls, ntsPlayCalls + 1);
+  nodes['#toggle'].click(); await tick();
+  assert.equal(nodes['#status'].dataset.state, 'paused');
+  nodes['#toggle'].click(); await tick();
+  assert.equal(nodes['#status'].dataset.state, 'playing');
+  assert.equal(nodes['#radio'].playCalls, ntsPlayCalls + 2);
+  ntsButtons[1].click(); await tick();
+  assert.equal(nodes['#radio'].paused, true, 'switch stops the previous NTS stream');
+  assert.equal(nodes['#radio'].src, 'https://stream-relay-geo.ntslive.net/stream2?client=direct');
+  assert.equal(nodes['#status'].dataset.state, 'idle');
+  nodes['#toggle'].click(); await tick();
+  nodes['#radio'].error = { code: 4 }; nodes['#radio'].dispatchEvent(new Event('error')); await tick();
+  assert.equal(nodes['#status'].dataset.state, 'error');
+  assert.match(nodes['#status'].textContent, /unavailable or blocked.*open on NTS/i);
+  assert.equal(nodes['#toggle'].dataset.action, 'play');
+  nodes['#toggle'].click(); await tick();
+  assert.equal(nodes['#status'].dataset.state, 'playing', 'Play retries the selected NTS channel');
   assert.equal(sent.filter(item => item.method === 'tools/call').length, callsBeforeNts, 'NTS does not report a Radio Browser click');
   nodes['#countries-tab'].click();
   notify(result([row(3, 'GB')], { countryCode: 'GB', partial: true })); await tick();

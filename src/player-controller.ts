@@ -1,7 +1,7 @@
 import { PlaybackCoordinator, type CoordinationEnvironment } from './playback-coordinator.js';
 
 type PlayerState = 'idle' | 'buffering' | 'playing' | 'paused' | 'error';
-export type Selection = { id: string; name: string; streamUrl: string; clickToken?: string };
+export type Selection = { id: string; name: string; streamUrl: string; clickToken?: string; source?: 'nts' };
 type Options = { onPlaying?: (token: string) => void; coordination?: CoordinationEnvironment;
   remoteButton?: HTMLButtonElement | null; remoteStatus?: HTMLElement | null };
 
@@ -35,6 +35,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     coordinator.cancel();
   }
   function fail(message: string) { stop(); show('error', message); }
+  function unavailable(message: string) { return selected?.source === 'nts' ? 'Stream unavailable or blocked. Try Play again, or open on NTS.' : message; }
   coordinator.onStop = (reason) => {
     stop();
     show('paused', reason === 'transfer' ? 'Paused because Dial started in another thread.' : 'Paused from another thread.');
@@ -73,7 +74,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
   }
   async function play() {
     if (!audio.src) return;
-    if (!coordinator.available) { show('error', 'This environment cannot coordinate Dial playback.'); return; }
+    if (!coordinator.available) { show('error', unavailable('This environment cannot coordinate Dial playback.')); return; }
     wanted = true;
     playSettled = false;
     mediaStarted = false;
@@ -83,7 +84,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     show('buffering', 'Switching playback…');
     const granted = await coordinator.acquire(globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random()}`, selected?.name ?? 'Radio Paradise', abort.signal);
     if (!granted) {
-      if (wanted && currentAttempt === attempt) fail('Could not switch playback; the other thread may still be playing. Try again.');
+      if (wanted && currentAttempt === attempt) fail(unavailable('Could not switch playback; the other thread may still be playing. Try again.'));
       return;
     }
     if (!wanted || currentAttempt !== attempt || abort.signal.aborted) { coordinator.release(); return; }
@@ -96,7 +97,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
       if (!wanted || currentAttempt !== attempt) return;
       started(currentAttempt);
     } catch {
-      if (wanted && currentAttempt === attempt) fail('Could not start audio. Check your connection or playback permission, then try Play again.');
+      if (wanted && currentAttempt === attempt) fail(unavailable('Could not start audio. Check your connection or playback permission, then try Play again.'));
     }
   }
   toggle.addEventListener('click', () => {
@@ -116,7 +117,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
       show('paused', `Paused ${selected?.name ?? 'live radio'}`);
     } else if (state !== 'error' && state !== 'idle') show('paused', 'Paused');
   });
-  audio.addEventListener('error', () => { if (wanted && audio.error) fail('Stream unavailable or blocked. Try Play again.'); });
+  audio.addEventListener('error', () => { if (wanted && audio.error) fail(unavailable('Stream unavailable or blocked. Try Play again.')); });
   const teardown = () => { stop(); coordinator.dispose(); };
   if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('pagehide', teardown, { once: true });
   return { selectStation, clearSelection, dispose: teardown };
