@@ -1,0 +1,823 @@
+{
+  "started": "2026-11-12T07:52:33.918Z",
+  "finished": "2026-11-12T07:52:47.497Z",
+  "candidate": "a840fda41a86063809bb71b0dc60e744bed7461d",
+  "countryResults": [
+    {
+      "code": "US",
+      "id": "cd477c35-d625-11e8-a54a-52543be04c81",
+      "exactUrl": "https://streaming.radiostreamlive.com/miamibeachradio_devices",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 11,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "cd477c35-d625-11e8-a54a-52543be04c81",
+          "countryCode": "US",
+          "codec": "MP3",
+          "urlResolved": "https://streaming.radiostreamlive.com/miamibeachradio_devices",
+          "url": "https://streaming.radiostreamlive.com/miamibeachradio_devices"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "cd477c35-d625-11e8-a54a-52543be04c81",
+        "name": "Miami Beach Radio",
+        "streamUrl": "https://streaming.radiostreamlive.com/miamibeachradio_devices"
+      },
+      "direct": {
+        "status": 206,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 90 60 c6 80 02 fb",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "FR",
+      "id": "c5bc6ba3-5adf-4bb6-8982-82d53a682799",
+      "exactUrl": "https://jazz-wr17.ice.infomaniak.ch/jazz-wr17-128.mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 5,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "c5bc6ba3-5adf-4bb6-8982-82d53a682799",
+          "countryCode": "FR",
+          "codec": "MP3",
+          "urlResolved": "https://jazz-wr17.ice.infomaniak.ch/jazz-wr17-128.mp3",
+          "url": "https://jazz-wr17.ice.infomaniak.ch/jazz-wr17-128.mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "c5bc6ba3-5adf-4bb6-8982-82d53a682799",
+        "name": "Jazzradio.fr Jazz & Classique",
+        "streamUrl": "https://jazz-wr17.ice.infomaniak.ch/jazz-wr17-128.mp3"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 94 64 ed 80 03 63",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "JP",
+      "id": "5a2cbfe7-0518-44e9-aca6-0fd41e466ff0",
+      "exactUrl": "https://s10.webradio-hosting.com/proxy/fredradiojp/stream",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 2,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 17,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "5a2cbfe7-0518-44e9-aca6-0fd41e466ff0",
+          "countryCode": "JP",
+          "codec": "MP3",
+          "urlResolved": "https://s10.webradio-hosting.com/proxy/fredradiojp/stream",
+          "url": "https://s10.webradio-hosting.com/proxy/fredradiojp/stream"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "5a2cbfe7-0518-44e9-aca6-0fd41e466ff0",
+        "name": "Fred Film Radio(日本語)",
+        "streamUrl": "https://s10.webradio-hosting.com/proxy/fredradiojp/stream"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 e6 8f f6 51",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "GB",
+      "id": "9619e7d7-0601-11e8-ae97-52543be04c81",
+      "exactUrl": "https://listen-msmn.sharp-stream.com/nme1.mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 6,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "9619e7d7-0601-11e8-ae97-52543be04c81",
+          "countryCode": "GB",
+          "codec": "MP3",
+          "urlResolved": "https://listen-msmn.sharp-stream.com/nme1.mp3",
+          "url": "https://listen-msmn.sharp-stream.com/nme1.mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "9619e7d7-0601-11e8-ae97-52543be04c81",
+        "name": "TMM 1",
+        "streamUrl": "https://listen-msmn.sharp-stream.com/nme1.mp3"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fa 92 00 aa 0b d0 80",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "CA",
+      "id": "c682befa-3e57-4db1-b1f2-dfcedb93f4d0",
+      "exactUrl": "https://s3.radio.co/s3b10a57ef/listen",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 3,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "c682befa-3e57-4db1-b1f2-dfcedb93f4d0",
+          "countryCode": "CA",
+          "codec": "MP3",
+          "urlResolved": "https://s3.radio.co/s3b10a57ef/listen",
+          "url": "https://s3.radio.co/s3b10a57ef/listen"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "c682befa-3e57-4db1-b1f2-dfcedb93f4d0",
+        "name": "Radio Pakistan Toronto",
+        "streamUrl": "https://s3.radio.co/s3b10a57ef/listen"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 a0 00 03 5e",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "DE",
+      "id": "6cddaca1-f2c1-11e8-a471-52543be04c81",
+      "exactUrl": "https://0n-70s.radionetz.de/0n-70s.mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "6cddaca1-f2c1-11e8-a471-52543be04c81",
+          "countryCode": "DE",
+          "codec": "MP3",
+          "urlResolved": "https://0n-70s.radionetz.de/0n-70s.mp3",
+          "url": "https://0n-70s.radionetz.de/0n-70s.mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "6cddaca1-f2c1-11e8-a471-52543be04c81",
+        "name": "- 0 N - 70s on Radio",
+        "streamUrl": "https://0n-70s.radionetz.de/0n-70s.mp3"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 60 00 00 02 f8",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "ES",
+      "id": "f3081f41-531f-4e38-88bc-8e1a699635c4",
+      "exactUrl": "https://c6.auracast.net/radio/8090/radio.mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "f3081f41-531f-4e38-88bc-8e1a699635c4",
+          "countryCode": "ES",
+          "codec": "MP3",
+          "urlResolved": "https://c6.auracast.net/radio/8090/radio.mp3",
+          "url": "https://c6.auracast.net/radio/8090/radio.mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "f3081f41-531f-4e38-88bc-8e1a699635c4",
+        "name": "#1 Splash 90s Dance",
+        "streamUrl": "https://c6.auracast.net/radio/8090/radio.mp3"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 7f 80 f4 09",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "IT",
+      "id": "4df24bb0-2794-498f-bdc0-0c3d6b71ed95",
+      "exactUrl": "https://discofunk.streamingmedia.it/play",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 8,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "4df24bb0-2794-498f-bdc0-0c3d6b71ed95",
+          "countryCode": "IT",
+          "codec": "MP3",
+          "urlResolved": "https://discofunk.streamingmedia.it/play",
+          "url": "https://discofunk.streamingmedia.it/play"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "4df24bb0-2794-498f-bdc0-0c3d6b71ed95",
+        "name": "70 80 Disco Funk ModernSoul e Boogie",
+        "streamUrl": "https://discofunk.streamingmedia.it/play"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb b4 04 f5 80 04 8b",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "AU",
+      "id": "3af3be8d-da3e-4051-a604-d5958f410732",
+      "exactUrl": "https://theproganrockmachine.out.airtime.pro/theproganrockmachine_b",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "3af3be8d-da3e-4051-a604-d5958f410732",
+          "countryCode": "AU",
+          "codec": "MP3",
+          "urlResolved": "https://theproganrockmachine.out.airtime.pro/theproganrockmachine_b",
+          "url": "https://theproganrockmachine.out.airtime.pro/theproganrockmachine_b"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "3af3be8d-da3e-4051-a604-d5958f410732",
+        "name": "The Prog Rock Machine",
+        "streamUrl": "https://theproganrockmachine.out.airtime.pro/theproganrockmachine_b"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 52 44 ea 8f f1 3f",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "BR",
+      "id": "193e3072-b88d-4e33-90e7-fb1564713e95",
+      "exactUrl": "https://stream02.ouveai.com.br/8034/stream",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "193e3072-b88d-4e33-90e7-fb1564713e95",
+          "countryCode": "BR",
+          "codec": "MP3",
+          "urlResolved": "https://stream02.ouveai.com.br/8034/stream",
+          "url": "https://stream02.ouveai.com.br/8034/stream"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "193e3072-b88d-4e33-90e7-fb1564713e95",
+        "name": "Rádio Mix FM 88,9 MHz (Juiz de Fora - MG)",
+        "streamUrl": "https://stream02.ouveai.com.br/8034/stream"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fa 92 00 5c b1 e6 80",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "MX",
+      "id": "7a163be5-9e29-11e9-a787-52543be04c81",
+      "exactUrl": "https://s3.radio.co/s2c1cebae5/listen",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "7a163be5-9e29-11e9-a787-52543be04c81",
+          "countryCode": "MX",
+          "codec": "MP3",
+          "urlResolved": "https://s3.radio.co/s2c1cebae5/listen",
+          "url": "https://s3.radio.co/s2c1cebae5/listen"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "7a163be5-9e29-11e9-a787-52543be04c81",
+        "name": "Rock 101",
+        "streamUrl": "https://s3.radio.co/s2c1cebae5/listen"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 f4 80 23 4b",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "KR",
+      "id": "7a72aa80-3902-4d73-a548-db81ac780240",
+      "exactUrl": "https://antares.dribbcast.com/proxy/kpop?mp=/s",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 27,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 0,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "7a72aa80-3902-4d73-a548-db81ac780240",
+          "countryCode": "KR",
+          "codec": "MP3",
+          "urlResolved": "https://antares.dribbcast.com/proxy/kpop?mp=/s",
+          "url": "https://antares.dribbcast.com/proxy/kpop?mp=/s"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "7a72aa80-3902-4d73-a548-db81ac780240",
+        "name": "Big B Radio - Kpop",
+        "streamUrl": "https://antares.dribbcast.com/proxy/kpop?mp=/s"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb b2 64 f4 80 04 85",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "IN",
+      "id": "0db90d9a-4ecc-450c-b8fa-695405b24587",
+      "exactUrl": "https://drive.uber.radio/uber/bollywood2010s/icecast.audio",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "0db90d9a-4ecc-450c-b8fa-695405b24587",
+          "countryCode": "IN",
+          "codec": "MP3",
+          "urlResolved": "https://drive.uber.radio/uber/bollywood2010s/icecast.audio",
+          "url": "https://drive.uber.radio/uber/bollywood2010s/icecast.audio"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "0db90d9a-4ecc-450c-b8fa-695405b24587",
+        "name": "Bollywood 2010's",
+        "streamUrl": "https://drive.uber.radio/uber/bollywood2010s/icecast.audio"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 e5 00 13 13",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "ZA",
+      "id": "dd493e42-1c7c-4256-8277-53cf61452d88",
+      "exactUrl": "https://live.ecr.co.za/ecrgoldhigh.mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 2,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "dd493e42-1c7c-4256-8277-53cf61452d88",
+          "countryCode": "ZA",
+          "codec": "MP3",
+          "urlResolved": "https://live.ecr.co.za/ecrgoldhigh.mp3",
+          "url": "https://live.ecr.co.za/ecrgoldhigh.mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "dd493e42-1c7c-4256-8277-53cf61452d88",
+        "name": "East Coast Gold",
+        "streamUrl": "https://live.ecr.co.za/ecrgoldhigh.mp3"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb 92 64 69 02 02 dd",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "NL",
+      "id": "0c62b9d7-8de0-4693-9842-6bf9b50229d3",
+      "exactUrl": "https://icecast.omroep.nl/3fm-bb-mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "0c62b9d7-8de0-4693-9842-6bf9b50229d3",
+          "countryCode": "NL",
+          "codec": "MP3",
+          "urlResolved": "https://icecast.omroep.nl/3fm-bb-mp3",
+          "url": "https://icecast.omroep.nl/3fm-bb-mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "0c62b9d7-8de0-4693-9842-6bf9b50229d3",
+        "name": "NPO 3FM",
+        "streamUrl": "https://icecast.omroep.nl/3fm-bb-mp3"
+      },
+      "direct": {
+        "status": 200,
+        "redirected": false,
+        "location": null,
+        "contentType": "audio/mpeg",
+        "bytesRead": 256,
+        "first8Hex": "ff fb b4 64 97 00 04 d0",
+        "hasMpegFrameSync": true,
+        "error": null
+      }
+    },
+    {
+      "code": "SE",
+      "id": "40dfa430-7988-4b02-ae1b-ce5fe8b5aad3",
+      "exactUrl": "https://wr11-ice.stream.khz.se/wr11_mp3",
+      "status": "ok",
+      "scanState": "complete",
+      "catalogCount": 1,
+      "windows": [
+        {
+          "offset": 0,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 50,
+          "searchedCount": 50,
+          "success": true
+        },
+        {
+          "offset": 100,
+          "searchedCount": 50,
+          "success": true
+        }
+      ],
+      "candidateRawRows": [
+        {
+          "uuid": "40dfa430-7988-4b02-ae1b-ce5fe8b5aad3",
+          "countryCode": "SE",
+          "codec": "MP3",
+          "urlResolved": "https://wr11-ice.stream.khz.se/wr11_mp3",
+          "url": "https://wr11-ice.stream.khz.se/wr11_mp3"
+        }
+      ],
+      "exactTuplePresent": true,
+      "admitted": true,
+      "station": {
+        "id": "40dfa430-7988-4b02-ae1b-ce5fe8b5aad3",
+        "name": "Bandit Classic Rock",
+        "streamUrl": "https://wr11-ice.stream.khz.se/wr11_mp3"
+      },
+      "direct": {
+        "status": 500,
+        "redirected": false,
+        "location": null,
+        "contentType": null,
+        "bytesRead": 0,
+        "first8Hex": "",
+        "hasMpegFrameSync": false,
+        "error": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "agent": "/root/dial009_implement",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "Measure dated compatible station candidates for existing countries and propose additional countries with evidence and explicit coverage gaps.",
+    "Investigate official NTS Radio channels, stream compatibility, attribution and country versus editorial identity; propose clean discoverability without misleading location labels.",
+    "Produce bounded product and technical specs preserving minimal ChatGPT desktop UI, finite stream policy, playback coordination and DIAL-008 behavior; require owner approval before production changes.",
+    "Independent Review and Verify must separate catalog admission, stream reachability and actual ChatGPT playback evidence for any implemented candidate."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Find more useful stations across existing and additional countries, include NTS Radio through a verified minimal discovery design, and retain clean ChatGPT desktop usability. Globe selection is a separate stretch proposal.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-7093cf8abdbd",
+  "spec": {
+    "at": "2026-11-12T04:04:25+00:00",
+    "by": "OWNER",
+    "hashes": {
+      "PRODUCT.md": "41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b",
+      "TECH.md": "8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc"
+    },
+    "mode": "approved"
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-009"
+}

@@ -1,0 +1,40 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "architecture": [
+    "Only active registry data, explanatory documentation and exclusion tests changed. Derived MEDIA_ORIGINS removes the unused SE origin without introducing alternative origins or URLs.",
+    "Collector, country picker, playback controller, request correlation and NTS fallback code are unchanged from accepted attempt 2."
+  ],
+  "at": "2026-11-12T07:59:35+00:00",
+  "attempt": 3,
+  "candidate_commit": "d4da1f9d1c9bb4c509bd35789fcb676607c3fbde",
+  "complexity": [
+    "Minimal spec-authorized exclusion with focused tests and truthful coverage documentation; no unrelated scope introduced."
+  ],
+  "correctness": [
+    "SE URL no longer passes browser URL policy or UUID/country binding. Matching SE directory fixture returns complete no_supported_stations rather than inventing an alternative.",
+    "Country picker still exposes Sweden and server integration checks that option. Coverage-gap document references the actual prior Verify evidence; no new direct observation is falsely claimed.",
+    "Remaining 15 exact pairs retain current-row admission checks and all prior regression tests pass."
+  ],
+  "findings": [],
+  "recommendation": "ACCEPT",
+  "requirements": [
+    "Read dispatch, Implement exclusion report, exact candidate diff, prior Verify report run-fc56cbb3740c and its recorded direct-probe evidence. Previously read bootstrap/Review contracts and approved PRODUCT/TECH apply; both spec hashes still match approval and HEAD matches candidate.",
+    "Approved failure handling explicitly requires exclusion of failed stream candidates without silent substitution. This revision removes only the failed SE Bandit tuple and its unique derived origin; remaining 15 approved tuples are unchanged.",
+    "16-country picker and SE bounded lookup remain intact. docs/DIAL-009-CANDIDATE-STATUS.md accurately distinguishes the recorded SE directory presence from HTTP 500/zero-byte direct failure and states an explicit coverage gap.",
+    "Prior request correlation/error-recovery fixes, finite policy, DIAL-008 behavior and link-only NTS remain intact. This is code-review acceptance; fresh Verify and unavailable host QA remain separate gates."
+  ],
+  "role": "Review",
+  "run_id": "run-1165f955264d",
+  "security": [
+    "Policy narrows; no wildcard, replacement host, arbitrary URL, proxy, codec or CSP permission added. Browser and server share the reduced registry.",
+    "Safe text, signed click attribution and NTS isolation unchanged. No merge, push, publication or deployment."
+  ],
+  "tests": [
+    "npm test independently run on exact candidate: PASS; TypeScript/esbuild build and 39 tests, zero failures.",
+    "Independent direct assertions against built policy: matchesCountryCandidate(SE UUID, SE, exact URL) is false; parseMediaUrl(exact SE URL) is null; SE origin absent; 15 registry entries remain.",
+    "New fixture confirms complete SE scan with failed candidate row returns no_supported_stations and zero admitted choices. Integration confirms finite CSP exclusion and retained Sweden picker option.",
+    "git diff --check: PASS. Spec hashes unchanged. No production edits or lifecycle writes by Review.",
+    "No fresh live provider/direct stream/host checks performed in this Review. Prior Verify HTTP 500 evidence is historical evidence motivating exclusion, not a new probe result. Host CSP/audio/layout remain BLOCKED."
+  ],
+  "work_item": "DIAL-009"
+}
