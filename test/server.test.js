@@ -59,10 +59,12 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.ok(findTool);
   const invalid = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'ZZ' } });
   assert.equal(invalid.structuredContent.status, 'invalid_country');
+  const pickerResult = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'ZZ', requestId: 'picker-42' } });
+  assert.equal(pickerResult.structuredContent.requestId, 'picker-42');
   const unavailable = await client.callTool({ name: 'find_stations_by_country', arguments: { countryCode: 'FR' } });
   assert.equal(unavailable.structuredContent.status, 'provider_unavailable');
   const countryResource = await client.readResource({ uri: findTool._meta.ui.resourceUri });
-  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v11.html');
+  assert.equal(findTool._meta.ui.resourceUri, 'ui://dial/country-v12.html');
   assert.match(resource.contents[0].text, /class="card"/);
   assert.match(resource.contents[0].text, /prefers-color-scheme: dark/);
   for (const deliveredHtml of [resource.contents[0].text, countryResource.contents[0].text]) {

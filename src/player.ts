@@ -88,21 +88,30 @@ if (list && summary) {
     const countryCode = countrySelect.value;
     if (!countryCode) return;
     const request = ++countryRequestSerial;
+    const requestId = `${Date.now()}-${request}`;
     activeCountryRequest = request;
     pending = null;
     summary.textContent = `Scanning ${countryCode}…`;
-    void app.callServerTool({ name: 'find_stations_by_country', arguments: { countryCode } })
+    refreshControls();
+    let accepted = false;
+    void app.callServerTool({ name: 'find_stations_by_country', arguments: { countryCode, requestId } })
       .then(result => {
         if (request !== activeCountryRequest) return;
-        const value = result.structuredContent as { kind?: string; countryCode?: string } | undefined;
-        if (value?.kind !== 'initial' || value.countryCode !== countryCode || !acceptInitial(value)) catalog.error('Could not load country results. Choose the country again.');
+        const value = result.structuredContent as { kind?: string; countryCode?: string; requestId?: string } | undefined;
+        if (value?.kind !== 'initial' || value.countryCode !== countryCode || value.requestId !== requestId || !acceptInitial(value)) catalog.error('Could not load country results. Existing choices remain.');
+        else accepted = true;
       })
-      .catch(() => { if (request === activeCountryRequest) catalog.error('Country request failed. Choose the country again.'); })
-      .finally(() => { if (request === activeCountryRequest) activeCountryRequest = null; });
+      .catch(() => { if (request === activeCountryRequest) catalog.error('Country request failed. Existing choices remain.'); })
+      .finally(() => {
+        if (request !== activeCountryRequest) return;
+        activeCountryRequest = null;
+        if (!accepted) countrySelect.value = catalog.country;
+        refreshControls();
+      });
   });
   const refreshControls = () => {
     if (more) more.hidden = !catalog.canMore;
-    if (retry) { retry.hidden = !catalog.canRetry; retry.disabled = pending !== null; }
+    if (retry) { retry.hidden = !catalog.canRetry; retry.disabled = pending !== null || activeCountryRequest !== null; }
   };
   more?.addEventListener('click', () => {
     catalog.reveal();
@@ -129,10 +138,14 @@ if (list && summary) {
   });
   app.ontoolresult = (params) => {
     if (!params.structuredContent || typeof params.structuredContent !== 'object') return;
-    const result = params.structuredContent as { kind?: string };
+    const result = params.structuredContent as { kind?: string; requestId?: string };
     // Retry notifications have no request identity. Only the matching promise may merge them.
     if (result.kind === 'retry') return;
-    if (result.kind !== 'initial' || activeCountryRequest !== null) return;
+    // Picker calls carry an echoed ID. Their correlated promise alone may apply them;
+    // late or duplicate notifications must never replace a newer selection.
+    if (result.kind !== 'initial' || typeof result.requestId === 'string') return;
+    // A fresh chat request supersedes any in-flight picker request.
+    activeCountryRequest = null;
     pending = null;
     if (!acceptInitial(result)) catalog.error('Could not load station results. Try the country request again.');
     refreshControls();
