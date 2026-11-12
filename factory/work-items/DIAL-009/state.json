@@ -97,12 +97,55 @@
       "seq": 10,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    },
+    {
+      "at": "2026-11-12T04:04:24+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Yep, new specs have improved, current work approved, let's push it into the main and start on the new new work.",
+      "kind": "intervention",
+      "possible_improvement": "Continue exact-revision spec approval before build.",
+      "question": "Approve coverage/NTS PRODUCT.md and TECH.md for implementation?",
+      "reason": "Owner approved new coverage/NTS specs and requested implementation",
+      "seq": 11,
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-009"
+    },
+    {
+      "at": "2026-11-12T04:04:25+00:00",
+      "by": "OWNER",
+      "hashes": {
+        "PRODUCT.md": "41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b",
+        "TECH.md": "8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc"
+      },
+      "kind": "spec_approved",
+      "seq": 12
+    },
+    {
+      "at": "2026-11-12T04:04:25+00:00",
+      "from_state": "WAITING_FOR_SPEC_APPROVAL",
+      "kind": "advanced",
+      "seq": 13,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
     }
   ],
   "final_result": null,
   "handoff": null,
   "id": "DIAL-009",
-  "interventions": [],
+  "interventions": [
+    {
+      "at": "2026-11-12T04:04:24+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Yep, new specs have improved, current work approved, let's push it into the main and start on the new new work.",
+      "possible_improvement": "Continue exact-revision spec approval before build.",
+      "question": "Approve coverage/NTS PRODUCT.md and TECH.md for implementation?",
+      "reason": "Owner approved new coverage/NTS specs and requested implementation",
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-009"
+    }
+  ],
   "objective": "Find more useful stations across existing and additional countries, include NTS Radio through a verified minimal discovery design, and retain clean ChatGPT desktop usability. Globe selection is a separate stretch proposal.",
   "reports": [
     {
@@ -239,9 +282,15 @@
     }
   ],
   "spec": {
-    "mode": "unresolved"
+    "at": "2026-11-12T04:04:25+00:00",
+    "by": "OWNER",
+    "hashes": {
+      "PRODUCT.md": "41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b",
+      "TECH.md": "8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc"
+    },
+    "mode": "approved"
   },
-  "state": "WAITING_FOR_SPEC_APPROVAL",
+  "state": "BUILDING",
   "title": "Expand station and country coverage including NTS Radio",
-  "updated_at": "2026-11-12T03:43:51+00:00"
+  "updated_at": "2026-11-12T04:04:25+00:00"
 }

@@ -254,6 +254,19 @@
       "seq": 26,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-12T04:04:24+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Yep, new specs have improved, current work approved, let's push it into the main and start on the new new work.",
+      "kind": "intervention",
+      "possible_improvement": "Keep repository acceptance and host playback evidence distinct.",
+      "question": "Push current reviewed More stations work to main?",
+      "reason": "Owner explicitly authorized pushing reviewed current work to main; host QA is still unverified",
+      "seq": 27,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-008"
     }
   ],
   "final_result": null,
@@ -269,6 +282,17 @@
       "question": "Proceed with proposed DIAL-008 behavior?",
       "reason": "Owner approved proposed More stations changes and requested subsequent coverage and NTS work",
       "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-008"
+    },
+    {
+      "at": "2026-11-12T04:04:24+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Yep, new specs have improved, current work approved, let's push it into the main and start on the new new work.",
+      "possible_improvement": "Keep repository acceptance and host playback evidence distinct.",
+      "question": "Push current reviewed More stations work to main?",
+      "reason": "Owner explicitly authorized pushing reviewed current work to main; host QA is still unverified",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-008"
     }
   ],
@@ -650,5 +674,5 @@
   },
   "state": "WAITING_FOR_HUMAN",
   "title": "Make More stations reflect actual additional choices",
-  "updated_at": "2026-11-12T03:45:40+00:00"
+  "updated_at": "2026-11-12T04:04:24+00:00"
 }
