@@ -1,0 +1,28 @@
+{
+  "agent": "/root/dial008_implement_current",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "More stations is offered only when additional unique compatible choices are known within the approved bounded scan; no empty or duplicate-only click is advertised as more stations.",
+    "Preserve bounded provider requests, finite stream policy, deduplication, selected/playing continuity, stale guards and neutral Studio UI; failures are distinct from exhausted results.",
+    "Record dated live counts and a genuine pagination test country; clearly distinguish compatible catalog choices from audible playback.",
+    "Independent Review and Verify assess exact candidate and focused regression/host QA evidence; missing host checks remain BLOCKED."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Fix owner-reported misleading More button on France/Japan. Preserve original coverage and hosting gate. US live scan today returns9 unique compatible choices across pages1+5+3, FR6, JP1. Propose bounded lookahead or equivalent known-result pagination rather than guessing from raw provider page length.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-916cbd9d2bb7",
+  "spec": {
+    "at": "2026-11-12T03:28:08+00:00",
+    "by": "OWNER",
+    "hashes": {
+      "PRODUCT.md": "781df6a2a753e875800125bdd84724f55aac9370860ed1ac3795706546c26725",
+      "TECH.md": "2092b7892a3480abd149063409b31e3cad5e91506823430972a48776fe6663ff"
+    },
+    "mode": "approved"
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-008"
+}

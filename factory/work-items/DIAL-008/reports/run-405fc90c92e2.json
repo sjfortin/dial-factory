@@ -1,0 +1,16 @@
+{
+  "agent": "/root/dial008_spec",
+  "at": "2026-11-08T01:03:57+00:00",
+  "document_sha256": {
+    "PRODUCT.md": "99d0c9158251a8870a640d9e4967b6cdb11329de67b92a2dc482b5cf9e262c8f",
+    "TECH.md": "2092b7892a3480abd149063409b31e3cad5e91506823430972a48776fe6663ff"
+  },
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "role": "Spec",
+  "run_id": "run-405fc90c92e2",
+  "summary": "Three-window bounded server catalog, eight-choice local More reveal, explicit partial failure and manual retry; no new origins or hosting.",
+  "work_item": "DIAL-008"
+}

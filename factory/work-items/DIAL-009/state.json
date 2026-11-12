@@ -1,0 +1,247 @@
+{
+  "created_at": "2026-11-12T03:28:40+00:00",
+  "criteria": [
+    "Measure dated compatible station candidates for existing countries and propose additional countries with evidence and explicit coverage gaps.",
+    "Investigate official NTS Radio channels, stream compatibility, attribution and country versus editorial identity; propose clean discoverability without misleading location labels.",
+    "Produce bounded product and technical specs preserving minimal ChatGPT desktop UI, finite stream policy, playback coordination and DIAL-008 behavior; require owner approval before production changes.",
+    "Independent Review and Verify must separate catalog admission, stream reachability and actual ChatGPT playback evidence for any implemented candidate."
+  ],
+  "events": [
+    {
+      "at": "2026-11-12T03:28:40+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Expand station and country coverage including NTS Radio"
+    },
+    {
+      "at": "2026-11-12T03:28:40+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "agent": "/root/dial009_triage",
+      "at": "2026-11-12T03:28:49+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-62d16e1a20e2",
+      "seq": 3
+    },
+    {
+      "at": "2026-11-12T03:32:04+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "SPEC",
+      "role": "Triage",
+      "run_id": "run-62d16e1a20e2",
+      "seq": 4
+    },
+    {
+      "at": "2026-11-12T03:32:04+00:00",
+      "from_state": "TRIAGE",
+      "kind": "advanced",
+      "seq": 5,
+      "terminal_failure_reason": null,
+      "to_state": "PLANNING"
+    },
+    {
+      "agent": "/root/dial009_spec",
+      "at": "2026-11-12T03:32:14+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Spec",
+      "run_id": "run-229ae19bb27c",
+      "seq": 6
+    },
+    {
+      "at": "2026-11-12T03:37:17+00:00",
+      "kind": "run_closed",
+      "reason": "Harness daemon restart lost Spec agent context before report or documents; reconstruct replacement from saved packet and recorded triage.",
+      "result": "BLOCKED",
+      "run_id": "run-229ae19bb27c",
+      "seq": 7
+    },
+    {
+      "agent": "/root/dial009_spec_recovered",
+      "at": "2026-11-12T03:37:51+00:00",
+      "kind": "dispatched",
+      "replaces": "run-229ae19bb27c",
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Spec",
+      "run_id": "run-4972640e22f1",
+      "seq": 8
+    },
+    {
+      "at": "2026-11-12T03:43:51+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Spec",
+      "run_id": "run-4972640e22f1",
+      "seq": 9
+    },
+    {
+      "at": "2026-11-12T03:43:51+00:00",
+      "from_state": "PLANNING",
+      "kind": "advanced",
+      "seq": 10,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "DIAL-009",
+  "interventions": [],
+  "objective": "Find more useful stations across existing and additional countries, include NTS Radio through a verified minimal discovery design, and retain clean ChatGPT desktop usability. Globe selection is a separate stretch proposal.",
+  "reports": [
+    {
+      "agent": "/root/dial009_triage",
+      "at": "2026-11-12T03:32:04+00:00",
+      "complexity": "High enough to require Spec. It combines a substantially broader catalog/origin policy with product taxonomy for a country picker, NTS's non-country editorial channels, and the current DIAL-008 catalog/retry contract, finite media policy, browser CSP, and playback coordination.",
+      "evidence": [
+        "kind: repository; detail: DIAL-007 sampled eight countries (US, FR, GB, CA, DE, JP, ES, IT) and recorded one direct MP3 response candidate per country. It distinguishes direct bytes from audible ChatGPT playback. DIAL-008 records dated catalog counts: US 9, FR 6, JP 1, GB 6, CA 2, DE 1, ES 1, IT 5. These counts are historical provider observations, not durable inventory or audio verification.",
+        "kind: bounded_live_catalog_probe; date: 2026-11-12; detail: Queried one first 50-row Radio Browser page per AU, BR, MX, KR, IN, ZA, NL and SE (votes descending, hidebroken=true). Zero rows in each sample matched the current exact approved media origins and MP3 + exact country-code filter. This is not proof those countries lack playable stations; it shows present origin policy does not provide broader country coverage in these samples.",
+        "kind: official_nts_identity; url: https://www.nts.live/about; detail: NTS describes two 24/7 live channels, human-curated programming and broadcasters across 80+ countries. That identity is editorial/global; assigning the service as a UK country station would mislead.",
+        "kind: official_nts_live_channels; url: https://ntslive.freshdesk.com/support/solutions/articles/77000569502-live-radio/; detail: Official support says NTS broadcasts across two live channels, has studios in London and LA, and presents shows from over 50 countries. It directs listeners to its website/apps.",
+        "kind: official_nts_stream_urls; url: https://ntslive.freshdesk.com/support/solutions/articles/77000587257-tunein; detail: Official NTS support lists direct live URLs: https://stream-relay-geo.ntslive.net/stream?client=direct (NTS 1) and https://stream-relay-geo.ntslive.net/stream2?client=direct (NTS 2). The page says these are alternatives for devices supporting custom stream URLs.",
+        "kind: bounded_nts_http_probe; date: 2026-11-12; detail: One 8-second request per official NTS URL, Range bytes 0-255, read cap 256 bytes. Both returned HTTP 200 audio/mpeg and MP3 frame bytes; both redirected to https://audio-edge-kkqan.sin.d.radiomast.io/nts1 or /nts2 in this run. This is HTTP metadata/body evidence only, not browser CSP acceptance or audible playback. The dynamic-looking geo/edge redirect host is not in the existing exact media policy; the browser resource's CSP will also need appropriate evidence and change review.",
+        "kind: official_nts_live_page; url: https://www.nts.live/radio; detail: Official live page identifies channel 1 and channel 2 and offers live listening; use as clean secondary discovery/source attribution."
+      ],
+      "open_questions": [
+        "For NTS, should the product offer NTS 1 and NTS 2 as a separate editorial/global collection, rather than place them under United Kingdom? Recommended: separate collection, with NTS London/LA context only as editorial metadata, not a country claim.",
+        "Should NTS be admitted only after the owner approves a dedicated redirect/CSP treatment for its official geo-relay endpoint and an independent browser/host check? Recommended: yes; no wildcard media origins or arbitrary redirect-following.",
+        "Which additional countries are most valuable? Existing exact origins produced zero matches in the bounded first-page sample across AU, BR, MX, KR, IN, ZA, NL and SE; prioritize candidate research with owner-selected regions or a stated global coverage goal.",
+        "Does 'more stations per country' mean raising DIAL-008's 30-choice ceiling, adding more provider windows, or improving diversity within the same bounded catalog? Recommend retain current three windows / 30 cap for this phase and grow the exact-origin candidate set only with dated evidence; seek owner approval before changing cap or scan budget.",
+        "Should globe selection remain a separately approved visual stretch proposal after catalog/player behavior is accepted? Recommended: yes."
+      ],
+      "recommendation": "SPEC",
+      "recommendation_reason": "Prepare bounded product and technical specs before implementation because NTS requires distinct editorial identity and a stream/CSP policy decision, while broader country coverage requires new candidate origins and explicit acceptance criteria. Keep the globe picker as a separate stretch proposal. Require owner approval of exact spec revisions before any production change. Independent Review and Verify must independently separate catalog admission, direct reachability, and ChatGPT playback evidence for each admitted candidate; absent host playback remains BLOCKED.",
+      "relevant_code": [
+        "src/discovery.ts: country-code Radio Browser discovery; three 50-row windows, MP3-only filter, exact-country validation, deduplication, 30-choice cap, signed click tokens, exact UUID overrides.",
+        "src/media-policy.ts: finite exact HTTPS origins; rejects explicit ports and playlist formats.",
+        "src/server.ts: app-only country discovery contract and resource registration.",
+        "src/station-list.ts, src/player.ts, src/playback-coordinator.ts, public/discovery.html: bounded catalog reveal, selection/playback, lightweight UI and same-browser coordination.",
+        "test/discovery.test.js, test/station-list.test.js, test/ui-harness.test.js, test/coordinator-timers.test.js: automated policy, pagination/reveal, stale-result, and coordination coverage; not run during this triage.",
+        "factory/work-items/DIAL-008/PRODUCT.md and TECH.md: active concurrent behavior contract; preserve finite policy, 30-item cap, retry semantics, safe UI, click disclosure and playback state.",
+        "docs/DIAL-006-COVERAGE.md and docs/DIAL-007-CANDIDATES.md: dated 2026-11-06 candidate and coverage evidence; docs/DIAL-008 evidence records 2026-11-08 catalog counts."
+      ],
+      "risks": [
+        "Catalog admission, direct stream reachability, browser-origin/CSP compatibility, and actual audible ChatGPT playback are separate claims; no catalog row should be labelled playable based only on directory or bounded HTTP evidence.",
+        "NTS official geo-relay redirects beyond the approved exact-origin list. Broad wildcard CSP/media origins or following arbitrary redirects would weaken the current finite trust boundary; a documented stable stream contract or narrow NTS-specific policy is needed before admission.",
+        "Country expansion may require new provider origins. The 2026-11-12 first-page samples found zero new-country matches using current origins, so more countries require separately researched candidate streams and exact-origin review.",
+        "Globe-based country selection adds interaction and layout cost to a currently compact desktop player; keep it explicitly stretch/deferred and never block the functional country list.",
+        "DIAL-008 is concurrently being implemented; any approved DIAL-009 work must preserve its bounded three-window scan, 30-choice cap, known-choice More semantics, partial/retry handling, selection/audio continuity, attribution and safe rendering."
+      ],
+      "role": "Triage",
+      "run_id": "run-62d16e1a20e2",
+      "scope": "Read-only triage of country/station catalog breadth, official NTS Radio discovery and stream feasibility, minimal ChatGPT desktop UI, and a separate globe picker stretch proposal. No production or lifecycle files changed.",
+      "work_item": "DIAL-009"
+    },
+    {
+      "agent": "/root/dial009_spec_recovered",
+      "at": "2026-11-12T03:43:51+00:00",
+      "documents": [
+        "PRODUCT.md",
+        "TECH.md"
+      ],
+      "evidence": [
+        "2026-11-12 UTC: first 50-row Radio Browser window for each of AU BR MX KR IN ZA NL SE, and offsets 0/50/100 for US FR JP GB CA DE ES IT; all sampled requests succeeded. Exact 16 UUID+URL pairs in TECH.md were observed in matching country MP3 rows.",
+        "2026-11-12 UTC: each of the 16 proposed exact URLs returned no-redirect 200 or 206 audio/mpeg and first MP3 frame bytes in an 8-second, 256-byte capped probe. This is direct stream evidence, not ChatGPT host audio.",
+        "2026-11-12 UTC: official NTS relay URLs returned 302 via streams.radiomast.io to audio-edge-kkqan.sin.d.radiomast.io; final endpoints returned 200 audio/mpeg and MP3 bytes. Stable finite CSP and host playback remain unresolved.",
+        "NTS official source URLs: https://www.nts.live/about ; https://www.nts.live/radio ; https://ntslive.freshdesk.com/support/solutions/articles/77000569502-live-radio/ ; https://ntslive.freshdesk.com/support/solutions/articles/77000587257-tunein"
+      ],
+      "owner_review": "Approve exact PRODUCT.md and TECH.md hashes before build. NTS in-player audio is gated on finite redirect/CSP and real ChatGPT host evidence; otherwise the specified NTS collection remains link-only. The globe is deferred. No production code changed.",
+      "product_sha256": "41a87cd785119be88e575960eb13cd768688a4ebcfec2a0d88c6b4e03b04916b",
+      "role": "Spec",
+      "run_id": "run-4972640e22f1",
+      "tech_sha256": "8fd2c9a939dcaa834d128c13a94244eda674635f18320db46287cd39ec1fd7fc",
+      "work_item": "DIAL-009"
+    }
+  ],
+  "resume_stage": null,
+  "runs": [
+    {
+      "agent": "/root/dial009_triage",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 195,
+      "ended_at": "2026-11-12T03:32:04+00:00",
+      "harness": "current-collaboration",
+      "id": "run-62d16e1a20e2",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "SPEC",
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "Read-only investigation of broader coverage and official NTS integration before bounded spec",
+      "started_at": "2026-11-12T03:28:49+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial009_spec",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 303,
+      "ended_at": "2026-11-12T03:37:17+00:00",
+      "harness": "current-collaboration",
+      "id": "run-229ae19bb27c",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Spec",
+      "selection_reason": "Design bounded station/country expansion and official NTS support with exact-origin compatibility and minimal UX",
+      "started_at": "2026-11-12T03:32:14+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial009_spec_recovered",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 360,
+      "ended_at": "2026-11-12T03:43:51+00:00",
+      "harness": "current-collaboration",
+      "id": "run-4972640e22f1",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": "run-229ae19bb27c",
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Spec",
+      "selection_reason": "Daemon restart lost previous Spec context before artifacts; reconstruct from saved triage/packet and actual partial progress",
+      "started_at": "2026-11-12T03:37:51+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "WAITING_FOR_SPEC_APPROVAL",
+  "title": "Expand station and country coverage including NTS Radio",
+  "updated_at": "2026-11-12T03:43:51+00:00"
+}

@@ -1,5 +1,7 @@
 # Dial roadmap — proposal
 
+Current checkpoint (2026-11-12): DIAL-008 is independently reviewed and locally verified, waiting for actual host QA; DIAL-009 country/station expansion and NTS specs await exact approval. Globe-based selection is a separate owner-requested stretch goal. See [NEXT-SESSION.md](NEXT-SESSION.md) and canonical factory state records for current status; the phase descriptions below retain earlier proposal history.
+
 This is a proposed sequence, not approval to implement every phase. DIAL-004 playback coordination and DIAL-005 Studio redesign are complete. DIAL-006 is the current planning phase: bounded station coverage for FR, GB, US, CA, DE, JP, ES and IT. Hosting follows only after the owner accepts coverage and separately approves its scope.
 
 ## Current delivery: country discovery (DIAL-002)

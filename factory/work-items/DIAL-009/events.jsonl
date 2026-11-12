@@ -1,0 +1,10 @@
+{"at": "2026-11-12T03:28:40+00:00", "kind": "created", "seq": 1, "title": "Expand station and country coverage including NTS Radio"}
+{"at": "2026-11-12T03:28:40+00:00", "from_state": "INTAKE", "kind": "advanced", "seq": 2, "terminal_failure_reason": null, "to_state": "TRIAGE"}
+{"agent": "/root/dial009_triage", "at": "2026-11-12T03:28:49+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-luna", "requested_reasoning": "medium", "role": "Triage", "run_id": "run-62d16e1a20e2", "seq": 3}
+{"at": "2026-11-12T03:32:04+00:00", "attempt": null, "candidate_commit": null, "kind": "reported", "result": "SPEC", "role": "Triage", "run_id": "run-62d16e1a20e2", "seq": 4}
+{"at": "2026-11-12T03:32:04+00:00", "from_state": "TRIAGE", "kind": "advanced", "seq": 5, "terminal_failure_reason": null, "to_state": "PLANNING"}
+{"agent": "/root/dial009_spec", "at": "2026-11-12T03:32:14+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-sol", "requested_reasoning": "high", "role": "Spec", "run_id": "run-229ae19bb27c", "seq": 6}
+{"at": "2026-11-12T03:37:17+00:00", "kind": "run_closed", "reason": "Harness daemon restart lost Spec agent context before report or documents; reconstruct replacement from saved packet and recorded triage.", "result": "BLOCKED", "run_id": "run-229ae19bb27c", "seq": 7}
+{"agent": "/root/dial009_spec_recovered", "at": "2026-11-12T03:37:51+00:00", "kind": "dispatched", "replaces": "run-229ae19bb27c", "requested_model": "gpt-6-sol", "requested_reasoning": "high", "role": "Spec", "run_id": "run-4972640e22f1", "seq": 8}
+{"at": "2026-11-12T03:43:51+00:00", "attempt": null, "candidate_commit": null, "kind": "reported", "result": "REPORTED", "role": "Spec", "run_id": "run-4972640e22f1", "seq": 9}
+{"at": "2026-11-12T03:43:51+00:00", "from_state": "PLANNING", "kind": "advanced", "seq": 10, "terminal_failure_reason": null, "to_state": "WAITING_FOR_SPEC_APPROVAL"}

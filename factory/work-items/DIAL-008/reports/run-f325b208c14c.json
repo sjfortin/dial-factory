@@ -1,0 +1,41 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "architecture": [
+    "Server collects offsets 0/50/100 sequentially and client reveals buffered choices in batches of eight. Retry is app-only, uses the same collector, and merges into retained catalog state.",
+    "Country resource moves to country-v10; fixed-player resource and finite media policy remain unchanged."
+  ],
+  "at": "2026-11-12T03:39:19+00:00",
+  "attempt": 1,
+  "candidate_commit": "ec3505ede5dd02c6aea8e29b965d7c39a67fb3a6",
+  "complexity": [
+    "Collection and local reveal simplify speculative pagination. Catalog retention makes summary state distinct from the latest scan metadata; that distinction needs to be explicit."
+  ],
+  "correctness": [
+    "Inspected exact HEAD candidate and changed production files. More derives from visibleCount < rows.length and makes no tool request. Retry promise identity, generation and country checks reject late retries and unsolicited notifications.",
+    "Read-only synthetic DOM probes reproduced missing cap disclosure for partial+cap and merged-cap cases and contradictory retained-versus-latest retry summary. No production files edited."
+  ],
+  "findings": [
+    "P2 — src/station-list.ts:41,103-106: Disclose the display cap independently of completeness and derive it after retry merges. The partial branch suppresses an already-true choiceLimitReached flag. Separately, 20 retained rows plus 20 unique retry rows reaches the 30-row client cap while both server flags are false, so discarded choices are not disclosed. Approved PRODUCT acceptance 3 and TECH require cap and partial state to coexist and truthful summary of the capped buffer. Render both facts and add focused UI regressions for partial+cap and merged-cap.",
+    "P2 — src/station-list.ts:42-43,101-106: Scope retry summaries to distinguish retained choices from the latest scan. Retry replaces status/windows while retaining prior rows, so a complete no_supported_stations retry can display both 1 compatible catalog choices and No compatible choices in these windows. After merging it also labels only the latest request row count as the inspection count for the accumulated buffer. Label latest-scan findings separately from retained catalog totals so empty/failure retry outcomes remain truthful without erasing selection/audio; add a retained-row plus empty-successful-retry test."
+  ],
+  "recommendation": "REVISE",
+  "requirements": [
+    "Read bootstrap contract, Review role, dispatch packet, approved PRODUCT.md and TECH.md, and actual Implement report run-916cbd9d2bb7. SHA-256 hashes of both spec files match packet approval.",
+    "Known-choice More, bounded three-window collection, finite filtering, manual retry and stale generation guards are implemented. The choice-limit and retained-result summary requirements have gaps described in findings.",
+    "Implement records 2026-11-12 eight-country catalog counts and genuine US later-window choices. Review did not repeat live scans; independent Verify must supply its own evidence. No human host QA pass is inferred."
+  ],
+  "role": "Review",
+  "run_id": "run-f325b208c14c",
+  "security": [
+    "No added provider/media origins or CSP expansion. Existing bounded response reader, redirect rejection, stream URL policy, UUID override and signed click-token logic retained. Browser rows are revalidated and names rendered with textContent.",
+    "No merge, push, publication or deployment performed."
+  ],
+  "tests": [
+    "npm test: PASS, TypeScript/esbuild build and 32 tests, 0 failures. Covers server/resource delivery, provider limits, filtering, local reveal, retry merge, stale guards and existing playback coordination.",
+    "git diff --check: PASS. git status remains only unrelated docs/backlog.md and untracked DIAL-008/DIAL-009 lifecycle files.",
+    "Focused node --input-type=module probe against built dist/station-list.js: partial 30-row catalog with choiceLimitReached=true renders Scan incomplete but no choice-limit text; initial partial 20 rows plus complete retry 20 disjoint rows produces 30 retained rows but no choice-limit text.",
+    "Focused catalog probe: retain one row from a partial initial response then accept complete no_supported_stations retry; summary simultaneously says 1 compatible catalog choices and No compatible choices in these windows without explaining retained versus latest scan.",
+    "No audible ChatGPT playback, host CSP, host More/retry continuity, host Pause, layout or click-disclosure observations were performed. Those checks remain BLOCKED."
+  ],
+  "work_item": "DIAL-008"
+}
