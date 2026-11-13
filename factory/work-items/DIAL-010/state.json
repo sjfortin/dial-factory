@@ -272,6 +272,19 @@
       "seq": 28,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-13T01:00:11+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approved",
+      "kind": "intervention",
+      "possible_improvement": "Preserve actual ChatGPT playback as a separate evidence gate after rollout.",
+      "question": "Approve pushing merging and updating testing endpoint for NTS ChatGPT QA?",
+      "reason": "Owner explicitly approved push merge and testing-endpoint rollout of reviewed NTS experiment",
+      "seq": 29,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-010"
     }
   ],
   "final_result": null,
@@ -287,6 +300,17 @@
       "question": "Approve DIAL-010 experimental NTS playback PRODUCT.md and TECH.md for implementation?",
       "reason": "Owner explicitly approved exact NTS experimental playback specs",
       "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-010"
+    },
+    {
+      "at": "2026-11-13T01:00:11+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approved",
+      "possible_improvement": "Preserve actual ChatGPT playback as a separate evidence gate after rollout.",
+      "question": "Approve pushing merging and updating testing endpoint for NTS ChatGPT QA?",
+      "reason": "Owner explicitly approved push merge and testing-endpoint rollout of reviewed NTS experiment",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-010"
     }
   ],
@@ -722,5 +746,5 @@
   },
   "state": "WAITING_FOR_HUMAN",
   "title": "Prove NTS in-app playback using Omarchy reference",
-  "updated_at": "2026-11-13T00:54:55+00:00"
+  "updated_at": "2026-11-13T01:00:11+00:00"
 }
