@@ -1,0 +1,72 @@
+{
+  "created_at": "2026-11-13T06:29:19+00:00",
+  "criteria": [
+    "Investigate owner-reported ChatGPT card showing Choose a station without Countries/NTS tabs; distinguish current resource delivery, iframe sizing, stale connection metadata and actual observed host evidence.",
+    "Reproduce and fix any verified presentation or entry-point defect without changing approved station/playback/network policy; give a direct verifiable path to the existing NTS UI if needed.",
+    "Independently Review and Verify an exact fix candidate with real rendered resource checks; record actual host outcome or explicit missing evidence without inferring success."
+  ],
+  "events": [
+    {
+      "at": "2026-11-13T06:29:19+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Diagnose missing Countries and NTS tabs in ChatGPT"
+    },
+    {
+      "at": "2026-11-13T06:29:19+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "agent": "/root/dial011_triage",
+      "at": "2026-11-13T06:29:39+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-86a66a2f6c83",
+      "seq": 3
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "DIAL-011",
+  "interventions": [],
+  "objective": "Resolve owner-reported Choose a station card with missing navigation; inspect actual delivered UI and host sizing/cache entry points, avoid repeated unsupported refresh advice.",
+  "reports": [],
+  "resume_stage": null,
+  "runs": [
+    {
+      "agent": "/root/dial011_triage",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": null,
+      "ended_at": null,
+      "harness": "current-collaboration",
+      "id": "run-86a66a2f6c83",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": null,
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "Identify actual pasted legacy card wording versus current server resource and connection metadata before choosing fix",
+      "started_at": "2026-11-13T06:29:39+00:00",
+      "status": "RUNNING",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "TRIAGE",
+  "title": "Diagnose missing Countries and NTS tabs in ChatGPT",
+  "updated_at": "2026-11-13T06:29:39+00:00"
+}
