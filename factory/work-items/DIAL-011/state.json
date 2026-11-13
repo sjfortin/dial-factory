@@ -30,6 +30,24 @@
       "role": "Triage",
       "run_id": "run-86a66a2f6c83",
       "seq": 3
+    },
+    {
+      "at": "2026-11-13T06:31:59+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "HUMAN_INPUT",
+      "role": "Triage",
+      "run_id": "run-86a66a2f6c83",
+      "seq": 4
+    },
+    {
+      "at": "2026-11-13T06:31:59+00:00",
+      "from_state": "TRIAGE",
+      "kind": "advanced",
+      "seq": 5,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
     }
   ],
   "final_result": null,
@@ -37,15 +55,51 @@
   "id": "DIAL-011",
   "interventions": [],
   "objective": "Resolve owner-reported Choose a station card with missing navigation; inspect actual delivered UI and host sizing/cache entry points, avoid repeated unsupported refresh advice.",
-  "reports": [],
-  "resume_stage": null,
+  "reports": [
+    {
+      "agent": "/root/dial011_triage",
+      "at": "2026-11-13T06:31:59+00:00",
+      "complexity": "Low for diagnosis; medium for a verified remedy because the host-rendered card and connector cache behavior are not directly observable here.",
+      "evidence": [
+        "{\"source\": \"owner-reported observation supplied in dispatch\", \"observation\": \"Fresh country card showed 'Choose a station' and no tabs, plus '4 supported stations for FR. Inspected provider rows none in requested window 1–50. Bounded scan complete. Select one, then press Play. Results can change between requests.' and 'Scans up to three pages of 50 provider rows; results may shift between requests.' Station names: RadioMeuh, RMC, BFMBusiness, BFMAvecRMC.\", \"limits\": \"Reported text only; visual card, dimensions, and host rendering were not independently inspectable.\"}",
+        "{\"source\": \"current HEAD source\", \"observation\": \"Current resource URI is country-v13-nts-experiment and current HTML includes both Countries and NTS tab controls. Current tool description promises up to 30 choices from three windows.\"}",
+        "{\"source\": \"current connected Dial tool description and read-only FR call\", \"observation\": \"Connected tool description still says first 50/up to 10. Calling it for FR now returned five choices and three successful windows, complete; its text says '5 compatible catalog choices ... in three bounded provider windows'. This indicates stale tool description metadata can coexist with current backend results.\"}",
+        "{\"source\": \"history and DIAL-010 rollout records\", \"observation\": \"The owner-pasted scan wording is found in historical country UI commit ec3505e^ (resource country-v9, no tabs). DIAL-010 records a public SDK resource read of the current v13 resource with NTS content and a complete five-choice FR result.\"}",
+        "{\"source\": \"official OpenAI plugin deployment documentation, as independently checked by Foreman\", \"observation\": \"The #Refreshmetadata guidance says deploy/restart the server, open the connection settings at https://chatgpt.com/plugins, choose Refresh and confirm metadata changed, then start a new conversation. Server restart/deployment is already recorded in DIAL-010 rollout; this triage worker cannot perform or observe the owner connection refresh because the connected UI/browser surfaces are unavailable.\", \"limits\": \"This is documented as a recovery procedure, not evidence that the particular owner card has refreshed.\"}"
+      ],
+      "open_questions": [
+        "After the documented connection metadata refresh and a new conversation, does find_stations_by_country render the current country-v13-nts-experiment resource with Countries/NTS tabs?",
+        "Can the owner provide a screenshot or inspectable card/resource identity if the missing tabs remain after refresh?"
+      ],
+      "recommendation": "HUMAN_INPUT",
+      "relevant_code": [
+        "src/server.ts:12, 45-47, 73-76: current discovery resource is ui://dial/country-v13-nts-experiment.html; find_stations_by_country links that URI.",
+        "src/server.ts:74-76: current server tool description says up to 30 choices in three bounded windows.",
+        "public/discovery.html:63: current resource defines Countries and NTS tabs and their panels.",
+        "factory/work-items/DIAL-010/evidence/rollout.md and rollout-check.json: public SDK read at 2026-11-13T01:00:54Z retrieved country-v13-nts-experiment; NTS URLs/origins were present; FR scan returned 5 and completed.",
+        "Historical commit ec3505e^: country-v10 resource contained the exact 'Scanning three windows of up to 50 provider rows; results may shift between requests.' note and no Countries/NTS tab markup. git log -S locates the owner-pasted 'Inspected provider rows none in requested window 1–50' wording in ec3505e.",
+        "Current connected tool metadata exposed in this runtime still describes 'up to 10 playable MP3 stations among the first 50 Radio Browser results'."
+      ],
+      "risks": [
+        "Do not label this as iframe clipping: current source and owner-pasted legacy text point toward stale UI/resource content, while no rendered dimensions were captured.",
+        "The exact scan wording is present in historical country UI commit ec3505e^ (resource country-v9) and absent from current source. It strongly identifies legacy UI content; which host cache delivered it remains unobserved.",
+        "A tool-description mismatch is directly observable, but does not establish whether refreshing/reconnecting changes the app card.",
+        "Do not change station, playback, or network policy to address this presentation issue."
+      ],
+      "role": "Triage",
+      "run_id": "run-86a66a2f6c83",
+      "scope": "Read-only comparison of owner-pasted fresh-country-card text, current HEAD MCP resource/tool metadata, historical country UI revisions, and recorded public rollout evidence. Actual rendered owner card is not accessible in this run; no product or lifecycle files changed.",
+      "work_item": "DIAL-011"
+    }
+  ],
+  "resume_stage": "TRIAGE",
   "runs": [
     {
       "agent": "/root/dial011_triage",
       "attempt": null,
       "cost": null,
-      "duration_seconds": null,
-      "ended_at": null,
+      "duration_seconds": 140,
+      "ended_at": "2026-11-13T06:31:59+00:00",
       "harness": "current-collaboration",
       "id": "run-86a66a2f6c83",
       "input_tokens": null,
@@ -54,19 +108,19 @@
       "reported_model": null,
       "requested_model": "gpt-6-luna",
       "requested_reasoning": "medium",
-      "result": null,
+      "result": "HUMAN_INPUT",
       "retry_of": null,
       "role": "Triage",
       "selection_reason": "Identify actual pasted legacy card wording versus current server resource and connection metadata before choosing fix",
       "started_at": "2026-11-13T06:29:39+00:00",
-      "status": "RUNNING",
+      "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
     "mode": "unresolved"
   },
-  "state": "TRIAGE",
+  "state": "WAITING_FOR_HUMAN",
   "title": "Diagnose missing Countries and NTS tabs in ChatGPT",
-  "updated_at": "2026-11-13T06:29:39+00:00"
+  "updated_at": "2026-11-13T06:31:59+00:00"
 }
