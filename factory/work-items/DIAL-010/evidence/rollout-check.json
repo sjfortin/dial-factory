@@ -1,0 +1,26 @@
+{
+  "at": "2026-11-13T01:00:54.444Z",
+  "endpoint": "https://macbook-air.tail10dbb3.ts.net/mcp",
+  "resourceUri": "ui://dial/country-v13-nts-experiment.html",
+  "checks": {
+    "experimentNote": true,
+    "nts1": true,
+    "nts2": true,
+    "origins": true,
+    "connectDomainsEmpty": true
+  },
+  "countries": [
+    {
+      "countryCode": "US",
+      "status": "ok",
+      "choices": 10,
+      "scanState": "complete"
+    },
+    {
+      "countryCode": "FR",
+      "status": "ok",
+      "choices": 5,
+      "scanState": "complete"
+    }
+  ]
+}
