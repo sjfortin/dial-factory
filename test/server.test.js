@@ -80,6 +80,17 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
     connectDomains: [],
     resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS]
   });
+  for (let version = 1; version <= 12; version++) {
+    const alias = `ui://dial/country-v${version}.html`;
+    const compatible = await client.readResource({ uri: alias });
+    assert.equal(compatible.contents[0].uri, alias, 'MCP resource URI matches the exact requested alias');
+    assert.equal(compatible.contents[0].mimeType, countryResource.contents[0].mimeType);
+    assert.equal(compatible.contents[0].text, countryResource.contents[0].text, 'old URI serves the complete current renderer');
+    assert.deepEqual(compatible.contents[0]._meta.ui.csp, countryResource.contents[0]._meta.ui.csp);
+    assert.match(compatible.contents[0].text, /id="nts-tab"/);
+    assert.match(compatible.contents[0].text, /stream2\?client=direct/);
+  }
+  await assert.rejects(client.readResource({ uri: 'ui://dial/country-v99.html' }), /not found/i);
   assert.deepEqual(NTS_CHANNELS, {
     '1': { id: 'nts-1', name: 'NTS 1', streamUrl: 'https://stream-relay-geo.ntslive.net/stream?client=direct' },
     '2': { id: 'nts-2', name: 'NTS 2', streamUrl: 'https://stream-relay-geo.ntslive.net/stream2?client=direct' }

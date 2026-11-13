@@ -10,6 +10,23 @@ import { NTS_RESOURCE_ORIGINS } from './nts-policy.js';
 
 const UI_URI = 'ui://dial/radio-v9.html';
 const DISCOVERY_URI = 'ui://dial/country-v13-nts-experiment.html';
+// Previously registered country UI addresses may remain in ChatGPT tool metadata.
+// Each serves the current renderer; these are explicit historical URIs, not a pattern.
+const COUNTRY_RESOURCE_URIS = [
+  DISCOVERY_URI,
+  'ui://dial/country-v1.html',
+  'ui://dial/country-v2.html',
+  'ui://dial/country-v3.html',
+  'ui://dial/country-v4.html',
+  'ui://dial/country-v5.html',
+  'ui://dial/country-v6.html',
+  'ui://dial/country-v7.html',
+  'ui://dial/country-v8.html',
+  'ui://dial/country-v9.html',
+  'ui://dial/country-v10.html',
+  'ui://dial/country-v11.html',
+  'ui://dial/country-v12.html'
+] as const;
 const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',
@@ -43,10 +60,12 @@ function makeServer() {
       }
     }]
   }));
-  registerAppResource(server, 'Country radio player', DISCOVERY_URI, {}, async () => ({
-    contents: [{ uri: DISCOVERY_URI, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
-      _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS] } } } }]
-  }));
+  for (const uri of COUNTRY_RESOURCE_URIS) {
+    registerAppResource(server, uri === DISCOVERY_URI ? 'Country radio player' : `Country radio player compatibility ${uri}`, uri, {}, async () => ({
+      contents: [{ uri, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
+        _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS] } } } }]
+    }));
+  }
   registerAppResource(server, 'Dial two-thread capability probe v2', PROBE_URI, {}, async () => ({
     contents: [{ uri: PROBE_URI, mimeType: RESOURCE_MIME_TYPE, text: probeHtml,
       _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: ['https://stream.radioparadise.com'] } } } }]
