@@ -1,0 +1,42 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "architecture": [
+    "NTS constants are isolated in nts-policy.ts; Radio Browser admission stays unchanged. Only country-v13-nts-experiment discovery resource adds NTS origins; connectDomains remains empty.",
+    "NTS selection enters the existing player/controller with source=nts and no click token. Controller retains the complete Selection object, so source-aware errors do not lose NTS metadata."
+  ],
+  "at": "2026-11-12T08:49:45+00:00",
+  "attempt": 1,
+  "candidate_commit": "b069150cbf75fffda831f22517fa0f117e221867",
+  "complexity": [
+    "Implementation is bounded and reuses one controller. Attribution visibility needs explicit selected-source state across tabs rather than only current collection plus countrySelected."
+  ],
+  "correctness": [
+    "Explicit NTS Play/Pause/Play-again, channel switching, source clearing, stale event guards and shared coordination reuse existing paths. Source-aware error fallback is applied to media rejection, media error and coordination failures, leaving Play retry available.",
+    "NTS token absence prevents Radio Browser reporting; selected station title, no country/codec metadata, official links and experimental note are present.",
+    "Tab changes do not alter playback, but Countries tab unconditionally reveals Radio Browser attribution even when the selected source is NTS; this violates the approved source attribution rule."
+  ],
+  "findings": [
+    "P2 — src/player.ts:46-49 (showCollection): Keep the Radio Browser playback disclosure hidden while NTS remains selected, including after switching to Countries. The current collection !== countries && !countrySelected expression makes it visible unconditionally on the Countries tab. Delivered-bundle reproduction: select NTS 1, click Countries; title remains NTS 1 and its audio source is retained, but the notice says that after playback starts Dial reports a Radio Browser click and server IP. No such report happens for NTS. Approved PRODUCT says NTS has no country attribution, and TECH explicitly requires country attribution hidden for NTS. Track selected source independently from the displayed collection, preserve ordinary catalog attribution/no-selection behavior and selected-country disclosure across tabs, and add a regression covering NTS selected/playing plus tab navigation and return to country selection."
+  ],
+  "recommendation": "REVISE",
+  "requirements": [
+    "Read bootstrap contract, Review role, dispatch packet, approved PRODUCT/TECH and Implement report. HEAD equals candidate and SHA-256 hashes match approval.",
+    "Approved DIAL-010 explicitly supersedes the earlier pre-enable NTS host gate for this finite experiment; enabling experimental controls before host proof is within scope.",
+    "Two fixed published URLs, three exact discovery-only resource origins, existing single controller and experimental note are implemented. One NTS attribution requirement fails on collection navigation.",
+    "Implement records owner reference URLs/backend and dated bounded HTTP routes. Those are reported evidence, not Review observations. No actual ChatGPT audible/CSP result is inferred; overall host-dependent outcome remains BLOCKED."
+  ],
+  "role": "Review",
+  "run_id": "run-d7c287aae715",
+  "security": [
+    "Exact official relay sources and three observed NTS origins only; no wildcard, arbitrary URL input, proxy, server media fetch or country-policy expansion.",
+    "NTS is not a provider row and has no click token. Existing country filtering, safe text rendering and signed click reporting unchanged.",
+    "Generic NTS error says unavailable or blocked without claiming a CSP diagnosis. Unlisted redirect behavior still depends on actual host enforcement and remains unverified."
+  ],
+  "tests": [
+    "npm test independently run at exact candidate: PASS, build and 40 tests, zero failures. Includes exact URL/CSP/resource assertions, delivered UI NTS play/pause/retry/switching and click isolation, controller coordination and country regressions.",
+    "Additional temporary delivered-bundle harness /tmp/dial010-review-attribution.mjs: selecting NTS 1 then switching Countries prints NTS_SELECTED_ON_COUNTRIES NTS 1 radioBrowserDisclosureVisible true. Original continuation assertions still pass.",
+    "git diff --check: PASS. No production edits, lifecycle writes, merge, push or deployment by Review.",
+    "No fresh HTTP route probe, actual browser media event observation, or ChatGPT audible/CSP/layout check performed by Review. Mocks do not establish audible playback; these evidence layers remain for independent Verify."
+  ],
+  "work_item": "DIAL-010"
+}

@@ -1,0 +1,63 @@
+{
+  "started": "2026-11-13T00:50:36.205Z",
+  "finished": "2026-11-13T00:50:40.075Z",
+  "method": "GET, Range bytes=0-63, redirect manual, max five hops, max 8 seconds per hop and max 30 seconds per channel, read at most 64 bytes from final response",
+  "results": [
+    {
+      "name": "NTS 1",
+      "initial": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+      "hops": [
+        {
+          "url": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+          "status": 302,
+          "contentType": "text/html",
+          "location": "https://streams.radiomast.io/nts1"
+        },
+        {
+          "url": "https://streams.radiomast.io/nts1",
+          "status": 302,
+          "contentType": "text/html; charset=utf-8",
+          "location": "https://audio-edge-kkqan.sin.d.radiomast.io/nts1"
+        },
+        {
+          "url": "https://audio-edge-kkqan.sin.d.radiomast.io/nts1",
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "location": null
+        }
+      ],
+      "bytesRead": 64,
+      "first16Hex": "ff fb d0 40 3e 80 07 01 68 57 d3 2c 63 68 b7 2c",
+      "mpegFrameSync": true,
+      "error": null
+    },
+    {
+      "name": "NTS 2",
+      "initial": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+      "hops": [
+        {
+          "url": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+          "status": 302,
+          "contentType": "text/html",
+          "location": "https://streams.radiomast.io/nts2"
+        },
+        {
+          "url": "https://streams.radiomast.io/nts2",
+          "status": 302,
+          "contentType": "text/html; charset=utf-8",
+          "location": "https://audio-edge-kkqan.sin.d.radiomast.io/nts2"
+        },
+        {
+          "url": "https://audio-edge-kkqan.sin.d.radiomast.io/nts2",
+          "status": 200,
+          "contentType": "audio/mpeg",
+          "location": null
+        }
+      ],
+      "bytesRead": 64,
+      "first16Hex": "ff fb d0 40 3e 80 06 10 69 58 d3 18 63 78 c7 8d",
+      "mpegFrameSync": true,
+      "error": null
+    }
+  ]
+}

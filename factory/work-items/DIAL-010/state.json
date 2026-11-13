@@ -77,12 +77,219 @@
       "seq": 8,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    },
+    {
+      "at": "2026-11-12T08:42:54+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "apporved",
+      "kind": "intervention",
+      "possible_improvement": "Keep experimental enablement separate from actual host playback acceptance.",
+      "question": "Approve DIAL-010 experimental NTS playback PRODUCT.md and TECH.md for implementation?",
+      "reason": "Owner explicitly approved exact NTS experimental playback specs",
+      "seq": 9,
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-010"
+    },
+    {
+      "at": "2026-11-12T08:42:55+00:00",
+      "by": "OWNER",
+      "hashes": {
+        "PRODUCT.md": "787490880e3bebba758147156b0525affebbca15e83837311d2ecf6989db751f",
+        "TECH.md": "878b72aec6c5b354d30747ce07eb34dda9b3574584ea19c15970467b294220d3"
+      },
+      "kind": "spec_approved",
+      "seq": 10
+    },
+    {
+      "at": "2026-11-12T08:42:55+00:00",
+      "from_state": "WAITING_FOR_SPEC_APPROVAL",
+      "kind": "advanced",
+      "seq": 11,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial010_implement",
+      "at": "2026-11-12T08:43:12+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-b802603a6511",
+      "seq": 12
+    },
+    {
+      "at": "2026-11-12T08:47:59+00:00",
+      "attempt": 1,
+      "candidate_commit": "b069150cbf75fffda831f22517fa0f117e221867",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-b802603a6511",
+      "seq": 13
+    },
+    {
+      "at": "2026-11-12T08:47:59+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 14,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "at": "2026-11-12T08:47:59+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-d7c287aae715",
+      "seq": 15
+    },
+    {
+      "at": "2026-11-12T08:49:45+00:00",
+      "attempt": 1,
+      "candidate_commit": "b069150cbf75fffda831f22517fa0f117e221867",
+      "kind": "reported",
+      "result": "REVISE",
+      "role": "Review",
+      "run_id": "run-d7c287aae715",
+      "seq": 16
+    },
+    {
+      "at": "2026-11-12T08:49:45+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 17,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial010_implement",
+      "at": "2026-11-12T08:49:45+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-b4991b05b08d",
+      "seq": 18
+    },
+    {
+      "at": "2026-11-12T08:51:03+00:00",
+      "attempt": 2,
+      "candidate_commit": "67ec8f6f14af468de533884d498126887558ea4c",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-b4991b05b08d",
+      "seq": 19
+    },
+    {
+      "at": "2026-11-12T08:51:04+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 20,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "at": "2026-11-12T08:51:04+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-b90ba03fe77e",
+      "seq": 21
+    },
+    {
+      "at": "2026-11-12T08:52:06+00:00",
+      "attempt": 2,
+      "candidate_commit": "67ec8f6f14af468de533884d498126887558ea4c",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-b90ba03fe77e",
+      "seq": 22
+    },
+    {
+      "at": "2026-11-12T08:52:06+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 23,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-12T08:52:07+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-1a09c90ffc81",
+      "seq": 24
+    },
+    {
+      "at": "2026-11-13T00:49:19+00:00",
+      "kind": "run_closed",
+      "reason": "Actual Verify worker hit harness usage limit before structured report; partial HTTP/browser artifacts preserved. Owner requested next-day resume.",
+      "result": "BLOCKED",
+      "run_id": "run-1a09c90ffc81",
+      "seq": 25
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-13T00:49:19+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-ade7336670ec",
+      "seq": 26
+    },
+    {
+      "at": "2026-11-13T00:54:54+00:00",
+      "attempt": 2,
+      "candidate_commit": "67ec8f6f14af468de533884d498126887558ea4c",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-ade7336670ec",
+      "seq": 27
+    },
+    {
+      "at": "2026-11-13T00:54:55+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 28,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
     }
   ],
   "final_result": null,
   "handoff": null,
   "id": "DIAL-010",
-  "interventions": [],
+  "interventions": [
+    {
+      "at": "2026-11-12T08:42:54+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "apporved",
+      "possible_improvement": "Keep experimental enablement separate from actual host playback acceptance.",
+      "question": "Approve DIAL-010 experimental NTS playback PRODUCT.md and TECH.md for implementation?",
+      "reason": "Owner explicitly approved exact NTS experimental playback specs",
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-010"
+    }
+  ],
   "objective": "Use owner omarchy-nts-radio repo as read-only reference to enable NTS1/2 playback in Dial through a focused compatibility experiment; no proxy or broad policy change without concrete reviewed design.",
   "reports": [
     {
@@ -138,9 +345,194 @@
       "run_id": "run-6d6350ae8110",
       "tech_sha256": "878b72aec6c5b354d30747ce07eb34dda9b3574584ea19c15970467b294220d3",
       "work_item": "DIAL-010"
+    },
+    {
+      "agent": "/root/dial010_implement",
+      "ambiguities": [
+        "ChatGPT host CSP enforcement, redirected NTS audio and audible Play/Pause/Play-again require independent host verification; direct HTTP and mocked tests cannot establish them.",
+        "The current CDN edge may vary by geography or time. A changed edge is intentionally not admitted automatically."
+      ],
+      "at": "2026-11-12T08:47:59+00:00",
+      "attempt": 1,
+      "blockers": [
+        "No actual ChatGPT host or audible observer was available to this Implement run; host outcome is unverified."
+      ],
+      "candidate_commit": "b069150cbf75fffda831f22517fa0f117e221867",
+      "change_summary": "Added experimental NTS 1/2 selection and explicit Play/Pause/Play-again in the existing discovery panel and audio controller. Fixed the sources to NTS's two published direct-player URLs, added only the three observed NTS route origins to the discovery resource CSP, bumped its URI, retained NTS official links and a retryable unavailable/blocked status, and preserved Radio Browser country filtering and click isolation.",
+      "decisions": [
+        "NTS source constants and CSP origins live in src/nts-policy.ts, separate from Radio Browser media admission.",
+        "The selected NTS source carries no click token, so the existing onPlaying hook does not call report_station_click.",
+        "NTS media and coordination failures use one concise fallback; the UI does not claim a generic media error proves CSP blocking.",
+        "The existing audio element and playback coordinator handle both NTS and country choices. Tab changes do not alter playback."
+      ],
+      "role": "Implement",
+      "run_id": "run-b802603a6511",
+      "tests": [
+        "npm test after the final source edit: PASS, 40/40 tests. Includes delivered discovery UI NTS selection, Play/Pause/Play-again, NTS1-to-NTS2 switching, retry after media error, tab change without autoplay, no Radio Browser tool call, exact CSP and URI, controller coordination and NTS-to-country switching, and existing country regressions. Log: /tmp/dial010-npm-test.log. These mocks do not establish audible playback.",
+        "git diff --check: PASS before candidate commit.",
+        "Direct HTTP probe at 2026-11-12T08:46:14Z from this workstation shell (geography unknown), manual redirects, Range bytes=0-63, 8-second per-hop timeout, five-hop cap: NTS 1 exact published URL -> 302 streams.radiomast.io/nts1 -> 302 audio-edge-kkqan.sin.d.radiomast.io/nts1 -> 200 audio/mpeg, 64 bytes read. NTS 2 followed corresponding /nts2 hops with 302, 302, 200 audio/mpeg and 64 bytes read. This checks routing only, not audio decoding or host playback.",
+        "Local Chromium availability check: headless Chromium rendered about:blank within a 12-second timeout. No user-gesture media event or audible result was obtained, so local browser playback remains BLOCKED.",
+        "Read-only owner reference inspection: Model.js uses https://stream-relay-geo.ntslive.net/stream and /stream2 without ?client=direct; Player.qml runs one mpv process, follows geo redirects, exposes pause/loading/error state, and retries dropped live audio. Reference files were not changed."
+      ],
+      "work_item": "DIAL-010"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "architecture": [
+        "NTS constants are isolated in nts-policy.ts; Radio Browser admission stays unchanged. Only country-v13-nts-experiment discovery resource adds NTS origins; connectDomains remains empty.",
+        "NTS selection enters the existing player/controller with source=nts and no click token. Controller retains the complete Selection object, so source-aware errors do not lose NTS metadata."
+      ],
+      "at": "2026-11-12T08:49:45+00:00",
+      "attempt": 1,
+      "candidate_commit": "b069150cbf75fffda831f22517fa0f117e221867",
+      "complexity": [
+        "Implementation is bounded and reuses one controller. Attribution visibility needs explicit selected-source state across tabs rather than only current collection plus countrySelected."
+      ],
+      "correctness": [
+        "Explicit NTS Play/Pause/Play-again, channel switching, source clearing, stale event guards and shared coordination reuse existing paths. Source-aware error fallback is applied to media rejection, media error and coordination failures, leaving Play retry available.",
+        "NTS token absence prevents Radio Browser reporting; selected station title, no country/codec metadata, official links and experimental note are present.",
+        "Tab changes do not alter playback, but Countries tab unconditionally reveals Radio Browser attribution even when the selected source is NTS; this violates the approved source attribution rule."
+      ],
+      "findings": [
+        "P2 — src/player.ts:46-49 (showCollection): Keep the Radio Browser playback disclosure hidden while NTS remains selected, including after switching to Countries. The current collection !== countries && !countrySelected expression makes it visible unconditionally on the Countries tab. Delivered-bundle reproduction: select NTS 1, click Countries; title remains NTS 1 and its audio source is retained, but the notice says that after playback starts Dial reports a Radio Browser click and server IP. No such report happens for NTS. Approved PRODUCT says NTS has no country attribution, and TECH explicitly requires country attribution hidden for NTS. Track selected source independently from the displayed collection, preserve ordinary catalog attribution/no-selection behavior and selected-country disclosure across tabs, and add a regression covering NTS selected/playing plus tab navigation and return to country selection."
+      ],
+      "recommendation": "REVISE",
+      "requirements": [
+        "Read bootstrap contract, Review role, dispatch packet, approved PRODUCT/TECH and Implement report. HEAD equals candidate and SHA-256 hashes match approval.",
+        "Approved DIAL-010 explicitly supersedes the earlier pre-enable NTS host gate for this finite experiment; enabling experimental controls before host proof is within scope.",
+        "Two fixed published URLs, three exact discovery-only resource origins, existing single controller and experimental note are implemented. One NTS attribution requirement fails on collection navigation.",
+        "Implement records owner reference URLs/backend and dated bounded HTTP routes. Those are reported evidence, not Review observations. No actual ChatGPT audible/CSP result is inferred; overall host-dependent outcome remains BLOCKED."
+      ],
+      "role": "Review",
+      "run_id": "run-d7c287aae715",
+      "security": [
+        "Exact official relay sources and three observed NTS origins only; no wildcard, arbitrary URL input, proxy, server media fetch or country-policy expansion.",
+        "NTS is not a provider row and has no click token. Existing country filtering, safe text rendering and signed click reporting unchanged.",
+        "Generic NTS error says unavailable or blocked without claiming a CSP diagnosis. Unlisted redirect behavior still depends on actual host enforcement and remains unverified."
+      ],
+      "tests": [
+        "npm test independently run at exact candidate: PASS, build and 40 tests, zero failures. Includes exact URL/CSP/resource assertions, delivered UI NTS play/pause/retry/switching and click isolation, controller coordination and country regressions.",
+        "Additional temporary delivered-bundle harness /tmp/dial010-review-attribution.mjs: selecting NTS 1 then switching Countries prints NTS_SELECTED_ON_COUNTRIES NTS 1 radioBrowserDisclosureVisible true. Original continuation assertions still pass.",
+        "git diff --check: PASS. No production edits, lifecycle writes, merge, push or deployment by Review.",
+        "No fresh HTTP route probe, actual browser media event observation, or ChatGPT audible/CSP/layout check performed by Review. Mocks do not establish audible playback; these evidence layers remain for independent Verify."
+      ],
+      "work_item": "DIAL-010"
+    },
+    {
+      "agent": "/root/dial010_implement",
+      "ambiguities": [
+        "Actual ChatGPT audible playback, host CSP behavior and local browser media events remain unverified as stated in the first Implement report; this revision changes only disclosure logic and its delivered UI test."
+      ],
+      "at": "2026-11-12T08:51:03+00:00",
+      "attempt": 2,
+      "blockers": [
+        "Host-dependent playback outcome still requires independent host observation."
+      ],
+      "candidate_commit": "67ec8f6f14af468de533884d498126887558ea4c",
+      "change_summary": "Tracked the selected playback source separately from the visible collection, so Radio Browser attribution stays hidden for NTS even after switching to Countries, remains visible for a selected country station while browsing NTS, and follows the ordinary catalog when no source is selected. Added delivered UI regressions for idle and playing NTS navigation and the return to country selection.",
+      "decisions": [
+        "Selected source is country, nts, or null; tab visibility alone does not determine Radio Browser playback disclosure.",
+        "The no-selection Countries catalog retains its Radio Browser data attribution; browsing NTS without a country selection hides that disclosure."
+      ],
+      "role": "Implement",
+      "run_id": "run-b4991b05b08d",
+      "tests": [
+        "npm test on the revised candidate: PASS, 40/40 tests, including delivered bundle regression for NTS idle/playing with Countries tab navigation, no-selection catalog attribution, and selected-country disclosure while browsing NTS. Log: /tmp/dial010-revision-npm-test.log.",
+        "git diff --check: PASS before commit."
+      ],
+      "work_item": "DIAL-010"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "architecture": [
+        "Selected source is now country, nts or null, independent of visible collection. Initial accepted catalog resets source; country and NTS selection set it explicitly.",
+        "Revision changes only src/player.ts attribution state and delivered UI regression assertions. Policy constants, CSP, controller and Radio Browser admission unchanged."
+      ],
+      "at": "2026-11-12T08:52:06+00:00",
+      "attempt": 2,
+      "candidate_commit": "67ec8f6f14af468de533884d498126887558ea4c",
+      "complexity": [
+        "Focused fix models source identity explicitly with no new subsystem; regression coverage directly exercises the reported disclosure problem."
+      ],
+      "correctness": [
+        "Inspected all selection/reset/tab paths: attribution formula correctly handles selected NTS, selected country and unselected catalog. Country selection explicitly restores its disclosure after NTS.",
+        "NTS error/retry retains source metadata and links; playback source and coordinator behavior unchanged from attempt 1. No remaining findings."
+      ],
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": [
+        "Read current dispatch, Implement revision report and exact commit diff; prior bootstrap/Review contract and approved PRODUCT/TECH review apply. HEAD equals candidate and both spec hashes still match approval.",
+        "Attempt-1 P2 attribution finding resolved. NTS selection hides Radio Browser disclosure on either tab; selected-country disclosure remains visible on either tab; no-selection attribution follows the visible catalog.",
+        "Finite experimental NTS scope remains intact: two official source URLs, three exact discovery-only CSP origins, one controller/coordinator, explicit playback and honest fallback. Approved spec permits this experiment before host proof.",
+        "Code-review ACCEPT does not establish HTTP route stability, local media behavior, audible ChatGPT playback or host CSP. Independent Verify must record these separately; missing host evidence and overall host-dependent technical outcome remain BLOCKED."
+      ],
+      "role": "Review",
+      "run_id": "run-b90ba03fe77e",
+      "security": [
+        "No additional origins, wildcard, proxy, arbitrary source, server media fetch or connectDomains changes. NTS remains separate from Radio Browser URL admission and click tokens.",
+        "No merge, push, publication or deployment performed."
+      ],
+      "tests": [
+        "npm test independently rerun on exact candidate: PASS; TypeScript/esbuild build and 40 tests, zero failures.",
+        "Delivered UI assertions cover idle and playing NTS while browsing Countries, no audio change on tabs, return to country selection, country disclosure while browsing NTS, and no-selection catalog attribution.",
+        "Existing exact NTS URL/CSP, click isolation, Play/Pause/Play-again, NTS channel/source switching, retryable media error, shared coordination and all country regressions pass.",
+        "git diff --check: PASS. No production or lifecycle edits by Review.",
+        "No new HTTP route, local browser media or ChatGPT audible/CSP/layout observations performed. Mock playback tests are not audible evidence."
+      ],
+      "work_item": "DIAL-010"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "at": "2026-11-13T00:54:54+00:00",
+      "attempt": 2,
+      "candidate_commit": "67ec8f6f14af468de533884d498126887558ea4c",
+      "criteria": [
+        {
+          "criterion": "Inspect owner omarchy-nts-radio reference and document its actual NTS live stream URLs, playback backend and relevant failure/recovery handling.",
+          "evidence": "Model.js defines the live relay endpoints `/stream` and `/stream2` (without the direct query); Player.qml documents one mpv child process, JSON IPC for paused/loading/error state, redirect-following and live rejoin/recovery. The owner reference is a desktop mpv client, not browser evidence. Approved TECH records NTS official direct URLs with `?client=direct`; fresh direct route probes for both are recorded separately.",
+          "method": "Read owner reference files `/home/sam/omarchy-nts-radio-audio-handoff/Model.js` and `Player.qml`; cross-checked approved TECH.md and NTS-published URLs.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Establish a bounded NTS1/2 in-app playback experiment and justified finite stream/redirect/CSP policy using actual primary-source and runtime evidence, preserving clean UI and playback coordination.",
+          "evidence": "40/40 tests pass. Integration assertions require the two exact NTS URLs, exactly three NTS resource origins on the discovery resource and `connectDomains: []`; country filtering remains on the distinct finite `MEDIA_ORIGINS` policy. Tests cover one audio element/controller/coordinator, explicit Play/Pause/Play-again, error retry/fallback, channel/source switch, stale media events, no Radio Browser click for NTS, and attribution behavior. Fresh route traces show 302→302→200 audio/mpeg for each channel, with 64 capped bytes and MP3 frame sync. Local Chromium under a synthetic page CSP with the same three media origins observed channel-specific network 200/audio/mpeg, matching-source `playing`, >100 ms currentTime advance, Pause event and Play-again event for both channels. This is local browser evidence, not ChatGPT or audible evidence.",
+          "method": "Ran `npm test` on the exact commit; verified exact two URL/three-origin policy and discovery resource CSP in source/integration assertions; ran fresh manual-redirect direct probes and a bounded Chromium audio-element fixture with the exact media-origin list.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Independently Review and Verify any implemented exact candidate, separating direct HTTP/browser checks from actual ChatGPT audible Play/Pause/resume and host CSP evidence; missing host evidence stays BLOCKED.",
+          "evidence": "Review `run-b90ba03fe77e` (agent `/root/dial008_review_recovered`) accepted exact commit `67ec8f6f14af468de533884d498126887558ea4c`; Verify is `/root/dial008_verify`. Direct HTTP and local browser results are reported separately above. No ChatGPT host session or observer was available for audible NTS 1/2 Play, Pause, Play-again, real host CSP, or host layout. Therefore the host-dependent outcome and overall result remain BLOCKED.",
+          "method": "Confirmed distinct Review and Verify identities bind to the same candidate; separately recorded direct HTTP, local Chromium behavior and unavailable ChatGPT host observations.",
+          "result": "BLOCKED"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-ade7336670ec",
+      "spec_acceptance": [
+        {
+          "criterion": "**Reference and route evidence.** Record the actual reference URL/backend/error behavior, NTS's published exact NTS 1/2 URLs, and dated redirect/status/content-type observations for both channels. Distinguish the owner client, direct HTTP, browser, and ChatGPT host evidence. Record the test profile and network vantage; do not claim global reliability.",
+          "evidence": "Owner reference uses one redirect-following mpv backend with IPC paused/loading/error state and live recovery/rejoin. NTS's exact published URLs in the approved spec were each probed on 2026-11-13T00:50:36.205Z: relay 302 to streams.radiomast.io, 302 to the observed audio-edge host, then 200 audio/mpeg. Each final response provided at most 64 bytes with MP3 frame sync. This is one new network vantage/time and no global stability claim.",
+          "method": "Read the local owner reference Model.js/Player.qml and approved route docs; performed fresh dated direct HTTP probes for both published URLs.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "**Bounded in-app experiment.** NTS 1/2 selection and explicit Play/Pause/Play-again use the existing audio controller and coordination. The NTS media source is fixed to the two published URLs. The UI resource declares only the three currently observed NTS route origins in addition to its existing country origins; no wildcard, proxy, or `connectDomains` expansion. A changed or blocked destination yields an honest error and working official link. Automated checks cover exact URLs/CSP, selection and source switching, NTS not reporting Radio Browser clicks, Play/Pause/resume, error fallback, and existing country behavior.",
+          "evidence": "Both selected official URLs use the existing single audio element/controller and coordinator; no country URL admission is loosened. The discovery resource adds only the three exact origins (country resourceDomains plus NTS origins; connectDomains empty). In headless Chromium, each channel independently produced its own matching-source loadedmetadata/canplay/playing, currentTime increase >0.1s, pause, then a new playing event on Play-again; each final network response was 200 audio/mpeg. Test suite covers mocked error fallback and working official link, NTS click/attribution isolation, source switching and stale guards. The browser fixture is synthetic and not an actual ChatGPT host.",
+          "method": "Ran exact-candidate automated suite and a bounded local Chromium CDP fixture with separate fresh page/event log per channel; inspected controller, attribution, policy, and server integration tests.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "**Independent candidate and host outcome.** Independent Review and Verify inspect the same candidate commit. Verify separately records direct HTTP route, local browser behavior if obtainable in a bounded run, and actual ChatGPT UI/CSP plus audible NTS 1 and NTS 2 Play, Pause, and Play-again, including an error path and coordination. Each layer may PASS, FAIL, or BLOCKED based on its own evidence. If real host access or audible observation is missing, host playback and the overall technical outcome remain **BLOCKED**, even if code, HTTP checks, and local tests pass. A host failure is recorded as FAIL rather than represented as working playback.",
+          "evidence": "Independent Review accepted this exact commit; direct and local browser layers passed as described. No actual ChatGPT MCP Apps host or audible observer was available, so actual host CSP and audible NTS 1/2 Play, Pause and Play-again plus host error/coordination/layout remain BLOCKED as required.",
+          "method": "Bound review and verification to the same exact commit and separated direct-route, synthetic local-browser, and ChatGPT-host evidence.",
+          "result": "BLOCKED"
+        }
+      ],
+      "work_item": "DIAL-010"
     }
   ],
-  "resume_stage": null,
+  "resume_stage": "VERIFYING",
   "runs": [
     {
       "agent": "/root/dial010_triage",
@@ -185,12 +577,150 @@
       "started_at": "2026-11-12T08:28:20+00:00",
       "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial010_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 287,
+      "ended_at": "2026-11-12T08:47:59+00:00",
+      "harness": "current-collaboration",
+      "id": "run-b802603a6511",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Implement",
+      "selection_reason": "Implement owner-approved NTS1/2 experimental playback through existing controller and three exact observed CSP origins",
+      "started_at": "2026-11-12T08:43:12+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "attempt": 1,
+      "cost": null,
+      "duration_seconds": 106,
+      "ended_at": "2026-11-12T08:49:45+00:00",
+      "harness": "current-collaboration",
+      "id": "run-d7c287aae715",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "REVISE",
+      "retry_of": null,
+      "role": "Review",
+      "selection_reason": "Independent exact-candidate review of fixed-source NTS playback experiment and existing player coordination",
+      "started_at": "2026-11-12T08:47:59+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial010_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 78,
+      "ended_at": "2026-11-12T08:51:03+00:00",
+      "harness": "current-collaboration",
+      "id": "run-b4991b05b08d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": "run-b802603a6511",
+      "role": "Implement",
+      "selection_reason": "Fix independently reviewed source-disclosure mismatch after selecting NTS then browsing Countries",
+      "started_at": "2026-11-12T08:49:45+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_review_recovered",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 62,
+      "ended_at": "2026-11-12T08:52:06+00:00",
+      "harness": "current-collaboration",
+      "id": "run-b90ba03fe77e",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": "run-d7c287aae715",
+      "role": "Review",
+      "selection_reason": "Fresh independent review of source-aware attribution fix and preserved NTS experimental playback",
+      "started_at": "2026-11-12T08:51:04+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 57432,
+      "ended_at": "2026-11-13T00:49:19+00:00",
+      "harness": "current-collaboration",
+      "id": "run-1a09c90ffc81",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Independent exact-candidate NTS behavior policy route and bounded browser experiment checks; preserve absent actual host evidence",
+      "started_at": "2026-11-12T08:52:07+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial008_verify",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 335,
+      "ended_at": "2026-11-13T00:54:54+00:00",
+      "harness": "current-collaboration",
+      "id": "run-ade7336670ec",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": "run-1a09c90ffc81",
+      "role": "Verify",
+      "selection_reason": "Owner requested next-day resume after usage-limit failure; same approved Verify model, exact candidate and saved partial evidence",
+      "started_at": "2026-11-13T00:49:19+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
-    "mode": "unresolved"
+    "at": "2026-11-12T08:42:55+00:00",
+    "by": "OWNER",
+    "hashes": {
+      "PRODUCT.md": "787490880e3bebba758147156b0525affebbca15e83837311d2ecf6989db751f",
+      "TECH.md": "878b72aec6c5b354d30747ce07eb34dda9b3574584ea19c15970467b294220d3"
+    },
+    "mode": "approved"
   },
-  "state": "WAITING_FOR_SPEC_APPROVAL",
+  "state": "WAITING_FOR_HUMAN",
   "title": "Prove NTS in-app playback using Omarchy reference",
-  "updated_at": "2026-11-12T08:31:49+00:00"
+  "updated_at": "2026-11-13T00:54:55+00:00"
 }
