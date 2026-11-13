@@ -1,0 +1,92 @@
+{
+  "at": "2026-11-13T06:46:05.687Z",
+  "endpoint": "https://macbook-air.tail10dbb3.ts.net/mcp",
+  "canonical": "ui://dial/country-v13-nts-experiment.html",
+  "checks": [
+    {
+      "uri": "ui://dial/country-v1.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v2.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v3.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v4.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v5.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v6.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v7.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v8.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v9.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v10.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v11.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    },
+    {
+      "uri": "ui://dial/country-v12.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true,
+      "ntsTab": true
+    }
+  ],
+  "unknownRejected": true
+}
