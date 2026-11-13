@@ -1,0 +1,7 @@
+{
+  "at": "2026-11-13T06:50:57+00:00",
+  "question": "Did both NTS1/2 Play Pause Play-again and channel switching work?",
+  "response": "all is working radio and nts; Yes, both channels and switching work",
+  "source": "factory/work-items/DIAL-010/state.json intervention seq 21",
+  "classification": "Owner-reported host playback/switching outcome; not instrumented browser, CSP or audio telemetry."
+}

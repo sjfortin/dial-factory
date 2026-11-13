@@ -1,0 +1,221 @@
+{
+  "created_at": "2026-11-13T06:51:26+00:00",
+  "criteria": [
+    "Design separate, directly invokable country-radio and NTS experiences with clear prompts and accessible in-app help while preserving clean minimal layouts and shared playback ownership.",
+    "Investigate NTS archived-show keyword search and stream resolution using the owner Omarchy NTS reference and current primary sources; distinguish supported results, metadata, playback formats, expiring URLs and failure modes.",
+    "Define discoverable prompts and concrete tool routing for opening, searching, playing and pausing; state explicit browser gesture requirements and the supported cross-thread control scope without implying cross-device identity.",
+    "Produce a bounded product and technical proposal with exact trust/network policy, playback state, archive seek/resume semantics, acceptance checks and rollback; require exact owner approval before production changes.",
+    "Independent Review and Verify must assess any implemented candidate with real protocol/browser and host evidence, preserving missing evidence honestly."
+  ],
+  "events": [
+    {
+      "at": "2026-11-13T06:51:26+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Separate radio experiences, NTS archives and discoverable commands"
+    },
+    {
+      "at": "2026-11-13T06:51:26+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "agent": "/root/dial012_triage",
+      "at": "2026-11-13T06:51:48+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-f238ff972124",
+      "seq": 3
+    },
+    {
+      "at": "2026-11-13T06:54:24+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "SPEC",
+      "role": "Triage",
+      "run_id": "run-f238ff972124",
+      "seq": 4
+    },
+    {
+      "at": "2026-11-13T06:54:24+00:00",
+      "from_state": "TRIAGE",
+      "kind": "advanced",
+      "seq": 5,
+      "terminal_failure_reason": null,
+      "to_state": "PLANNING"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "at": "2026-11-13T06:54:39+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Spec",
+      "run_id": "run-ace8572344fa",
+      "seq": 6
+    },
+    {
+      "at": "2026-11-13T07:03:02+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Spec",
+      "run_id": "run-ace8572344fa",
+      "seq": 7
+    },
+    {
+      "at": "2026-11-13T07:03:03+00:00",
+      "from_state": "PLANNING",
+      "kind": "advanced",
+      "seq": 8,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "DIAL-012",
+  "interventions": [],
+  "objective": "Plan clean distinct country-radio and NTS entry points, archived NTS show search/playback, and easy known prompts/help plus same-browser cross-thread controls, reusing the owner Omarchy NTS reference where suitable.",
+  "reports": [
+    {
+      "agent": "/root/dial012_triage",
+      "at": "2026-11-13T06:54:24+00:00",
+      "complexity": "High: this combines entry-point/tool semantics, UI accessibility and command discoverability, an undocumented changing API, untrusted metadata/media URLs, external media resolution, playback-mode state, CSP/network policy, autoplay gesture rules, and cross-thread browser coordination.",
+      "evidence": [
+        "Current server exposes open_radio with one known Radio Paradise station and find_stations_by_country with a country resource; current country resource includes NTS 1/2 as a tab, so there is no dedicated NTS app entry point or archive-search tool yet.",
+        "Current NTS direct live URLs are stream-relay-geo.ntslive.net/stream and /stream2 with client=direct; current policy lists the relay and two redirect origins observed on 2026-11-12. This is existing tested live-channel policy, not evidence for archive media origins.",
+        "PlaybackCoordinator.pauseRemote() sends a bounded pause request to a reported active peer, waits up to 1800 ms for acknowledgement, and reports failure when no peer is available. Coordination is via Web Locks and BroadcastChannel; these are browser-context capabilities and provide no cross-device identity or guarantee.",
+        "The reference describes NTS archive API as undocumented, derived from nts.live player calls. It requires version=2 for useful /search results, clamps query to 120 characters and page size to 1..40, and parses show/episode results from /api/v2/search.",
+        "Bounded live NTS response check on 2026-11-13: GET https://www.nts.live/api/v2/search?q=Floating%20Points&version=2&offset=0&limit=3&types%5B%5D=show returned HTTP JSON with result count 13 and three show metadata rows. A separate limit=6 episode query returned count 639 and six episode metadata rows; sampled audio_sources pointed to soundcloud.com. No complete inventory was requested or retained.",
+        "Reference NtsApi.js accepts episode audio source pages only on HTTPS SoundCloud/Mixcloud hosts and warns against shipping NTS's embedded Basic credential for /resolve-stream.",
+        "Reference README says NTS does not host archive audio: episode sources are SoundCloud or Mixcloud; local playback relies on mpv yt-dlp hook. Resolver.qml uses yt-dlp to select progressive HTTP(S) and describes HLS/DASH as unsuitable for its Chromecast direct-media path. Dial's browser app cannot run this local subprocess.",
+        "The reference preserves archive seek/resume position but treats live resume as rejoining the current relay; carrying these semantics to browser media needs an explicit Spec and host verification.",
+        "Public NTS episode page evidence and NTS Supporter copy expose archive episodes and state that tracklist timestamps are a supporter feature; do not expose timestamps as generally available. Sources: https://www.nts.live/shows/selassie-tbc/episodes/selassie-tbc-8th-may-2020 and https://www.nts.live/supporters.",
+        "Browser-host playback evidence remains distinct from metadata response: the bounded API response proves metadata discovery only. No browser media request, redirect/CSP outcome, audible playback, or archive seek/pause behavior was tested in ChatGPT host."
+      ],
+      "open_questions": [
+        "Should NTS archive playback be limited to an NTS-hosted/site playback surface or external SoundCloud/Mixcloud link when safe direct in-app media resolution is unavailable? No browser-compatible archive resolver is established by current code or the native reference.",
+        "What are the exact approved NTS API request, timeout, query/page/response caps, metadata fields, and fallback behavior if the undocumented endpoint changes or returns no results?",
+        "What archive playback formats/origins, expiring URL handling, CSP resourceDomains, and failure states can be verified in the actual ChatGPT host, separately from API metadata and protocol reachability?",
+        "Should the product provide separate open_country_radio and open_nts_radio entry-point tools, plus a discoverable help/command tool (for example dial_help) and pause_dial command? Define exact invocation wording and how a pause command opens/targets a same-browser player when no active app is mounted in that thread.",
+        "Which accessible command/help presentation is preferred (tool descriptions, in-app prompt list, help action, or combination), and what keyboard/screen-reader acceptance checks are required?",
+        "Does the owner require NTS archive seek, resume-from-position, and replay semantics to match the native reference, and what behavior should apply when the media provider does not support seeking?",
+        "How should the UI disclose that NTS search metadata is from an unofficial, undocumented endpoint and that audible playback depends on browser host/network support?"
+      ],
+      "recommendation": "SPEC",
+      "relevant_code": [
+        "src/server.ts:79-116 (open_radio, find_stations_by_country, retry/report tools)",
+        "src/nts-policy.ts:1-12 (NTS live relay and observed redirect-origin policy)",
+        "src/playback-coordinator.ts:169-186 (same-browser remote pause request/ack/timeout)",
+        "src/player-controller.ts:43-48,107 (remote pause/status UI wiring)",
+        "public/discovery.html:63 onward (country and NTS tabs in one shared player experience)",
+        "/home/sam/omarchy-nts-radio-audio-handoff/NtsApi.js:1-70,225-246,371 onward (undocumented NTS metadata endpoints, bounded search construction, episode audio-source parsing)",
+        "/home/sam/omarchy-nts-radio-audio-handoff/Resolver.qml:9-17,38-42,80-112 (yt-dlp resolver for progressive SoundCloud/Mixcloud media; native-host-only subprocess)",
+        "/home/sam/omarchy-nts-radio-audio-handoff/Player.qml:120-153,225 onward (live/archive pause-resume and archive seek semantics)",
+        "/home/sam/omarchy-nts-radio-audio-handoff/README.md:130-139,329-338 (archive dependency, no NTS-hosted audio, supporter tracklist limitation, unofficial undocumented endpoint caveat)"
+      ],
+      "risks": [
+        "Treating API search success or an audio_sources URL as proof that archived audio can play in an MCP App would overstate evidence; source pages are not direct audio streams.",
+        "Unbounded archive scraping, arbitrary URL resolution, importing an NTS embedded credential, or creating an undocumented proxy would add trust, privacy, and operational risk; keep any proposed query/page/response sizes bounded and constrain origins.",
+        "SoundCloud/Mixcloud resolved media may use expiring signed URLs and progressive/HLS/DASH variants; do not persist or share resolved URLs. Exact browser-host behavior needs evidence.",
+        "Autoplay may be blocked. Playback must begin only from an explicit user gesture in the app, with a clear Play action and failure state.",
+        "Cross-thread controls can only be described within the tested same-browser/profile/device context where Web Locks/BroadcastChannel are shared; do not imply synchronization across browsers or devices.",
+        "Separate country and NTS entry points could duplicate playback owners. They should reuse the existing coordinator and maintain a single active player/ownership contract."
+      ],
+      "role": "Triage",
+      "run_id": "run-f238ff972124",
+      "scope": "Triage of separate country-radio and NTS entry points, bounded NTS archived-show search/playback feasibility, discoverable in-thread prompts/help, and same-browser/profile cross-thread Pause controls. Read-only inspection; no production or lifecycle files changed.",
+      "work_item": "DIAL-012"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "at": "2026-11-13T07:03:02+00:00",
+      "document_revisions": {
+        "PRODUCT.md": "89630a477167cf83888bc856efd68ccebce4862e1f1910532d0f1f75397028f8",
+        "TECH.md": "5757b54987749f9ebe876342b3ca258fe1127df49674a636b06b55fa244adaa2"
+      },
+      "documents": [
+        "PRODUCT.md",
+        "TECH.md"
+      ],
+      "evidence": [
+        "Read current server, discovery UI, playback coordinator/controller, NTS policy, triage, and read-only owner Omarchy NTS reference.",
+        "On 2026-11-13 a bounded NTS v2 search returned public episode metadata and SoundCloud audio_sources; two sampled Floating Points episodes had no progressive candidate with native yt-dlp selector.",
+        "One 2024 sampled episode resolved to signed AAC m3u8 on playback.media-streaming.soundcloud.cloud; manifest GET returned 200 and CORS *, sampled segment references stayed on that origin, and first segment HEAD returned 200, CORS *, audio/mp4. Signed query values were not retained.",
+        "Primary MCP Apps CSP guidance and hls.js/yt-dlp documentation establish candidate mechanics; no ChatGPT-host archive audio test occurred."
+      ],
+      "open_risks": [
+        "Audible archive playback, MSE support, CSP and browser gesture behavior inside the ChatGPT host remain unverified.",
+        "NTS API is undocumented; SoundCloud signed-media origins/formats may change. Mixcloud in-app playback is outside this proposal pending separate evidence.",
+        "A control tool can only confirm pause after its mounted app receives a same-browser coordinator acknowledgement."
+      ],
+      "role": "Spec",
+      "run_id": "run-ace8572344fa",
+      "summary": "Specified distinct country and NTS launch views on one canonical UI resource, discoverable natural-language prompts, bounded NTS archive metadata/search, a fixed-origin SoundCloud HLS experiment, archive controls/seek/retry, and same-browser acknowledged pause control. Shared resource and legacy aliases receive the exact archive CSP origin in both lists; signed URLs use only app-only _meta, with no model/persistence exposure. Production changes require exact revision approval.",
+      "work_item": "DIAL-012"
+    }
+  ],
+  "resume_stage": null,
+  "runs": [
+    {
+      "agent": "/root/dial012_triage",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 156,
+      "ended_at": "2026-11-13T06:54:24+00:00",
+      "harness": "current-collaboration",
+      "id": "run-f238ff972124",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "SPEC",
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "Read-only bounded investigation of NTS archive reference, separate entry points and realistic discoverable cross-thread controls before spec",
+      "started_at": "2026-11-13T06:51:48+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 503,
+      "ended_at": "2026-11-13T07:03:02+00:00",
+      "harness": "current-collaboration",
+      "id": "run-ace8572344fa",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Spec",
+      "selection_reason": "Prepare bounded exact proposal for separate entry points and prompts plus evidence-based NTS archive resolution, preserving existing playback scope",
+      "started_at": "2026-11-13T06:54:39+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "WAITING_FOR_SPEC_APPROVAL",
+  "title": "Separate radio experiences, NTS archives and discoverable commands",
+  "updated_at": "2026-11-13T07:03:03+00:00"
+}

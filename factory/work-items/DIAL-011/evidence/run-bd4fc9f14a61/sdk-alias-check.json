@@ -1,0 +1,9 @@
+{
+  "candidate_commit": "699560e5d3b710dc4d7500cc10b85f5957b50ed7",
+  "command": "node --test test/server.test.js",
+  "result": "PASS",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "assertions": "The MCP SDK test reads country-v1.html through country-v12.html; each alias response URI equals the requested URI, MIME and full HTML match canonical current v13, CSP metadata matches, NTS tab and fixed stream URL are present; country-v99.html is rejected. Canonical tool resourceUri remains v13."
+}
