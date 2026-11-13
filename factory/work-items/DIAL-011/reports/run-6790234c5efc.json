@@ -1,0 +1,40 @@
+{
+  "agent": "/root/dial008_review_recovered",
+  "architecture": [
+    "Explicit finite URI list is registered with one current HTML/MIME/CSP construction. Each closure captures its own requested alias URI. No resource template, broad path fallback or legacy renderer is introduced.",
+    "Tool resource metadata still points to canonical v13. Fixed radio and capability-probe resources are unchanged."
+  ],
+  "at": "2026-11-13T06:42:19+00:00",
+  "attempt": 1,
+  "candidate_commit": "699560e5d3b710dc4d7500cc10b85f5957b50ed7",
+  "complexity": [
+    "Small explicit compatibility map and shared rendering path are appropriate to the observed historical addresses. No unnecessary metadata workaround or alternate UI implementation added."
+  ],
+  "correctness": [
+    "Exact diff is limited to server registration and integration tests. Alias reads return the requested URI with the complete canonical renderer and its current metadata.",
+    "Canonical tool/resource behavior and current Countries/NTS controls remain intact. Unknown v99 URI remains rejected. No findings."
+  ],
+  "findings": [],
+  "recommendation": "ACCEPT",
+  "requirements": [
+    "Read bootstrap contract, Review role, dispatch criteria, Implement report and recorded spec_skipped event at 2026-11-13T06:39:14Z. HEAD matches exact candidate.",
+    "Spec skip is justified for the recorded bounded compatibility restoration: historical country resource addresses serve the already reviewed current renderer and policy; no new playback or station feature.",
+    "Git server history independently confirms each alias v1 through v12 was a historical DISCOVERY_URI; canonical country-v13-nts-experiment remains unchanged.",
+    "The missing v9 resource is a verified entry-point defect in supplied investigation evidence, but its causal relationship to the owner host error remains inference. This review does not establish that the deployed ChatGPT card now opens."
+  ],
+  "role": "Review",
+  "run_id": "run-6790234c5efc",
+  "security": [
+    "Aliases serve only the existing current renderer and current finite CSP; no origin, connect permission, media admission, click-report policy or arbitrary resource lookup expansion.",
+    "Unknown version rejection preserves the finite compatibility boundary. Returning each requested alias URI keeps resource identity consistent with MCP read responses.",
+    "No merge, push, publication or deployment performed."
+  ],
+  "tests": [
+    "npm test independently run on exact candidate: PASS; TypeScript/esbuild build and 40 tests, zero failures.",
+    "Public SDK local HTTP MCP integration reads every v1-v12 alias and checks response URI, exact canonical HTML/MIME/CSP, NTS navigation and fixed NTS stream URL; v99 rejection passes.",
+    "Existing delivered browser bundle, NTS source/attribution/coordination and country policy/retry/stale-result regression tests all pass.",
+    "git history extraction confirms the finite historical URI set exactly matches v1-v12 plus current canonical v13. git diff --check: PASS.",
+    "No production or lifecycle edits, service restart, public deployment, rendered host card observation or audible test performed by Review. Actual host opening/layout outcome remains unverified and must not be inferred from SDK checks."
+  ],
+  "work_item": "DIAL-011"
+}

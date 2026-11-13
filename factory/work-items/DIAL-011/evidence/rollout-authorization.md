@@ -1,0 +1,3 @@
+# Authorization scope for compatibility restoration
+
+The owner explicitly approved push, merge and testing-endpoint rollout of the reviewed NTS experiment in the DIAL-010 approval turn. DIAL-011 restores previously published country UI resource addresses to that same approved current renderer and CSP after the owner reported the rollout unusable. This is a corrective step within that authorized testing rollout, with no new feature, stream policy or endpoint. It is not a new human approval or a host success claim. Foreman proceeds after independent Review and Verify, preserving missing actual ChatGPT recovery as BLOCKED.
