@@ -1,0 +1,10 @@
+{
+  "at": "2026-11-13T06:31:05.316Z",
+  "endpoint": "https://macbook-air.tail10dbb3.ts.net/mcp",
+  "resourceUri": "ui://dial/country-v13-nts-experiment.html",
+  "toolDescription": "Collect up to 30 compatible MP3 catalog choices from three bounded Radio Browser windows for an ISO alpha-2 country code, such as FR. Stream playback is not guaranteed.",
+  "ntsTab": true,
+  "countrySelect": true,
+  "oldSummary": false,
+  "oldScanNote": false
+}

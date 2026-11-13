@@ -1,0 +1,35 @@
+{
+  "agent": "/root/dial011_triage",
+  "at": "2026-11-13T06:39:14+00:00",
+  "complexity": "Low to medium: a narrow compatibility change can serve a finite set of known historical country UI URIs from the current renderer and current CSP; regression coverage should assert old URI reads return the same current UI while the current descriptor remains v13.",
+  "evidence": [
+    "Owner clicked the documented Refresh tools action; ChatGPT showed 'Couldn’t open Find radio stations by country'. This is owner-reported host behavior, not independently visible to this worker.",
+    "Foreman reports current public service root responds HTTP 200 and a connected find_stations_by_country call for FR returns new-format data.",
+    "Foreman reports public tools/list identifies the current v13 URI in standard _meta.ui.resourceUri and ui/resourceUri metadata; it does not include openai/outputTemplate.",
+    "Foreman reports public resources/read for ui://dial/country-v13-nts-experiment.html succeeds with the current tabs and CSP (26 resource origins).",
+    "Foreman reports a public resources/read request for ui://dial/country-v9.html returns JSON-RPC error -32602, 'not found'. This shows the exact legacy resource request is not registered at the current service.",
+    "Local src/server.ts registers only country-v13-nts-experiment.html and attaches that URI to the country discovery tool. Existing history includes a country-v9 registration at commit a8ffc47.",
+    "Official OpenAI plugin reference documents _meta.ui.resourceUri as the standard tool-to-UI key and openai/outputTemplate as an optional ChatGPT compatibility alias. Official troubleshooting notes that missing UI can result when a tool URI lacks a registered HTML resource and identifies mobile layout as a separate issue."
+  ],
+  "open_questions": [
+    "After a bounded alias is available for the specifically failing country-v9 URI, does the owner’s refreshed connection open the country UI with Countries and NTS tabs?",
+    "Should compatibility aliases cover only the observed failing v9 URI, or the finite previously registered country-v1 through country-v12 URIs for other cached descriptors? Confirm which versions were actually exposed to clients before selecting that finite list."
+  ],
+  "recommendation": "IMPLEMENT",
+  "relevant_code": [
+    "src/server.ts:12, 46-48, 72-76: only ui://dial/country-v13-nts-experiment.html is registered for the country UI and find_stations_by_country points to it; returned HTML and CSP are current.",
+    "src/server.ts:82-95: retry and play-report tools also point to the v13 country resource.",
+    "public/discovery.html:63: the shared current country resource includes Countries and NTS tabs.",
+    "Git URI history: country UI identifiers country-v1.html through country-v13-nts-experiment.html were used across commits; country-v9.html was the registered identifier at a historical revision and is the exact URI in the latest failing read evidence.",
+    "factory/work-items/DIAL-011/evidence/current-public-resource.json: recorded v13 resource has ntsTab=true, countrySelect=true, oldSummary=false, and oldScanNote=false."
+  ],
+  "risks": [
+    "The current exact legacy URI read failure is verified through Foreman-provided public SDK evidence, but the causal link between that failure and the owner's 'Couldn’t open' message is an inference; the exact host request was not observed during this run.",
+    "Do not treat the successful v13 resource read as proof that the owner card opened or that its layout is correct in ChatGPT.",
+    "Do not add a wildcard URI handler, restore old HTML, change station/playback/network policy, or claim that outputTemplate is required."
+  ],
+  "role": "Triage",
+  "run_id": "run-44c24c051ac5",
+  "scope": "Read-only diagnosis of the refreshed connection's country tool/resource metadata and known historical UI resource URIs. The current public endpoint, tool response, and v13 resource checks were supplied in the Foreman dispatch evidence; I independently inspected current registration and URI history. No production or lifecycle files changed.",
+  "work_item": "DIAL-011"
+}
