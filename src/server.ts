@@ -6,9 +6,10 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
+import { NTS_RESOURCE_ORIGINS } from './nts-policy.js';
 
 const UI_URI = 'ui://dial/radio-v9.html';
-const DISCOVERY_URI = 'ui://dial/country-v12.html';
+const DISCOVERY_URI = 'ui://dial/country-v13-nts-experiment.html';
 const PROBE_URI = 'ui://dial/capability-probe-v2.html';
 const STATION = {
   name: 'Radio Paradise',
@@ -44,7 +45,7 @@ function makeServer() {
   }));
   registerAppResource(server, 'Country radio player', DISCOVERY_URI, {}, async () => ({
     contents: [{ uri: DISCOVERY_URI, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
-      _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS] } } } }]
+      _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS] } } } }]
   }));
   registerAppResource(server, 'Dial two-thread capability probe v2', PROBE_URI, {}, async () => ({
     contents: [{ uri: PROBE_URI, mimeType: RESOURCE_MIME_TYPE, text: probeHtml,

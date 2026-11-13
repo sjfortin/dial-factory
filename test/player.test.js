@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { installPlayer } from '../dist/player-controller.js';
+import { NTS_CHANNELS } from '../dist/nts-policy.js';
 
 class ElementDouble extends EventTarget {
   dataset = {}; textContent = ''; hidden = false; disabled = false; attributes = {};
@@ -251,4 +252,43 @@ test('late old-source events cannot turn a new idle selection into playback', as
   assert.equal(a.audio.src, 'https://example.com/b');
   assert.deepEqual(reports, []);
   a.player.dispose();
+});
+
+test('NTS uses one audio element and coordinator, never reports a catalog click, and retries errors', async () => {
+  const env = shared(); const reports = [];
+  const a = setup(env, 'country', reports); const b = setup(env, 'other-thread', reports);
+  a.player.selectStation({ ...NTS_CHANNELS['1'], source: 'nts' });
+  assert.equal(a.audio.src, NTS_CHANNELS['1'].streamUrl);
+  assert.equal(a.audio.playCalls, 0, 'selection does not autoplay');
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, false);
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  assert.deepEqual(reports, []);
+  a.player.selectStation({ ...NTS_CHANNELS['2'], source: 'nts' });
+  assert.equal(a.audio.isPlaying, false);
+  assert.equal(a.audio.src, NTS_CHANNELS['2'].streamUrl);
+  assert.equal(a.status.dataset.state, 'idle');
+  a.audio.fire('playing'); a.audio.fire('waiting');
+  assert.equal(a.status.dataset.state, 'idle', 'old events cannot revive NTS 1');
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  b.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, false, 'other thread stops NTS before taking ownership');
+  assert.equal(b.audio.isPlaying, true);
+  b.toggle.fire('click'); await settle();
+  a.toggle.fire('click'); await settle();
+  a.audio.error = { code: 4 }; a.audio.fire('error'); await settle();
+  assert.equal(a.status.dataset.state, 'error');
+  assert.match(a.status.textContent, /unavailable or blocked.*open on NTS/i);
+  assert.equal(env.lock.active, false);
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.isPlaying, true);
+  a.player.selectStation({ id: 'country', name: 'Country station', streamUrl: 'https://example.com/country', clickToken: 'country' });
+  assert.equal(a.audio.isPlaying, false, 'NTS to country stops the old stream');
+  a.toggle.fire('click'); await settle();
+  assert.deepEqual(reports, ['country']);
+  a.player.dispose(); b.player.dispose();
 });
