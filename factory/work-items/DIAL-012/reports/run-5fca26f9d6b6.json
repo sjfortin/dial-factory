@@ -1,0 +1,29 @@
+{
+  "agent": "/root/dial012_spec",
+  "artifacts": [
+    "DESIGN-PREVIEW.html"
+  ],
+  "at": "2026-11-17T00:31:47+00:00",
+  "document_revisions": {
+    "DESIGN-PREVIEW.html": "79833df6f5a5dca3f0c7b679f2ec7c0d89ade2fa6b10721caecd2100f3a8f850",
+    "PRODUCT.md": "11aef56c358ad8e78b2501c6f55ef5b80723c71f100f1764bfbd14153ddab591",
+    "TECH.md": "5e02beeff47b1402ec5eeadf8a8bc9ac5823d016b6a064e808ed5c51b17fb009"
+  },
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "evidence": [
+    "Read recorded Spec revision packet and prior approved-for-review documents.",
+    "Edited only PRODUCT.md, TECH.md, and static DESIGN-PREVIEW.html; HTMLParser accepted the preview. No host, phone, audio, or production test was performed."
+  ],
+  "open_risks": [
+    "Phone Media Session forwarding and OS Play gesture behavior remain unverified.",
+    "Actual ChatGPT-host archive playback remains unverified.",
+    "Exact document revisions require owner approval before production implementation."
+  ],
+  "role": "Spec",
+  "run_id": "run-5fca26f9d6b6",
+  "summary": "Corrected phone Media Session design: user-paused source retains a scoped eligibility token and paused OS controls; external Play uses atomic claim-if-idle without transferring an active owner, while external Pause applies only to active owner. Preview Play target is 44 px.",
+  "work_item": "DIAL-012"
+}

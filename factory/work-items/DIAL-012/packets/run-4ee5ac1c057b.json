@@ -1,0 +1,23 @@
+{
+  "agent": "/root/dial012_spec",
+  "candidate": null,
+  "contract": "factory/agents/spec/agent.md",
+  "criteria": [
+    "Design separate, directly invokable country-radio and NTS experiences with clear prompts and accessible in-app help while preserving clean minimal layouts and shared playback ownership.",
+    "Investigate NTS archived-show keyword search and stream resolution using the owner Omarchy NTS reference and current primary sources; distinguish supported results, metadata, playback formats, expiring URLs and failure modes.",
+    "Define discoverable prompts and concrete tool routing for opening, searching, playing and pausing; state explicit browser gesture requirements and the supported cross-thread control scope without implying cross-device identity.",
+    "Produce a bounded product and technical proposal with exact trust/network policy, playback state, archive seek/resume semantics, acceptance checks and rollback; require exact owner approval before production changes.",
+    "Independent Review and Verify must assess any implemented candidate with real protocol/browser and host evidence, preserving missing evidence honestly."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Plan clean distinct country-radio and NTS entry points, archived NTS show search/playback, and easy known prompts/help plus same-browser cross-thread controls, reusing the owner Omarchy NTS reference where suitable.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "high",
+  "role": "Spec",
+  "run_id": "run-4ee5ac1c057b",
+  "spec": {
+    "mode": "unresolved"
+  },
+  "state": "PLANNING",
+  "work_item": "DIAL-012"
+}

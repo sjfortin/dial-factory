@@ -79,12 +79,119 @@
       "seq": 8,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    },
+    {
+      "at": "2026-11-17T00:25:19+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Two separate NTS and radio-by-country experiences; be creative. Keep casting in mind but scratch it for now. Bluetooth from a phone should work; investigate quick Play/Pause actions outside the app. Continue NTS archive search.",
+      "kind": "intervention",
+      "possible_improvement": "Separate product design exploration and measured host capabilities from implementation approval.",
+      "question": "How should the proposed next phase be refined before implementation approval?",
+      "reason": "Owner refined next-phase design: distinct NTS/country experiences, Bluetooth phone output and quick actions; casting deferred",
+      "seq": 9,
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-012"
+    },
+    {
+      "at": "2026-11-17T00:25:19+00:00",
+      "from_state": "WAITING_FOR_SPEC_APPROVAL",
+      "kind": "advanced",
+      "seq": 10,
+      "terminal_failure_reason": null,
+      "to_state": "PLANNING"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "at": "2026-11-17T00:25:19+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Spec",
+      "run_id": "run-4ee5ac1c057b",
+      "seq": 11
+    },
+    {
+      "at": "2026-11-17T00:30:06+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Spec",
+      "run_id": "run-4ee5ac1c057b",
+      "seq": 12
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "at": "2026-11-17T00:30:06+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "role": "Spec",
+      "run_id": "run-5fca26f9d6b6",
+      "seq": 13
+    },
+    {
+      "at": "2026-11-17T00:31:47+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Spec",
+      "run_id": "run-5fca26f9d6b6",
+      "seq": 14
+    },
+    {
+      "at": "2026-11-17T00:31:47+00:00",
+      "from_state": "PLANNING",
+      "kind": "advanced",
+      "seq": 15,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_SPEC_APPROVAL"
+    },
+    {
+      "at": "2026-11-17T00:32:51+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Android",
+      "kind": "intervention",
+      "possible_improvement": "Record concrete device and app versions when host QA runs; do not infer OS media support from desktop tests.",
+      "question": "Which phone should be used for Bluetooth and outside-app playback control testing?",
+      "reason": "Owner identified first phone test platform",
+      "seq": 16,
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-012"
     }
   ],
   "final_result": null,
   "handoff": null,
   "id": "DIAL-012",
-  "interventions": [],
+  "interventions": [
+    {
+      "at": "2026-11-17T00:25:19+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Two separate NTS and radio-by-country experiences; be creative. Keep casting in mind but scratch it for now. Bluetooth from a phone should work; investigate quick Play/Pause actions outside the app. Continue NTS archive search.",
+      "possible_improvement": "Separate product design exploration and measured host capabilities from implementation approval.",
+      "question": "How should the proposed next phase be refined before implementation approval?",
+      "reason": "Owner refined next-phase design: distinct NTS/country experiences, Bluetooth phone output and quick actions; casting deferred",
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-012"
+    },
+    {
+      "at": "2026-11-17T00:32:51+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "Android",
+      "possible_improvement": "Record concrete device and app versions when host QA runs; do not infer OS media support from desktop tests.",
+      "question": "Which phone should be used for Bluetooth and outside-app playback control testing?",
+      "reason": "Owner identified first phone test platform",
+      "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-012"
+    }
+  ],
   "objective": "Plan clean distinct country-radio and NTS entry points, archived NTS show search/playback, and easy known prompts/help plus same-browser cross-thread controls, reusing the owner Omarchy NTS reference where suitable.",
   "reports": [
     {
@@ -163,6 +270,66 @@
       "run_id": "run-ace8572344fa",
       "summary": "Specified distinct country and NTS launch views on one canonical UI resource, discoverable natural-language prompts, bounded NTS archive metadata/search, a fixed-origin SoundCloud HLS experiment, archive controls/seek/retry, and same-browser acknowledged pause control. Shared resource and legacy aliases receive the exact archive CSP origin in both lists; signed URLs use only app-only _meta, with no model/persistence exposure. Production changes require exact revision approval.",
       "work_item": "DIAL-012"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "artifacts": [
+        "DESIGN-PREVIEW.html"
+      ],
+      "at": "2026-11-17T00:30:06+00:00",
+      "document_revisions": {
+        "DESIGN-PREVIEW.html": "4568cda4dfff38dc840b6057fdaac9e2e18eb5686e2285089fa924972cb4f54d",
+        "PRODUCT.md": "1480c85708fa1da8760a74a76f10c1ee08d413e65e015c49e646978502eba50f",
+        "TECH.md": "acded72985799a25cde0d4b5c00479efd824d27108e2aff187bf68a4cf033e66"
+      },
+      "documents": [
+        "PRODUCT.md",
+        "TECH.md"
+      ],
+      "evidence": [
+        "Inspected prior PRODUCT.md and TECH.md, recorded revision packet, bootstrap contract and Spec role.",
+        "Used primary OpenAI plugin documentation for mobile plugin availability; it does not establish phone media controls. MDN Media Session API is a candidate mechanism, not host proof.",
+        "Validated static HTML preview with Python HTMLParser: no duplicate IDs, external assets, audio or script tags; responsive rule present. No browser or phone playback test occurred.",
+        "Prior 2026-11-13 bounded NTS metadata/HLS probe remains historical evidence only; no new archive network probe occurred in this revision."
+      ],
+      "open_risks": [
+        "Owner phone platform remains TBD; actual foreground/background, lock-screen, media-key, and Bluetooth audio behavior is unverified.",
+        "Actual ChatGPT-host archive playback and signed HLS path remain unverified.",
+        "Exact document revisions require owner approval before production implementation."
+      ],
+      "role": "Spec",
+      "run_id": "run-4ee5ac1c057b",
+      "summary": "Refined DIAL-012 into visually distinct geographic Country and editorial NTS experiences with shared playback controls; preserved bounded NTS archive proposal and same-browser pause; added a measured phone Media Session/Bluetooth control experiment and deferred casting. The static preview is not production UI or playback evidence.",
+      "work_item": "DIAL-012"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "artifacts": [
+        "DESIGN-PREVIEW.html"
+      ],
+      "at": "2026-11-17T00:31:47+00:00",
+      "document_revisions": {
+        "DESIGN-PREVIEW.html": "79833df6f5a5dca3f0c7b679f2ec7c0d89ade2fa6b10721caecd2100f3a8f850",
+        "PRODUCT.md": "11aef56c358ad8e78b2501c6f55ef5b80723c71f100f1764bfbd14153ddab591",
+        "TECH.md": "5e02beeff47b1402ec5eeadf8a8bc9ac5823d016b6a064e808ed5c51b17fb009"
+      },
+      "documents": [
+        "PRODUCT.md",
+        "TECH.md"
+      ],
+      "evidence": [
+        "Read recorded Spec revision packet and prior approved-for-review documents.",
+        "Edited only PRODUCT.md, TECH.md, and static DESIGN-PREVIEW.html; HTMLParser accepted the preview. No host, phone, audio, or production test was performed."
+      ],
+      "open_risks": [
+        "Phone Media Session forwarding and OS Play gesture behavior remain unverified.",
+        "Actual ChatGPT-host archive playback remains unverified.",
+        "Exact document revisions require owner approval before production implementation."
+      ],
+      "role": "Spec",
+      "run_id": "run-5fca26f9d6b6",
+      "summary": "Corrected phone Media Session design: user-paused source retains a scoped eligibility token and paused OS controls; external Play uses atomic claim-if-idle without transferring an active owner, while external Pause applies only to active owner. Preview Play target is 44 px.",
+      "work_item": "DIAL-012"
     }
   ],
   "resume_stage": null,
@@ -210,6 +377,50 @@
       "started_at": "2026-11-13T06:54:39+00:00",
       "status": "FINISHED",
       "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 287,
+      "ended_at": "2026-11-17T00:30:06+00:00",
+      "harness": "current-collaboration",
+      "id": "run-4ee5ac1c057b",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": "run-ace8572344fa",
+      "role": "Spec",
+      "selection_reason": "Refine distinct experience design and assess Media Session phone Bluetooth/quick-control feasibility while retaining archive proposal",
+      "started_at": "2026-11-17T00:25:19+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial012_spec",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 101,
+      "ended_at": "2026-11-17T00:31:47+00:00",
+      "harness": "current-collaboration",
+      "id": "run-5fca26f9d6b6",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "high",
+      "result": "REPORTED",
+      "retry_of": "run-4ee5ac1c057b",
+      "role": "Spec",
+      "selection_reason": "Resolve paused-session ownership contract so outside-app Play can resume safely after Pause; align preview touch targets",
+      "started_at": "2026-11-17T00:30:06+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
     }
   ],
   "spec": {
@@ -217,5 +428,5 @@
   },
   "state": "WAITING_FOR_SPEC_APPROVAL",
   "title": "Separate radio experiences, NTS archives and discoverable commands",
-  "updated_at": "2026-11-13T07:03:03+00:00"
+  "updated_at": "2026-11-17T00:32:51+00:00"
 }
