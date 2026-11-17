@@ -7,9 +7,11 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { z } from 'zod';
 import { discover, MEDIA_ORIGINS, reportClick } from './discovery.js';
 import { NTS_RESOURCE_ORIGINS } from './nts-policy.js';
+import { ARCHIVE_ORIGIN, searchArchive, showEpisodes, resolveEpisode } from './nts-archive.js';
 
 const UI_URI = 'ui://dial/radio-v9.html';
 const DISCOVERY_URI = 'ui://dial/country-v13-nts-experiment.html';
+const CANONICAL_URI = 'ui://dial/listen-v1.html';
 // Previously registered country UI addresses may remain in ChatGPT tool metadata.
 // Each serves the current renderer; these are explicit historical URIs, not a pattern.
 const COUNTRY_RESOURCE_URIS = [
@@ -60,10 +62,10 @@ function makeServer() {
       }
     }]
   }));
-  for (const uri of COUNTRY_RESOURCE_URIS) {
-    registerAppResource(server, uri === DISCOVERY_URI ? 'Country radio player' : `Country radio player compatibility ${uri}`, uri, {}, async () => ({
+  for (const uri of [CANONICAL_URI, ...COUNTRY_RESOURCE_URIS]) {
+    registerAppResource(server, uri === CANONICAL_URI ? 'Dial country and NTS radio' : uri === DISCOVERY_URI ? 'Country radio player' : `Country radio player compatibility ${uri}`, uri, {}, async () => ({
       contents: [{ uri, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
-        _meta: { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS] } } } }]
+        _meta: { ui: { prefersBorder: true, csp: { connectDomains: [ARCHIVE_ORIGIN], resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS, ARCHIVE_ORIGIN] } } } }]
     }));
   }
   registerAppResource(server, 'Dial two-thread capability probe v2', PROBE_URI, {}, async () => ({
@@ -95,6 +97,50 @@ function makeServer() {
     const message = result.status === 'invalid_country' ? 'Invalid country code. Use an assigned ISO alpha-2 code such as FR.'
       : `${result.stations.length} compatible catalog choices for ${result.countryCode} in three bounded provider windows. Scan ${result.scanState}. ${result.choiceLimitReached ? '30-choice limit reached. ' : ''}Select one in the player; audible playback is not guaranteed.`;
     return { content: [{ type: 'text', text: `${message} Radio Browser: https://docs.radio-browser.info/. Playing a station reports its UUID and server IP to Radio Browser.` }], structuredContent: requestId === undefined ? result : { ...result, requestId } };
+  });
+  registerAppTool(server, 'open_country_radio', {
+    title: 'Open Dial radio by country', description: 'For “Dial, open country radio” or “Dial, find stations in Japan”. Opens the country chooser. Press Play in the app to start audio.',
+    inputSchema: { countryCode: z.string().optional() }, _meta: { ui: { resourceUri: CANONICAL_URI } }
+  }, async ({ countryCode }) => {
+    if (!countryCode) return { content: [{ type: 'text', text: 'Dial country radio opened. Choose a country, then press Play in the app.' }], structuredContent: { launchMode: 'country' } };
+    const result = await discover(countryCode, { providerOrigin });
+    return { content: [{ type: 'text', text: `${result.stations.length} country radio choices. Press Play in the app to start audio.` }], structuredContent: { ...result, launchMode: 'country' } };
+  });
+  registerAppTool(server, 'open_nts_radio', {
+    title: 'Open NTS radio in Dial', description: 'For “Dial, open NTS” or “Dial, play NTS 1”. Opens live channels and archive search; choose a channel and press Play in the app to start audio.',
+    inputSchema: { channel: z.enum(['1', '2']).optional() }, _meta: { ui: { resourceUri: CANONICAL_URI } }
+  }, async ({ channel }) => ({ content: [{ type: 'text', text: `NTS ${channel ?? 'radio'} opened. Press Play in the app to start audio.` }], structuredContent: { launchMode: 'nts', ...(channel ? { channel } : {}) } }));
+  registerAppTool(server, 'search_nts_archive', {
+    title: 'Search NTS shows and episodes', description: 'For “Dial, search NTS archives for Floating Points”. Finds a bounded first page of public NTS shows and episodes; playback requires pressing Play in the app.',
+    inputSchema: { query: z.string().min(1).max(120) }, _meta: { ui: { resourceUri: CANONICAL_URI } }
+  }, async ({ query }) => {
+    try { const result = await searchArchive(query); return { content: [{ type: 'text', text: `${result.items.length} NTS show/episode results. Press Play in the app to test archive audio.` }], structuredContent: { ...result, launchMode: 'nts-search' } }; }
+    catch { return { content: [{ type: 'text', text: 'NTS archive search is unavailable or the query is invalid. Retry in the app.' }], structuredContent: { kind: 'nts-search', launchMode: 'nts-search', status: 'error', items: [], query: query.slice(0, 120) } }; }
+  });
+  registerAppTool(server, 'pause_dial', {
+    title: 'Pause Dial in another thread', description: 'For “Dial, pause”. Opens a small control that attempts a same-browser Dial pause and displays its acknowledgement; no cross-device control.',
+    inputSchema: {}, _meta: { ui: { resourceUri: CANONICAL_URI } }
+  }, async () => ({ content: [{ type: 'text', text: 'Dial pause control opened. The app will report whether another thread acknowledged Pause.' }], structuredContent: { launchMode: 'pause-control', requestId: crypto.randomUUID() } }));
+  registerAppTool(server, 'search_nts_archive_in_app', {
+    title: 'Search NTS archive in app', description: 'Bounded NTS metadata search.', inputSchema: { query: z.string() },
+    _meta: { ui: { resourceUri: CANONICAL_URI, visibility: ['app'] } }
+  }, async ({ query }) => {
+    try { const result = await searchArchive(query); return { content: [{ type: 'text', text: 'NTS search complete.' }], structuredContent: result }; }
+    catch { return { content: [{ type: 'text', text: 'NTS search unavailable.' }], structuredContent: { kind: 'nts-search', status: 'error', items: [] } }; }
+  });
+  registerAppTool(server, 'list_nts_show_episodes', {
+    title: 'List NTS show episodes', description: 'Bounded recent episodes.', inputSchema: { showAlias: z.string() },
+    _meta: { ui: { resourceUri: CANONICAL_URI, visibility: ['app'] } }
+  }, async ({ showAlias }) => {
+    try { return { content: [{ type: 'text', text: 'NTS episodes loaded.' }], structuredContent: await showEpisodes(showAlias) }; }
+    catch { return { content: [{ type: 'text', text: 'NTS episodes unavailable.' }], structuredContent: { kind: 'nts-episodes', status: 'error', items: [] } }; }
+  });
+  registerAppTool(server, 'resolve_nts_episode', {
+    title: 'Resolve selected NTS episode', description: 'App-only public SoundCloud source resolution.', inputSchema: { showAlias: z.string(), episodeAlias: z.string() },
+    _meta: { ui: { resourceUri: CANONICAL_URI, visibility: ['app'] } }
+  }, async ({ showAlias, episodeAlias }) => {
+    try { const { item, candidate } = await resolveEpisode(showAlias, episodeAlias); return { content: [{ type: 'text', text: candidate ? 'Archive media candidate available.' : 'Audio unavailable here.' }], structuredContent: { status: candidate ? 'candidate' : 'unavailable', item }, _meta: candidate ? { dialMedia: candidate } : {} }; }
+    catch { return { content: [{ type: 'text', text: 'Archive source unavailable.' }], structuredContent: { status: 'error' } }; }
   });
   registerAppTool(server, 'retry_stations_by_country', {
     title: 'Retry country station scan',

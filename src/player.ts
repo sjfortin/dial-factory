@@ -21,12 +21,34 @@ const ntsTab = document.querySelector<HTMLButtonElement>('#nts-tab');
 const countriesPanel = document.querySelector<HTMLElement>('#countries-panel');
 const ntsPanel = document.querySelector<HTMLElement>('#nts-panel');
 const countryAttribution = document.querySelector<HTMLElement>('#country-attribution');
+const archiveQuery = document.querySelector<HTMLInputElement>('#archive-query');
+const archiveSearch = document.querySelector<HTMLButtonElement>('#archive-search-button');
+const archiveResults = document.querySelector<HTMLElement>('#archive-results');
+const archiveStatus = document.querySelector<HTMLElement>('#archive-status');
+const archiveLink = document.querySelector<HTMLAnchorElement>('#archive-link');
+const pausePanel = document.querySelector<HTMLElement>('#pause-panel');
+const playerSection = document.querySelector<HTMLElement>('#player-section');
+const pauseStatus = document.querySelector<HTMLElement>('#pause-status');
+const pauseRetry = document.querySelector<HTMLButtonElement>('#pause-retry');
+type ArchiveItem = { kind: 'show' | 'episode'; title: string; show: string; date: string; showAlias: string; episodeAlias?: string; url: string; audioSource: string };
+type ArchiveResult = { kind?: string; status?: string; items?: ArchiveItem[]; query?: string; launchMode?: string; channel?: string; requestId?: string };
 const player = installPlayer(audio, toggle, status, {
   coordination: {
     locks: navigator.locks,
     channel: (name) => new BroadcastChannel(name)
   },
   remoteButton, remoteStatus,
+  seek: document.querySelector<HTMLInputElement>('#archive-seek'),
+  time: document.querySelector<HTMLElement>('#archive-time'),
+  resolveArchive: async (showAlias, episodeAlias) => {
+    const result = await app.callServerTool({ name: 'resolve_nts_episode', arguments: { showAlias, episodeAlias } });
+    const meta = result._meta as { dialMedia?: { format?: string; url?: string; expires?: number } } | undefined;
+    const candidate = meta?.dialMedia;
+    if (!candidate || (candidate.format !== 'hls' && candidate.format !== 'direct') || typeof candidate.url !== 'string') return null;
+    const url = new URL(candidate.url);
+    if (url.origin !== 'https://playback.media-streaming.soundcloud.cloud') return null;
+    return { format: candidate.format, url: candidate.url, expires: candidate.expires };
+  },
   onPlaying: (clickToken) => {
     void app.callServerTool({ name: 'report_station_click', arguments: { clickToken } }).catch(() => {});
   }
@@ -50,6 +72,8 @@ if (list && summary) {
     if (countryAttribution) countryAttribution.hidden = selectedSource === 'nts' || (collection !== 'countries' && selectedSource !== 'country');
     countriesTab?.setAttribute('aria-selected', String(collection === 'countries'));
     ntsTab?.setAttribute('aria-selected', String(collection === 'nts'));
+    if (pausePanel) pausePanel.hidden = true;
+    if (playerSection) playerSection.hidden = false;
   };
   countriesTab?.addEventListener('click', () => showCollection('countries'));
   ntsTab?.addEventListener('click', () => showCollection('nts'));
@@ -67,8 +91,77 @@ if (list && summary) {
     if (stationTitle) stationTitle.textContent = selection.name;
     if (stationSubtitle) stationSubtitle.textContent = 'NTS · live channel · experimental playback';
     if (countryAttribution) countryAttribution.hidden = true;
+    if (archiveLink) archiveLink.hidden = true;
     for (const option of ntsPanel.querySelectorAll<HTMLButtonElement>('.nts-option')) option.setAttribute('aria-pressed', String(option === button));
   }));
+  let archiveSerial = 0;
+  const safeItem = (item: ArchiveItem) => item && (item.kind === 'show' || item.kind === 'episode') && /^[a-z0-9-]{1,100}$/.test(item.showAlias) &&
+    (item.kind === 'show' || (typeof item.episodeAlias === 'string' && /^[a-z0-9-]{1,100}$/.test(item.episodeAlias))) &&
+    item.url === `https://www.nts.live/shows/${item.showAlias}${item.kind === 'episode' ? `/episodes/${item.episodeAlias}` : ''}`;
+  const showArchive = (result: ArchiveResult) => {
+    if (!archiveResults || !archiveStatus) return;
+    archiveResults.replaceChildren();
+    if (result.status === 'error') { archiveStatus.textContent = 'NTS archive is unavailable or changed format. Try again.'; return; }
+    const items = Array.isArray(result.items) ? result.items.filter(safeItem).slice(0, 12) : [];
+    archiveStatus.textContent = items.length ? `${items.length} ${result.kind === 'nts-episodes' ? 'recent episodes' : 'show and episode results'} from NTS. Audio availability is checked on Play.` : 'No matching shows or episodes. Try another phrase.';
+    for (const item of items) {
+      const li = document.createElement('li'); li.className = 'archive-row';
+      const button = document.createElement('button'); button.type = 'button';
+      const title = document.createElement('strong'); title.textContent = item.title;
+      const sub = document.createElement('small'); sub.textContent = [item.kind === 'show' ? 'Show' : 'Episode', item.show && item.kind === 'episode' ? item.show : '', item.date, item.audioSource === 'unavailable' && item.kind === 'episode' ? 'Audio availability checked on Play' : ''].filter(Boolean).join(' · ');
+      button.append(title, sub);
+      button.addEventListener('click', () => {
+        if (item.kind === 'show') {
+          const serial = ++archiveSerial;
+          archiveStatus.textContent = `Loading episodes for ${item.title}…`;
+          void app.callServerTool({ name: 'list_nts_show_episodes', arguments: { showAlias: item.showAlias } }).then(response => { if (serial === archiveSerial) showArchive(response.structuredContent as ArchiveResult); }).catch(() => { if (serial === archiveSerial) archiveStatus.textContent = 'Could not load episodes. Try again.'; });
+          return;
+        }
+        selectedSource = 'nts'; catalog.clearSelected();
+        ntsPanel?.querySelectorAll<HTMLButtonElement>('.nts-option').forEach(option => option.setAttribute('aria-pressed', 'false'));
+        player.selectStation({ id: `nts:${item.showAlias}:${item.episodeAlias}`, name: item.title, streamUrl: '', source: 'nts', archive: { showAlias: item.showAlias, episodeAlias: item.episodeAlias!, url: item.url } });
+        toggle.disabled = false;
+        if (stationTitle) stationTitle.textContent = item.title;
+        if (stationSubtitle) stationSubtitle.textContent = [item.show || 'NTS', item.date, 'archive episode'].filter(Boolean).join(' · ');
+        if (archiveLink) { archiveLink.href = item.url; archiveLink.hidden = false; }
+      });
+      const link = document.createElement('a'); link.href = item.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Open on NTS';
+      li.append(button, link); archiveResults.append(li);
+    }
+  };
+  const search = () => {
+    const query = archiveQuery?.value.trim() ?? '';
+    if (!query || Array.from(query).length > 120) { if (archiveStatus) archiveStatus.textContent = 'Enter 1–120 characters to search.'; return; }
+    const serial = ++archiveSerial;
+    if (archiveStatus) archiveStatus.textContent = 'Searching NTS…';
+    if (archiveSearch) archiveSearch.disabled = true;
+    void app.callServerTool({ name: 'search_nts_archive_in_app', arguments: { query } }).then(response => { if (serial === archiveSerial) showArchive(response.structuredContent as ArchiveResult); }).catch(() => { if (serial === archiveSerial && archiveStatus) archiveStatus.textContent = 'NTS search failed. Try again.'; }).finally(() => { if (serial === archiveSerial && archiveSearch) archiveSearch.disabled = false; });
+  };
+  archiveSearch?.addEventListener('click', search);
+  archiveQuery?.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); search(); } });
+  let pauseRequest = '';
+  const pauseOnce = (requestId: string) => {
+    if (pauseRequest === requestId) return;
+    pauseRequest = requestId;
+    if (countriesPanel) countriesPanel.hidden = true;
+    if (ntsPanel) ntsPanel.hidden = true;
+    if (playerSection) playerSection.hidden = true;
+    if (pausePanel) pausePanel.hidden = false;
+    if (pauseStatus) pauseStatus.textContent = player.remoteAvailable() ? 'Requesting Pause from another Dial thread…' : 'This host cannot coordinate Dial playback.';
+    const tryPause = (remaining: number) => {
+      if (pauseRequest !== requestId) return;
+      if (!player.remoteKnown() && remaining > 0 && player.remoteAvailable()) { setTimeout(() => tryPause(remaining - 1), 100); return; }
+      void player.pauseRemote().then(ack => { if (pauseRequest === requestId && pauseStatus) pauseStatus.textContent = ack ? 'Pause confirmed by the other Dial thread.' : player.remoteAvailable() ? 'No player found or Pause was not confirmed. Check the other thread.' : 'This host cannot coordinate Dial playback.'; });
+    };
+    tryPause(5);
+  };
+  pauseRetry?.addEventListener('click', () => { pauseRequest = ''; pauseOnce(`${Date.now()}-${Math.random()}`); });
+  document.querySelectorAll?.('#help-examples li')?.forEach(item => {
+    const example = item.textContent ?? '';
+    const copy = document.createElement('button'); copy.type = 'button'; copy.textContent = 'Copy'; copy.setAttribute('aria-label', `Copy prompt: ${example}`);
+    copy.addEventListener('click', () => { void navigator.clipboard?.writeText(example)?.then(() => { copy.textContent = 'Copied'; }, () => { copy.textContent = 'Select the prompt to copy'; }); });
+    item.append(copy);
+  });
   function acceptInitial(result: unknown): boolean {
     if (catalog.receive(result) !== 'initial') return false;
     selectedSource = null;
@@ -143,7 +236,15 @@ if (list && summary) {
   });
   app.ontoolresult = (params) => {
     if (!params.structuredContent || typeof params.structuredContent !== 'object') return;
-    const result = params.structuredContent as { kind?: string; requestId?: string };
+    const result = params.structuredContent as ArchiveResult;
+    if (result.launchMode === 'pause-control' && typeof result.requestId === 'string') { pauseOnce(result.requestId); return; }
+    if (result.launchMode === 'nts' || result.launchMode === 'nts-search') {
+      showCollection('nts');
+      if (result.channel === '1' || result.channel === '2') ntsPanel?.querySelector<HTMLButtonElement>(`.nts-option[data-channel="${result.channel}"]`)?.click();
+      if (result.launchMode === 'nts-search') { if (archiveQuery && typeof result.query === 'string') archiveQuery.value = result.query; showArchive(result); }
+      return;
+    }
+    if (result.launchMode === 'country') showCollection('countries');
     // Retry notifications have no request identity. Only the matching promise may merge them.
     if (result.kind === 'retry') return;
     // Picker calls carry an echoed ID. Their correlated promise alone may apply them;
