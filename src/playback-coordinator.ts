@@ -164,8 +164,8 @@ export class PlaybackCoordinator {
     });
   }
 
-  release() {
-    if (!this.held) return;
+  release(epoch?: string) {
+    if (!this.held || (epoch !== undefined && this.held.epoch !== epoch)) return;
     const held = this.held;
     this.held = undefined;
     if (this.heartbeat) this.clearIntervalTimer(this.heartbeat);

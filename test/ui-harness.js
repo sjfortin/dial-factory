@@ -38,7 +38,8 @@ export async function exerciseDeliveredScript(script) {
   class ResizeObserver { observe() {} disconnect() {} }
   class BroadcastChannel { onmessage = null; constructor() { channels.push(this); } postMessage(message) { channelMessages.push(message); } close() {} }
   const navigator = { locks: { request(_name, { signal }, callback) { return signal.aborted ? Promise.reject(new Error('aborted')) : Promise.resolve().then(callback); } } };
-  runInNewContext(script, { window, document, navigator, BroadcastChannel, console: { ...console, debug() {} }, URL, setTimeout, clearTimeout, setInterval: () => 0, clearInterval: () => {}, queueMicrotask, requestAnimationFrame: callback => queueMicrotask(callback), ResizeObserver, Event, EventTarget, AbortController, TextEncoder, TextDecoder }, { timeout: 5000 });
+  const saved = new Map(); const sessionStorage = { getItem: key => saved.get(key) ?? null, setItem: (key, value) => { saved.set(key, value); } };
+  runInNewContext(script, { window, document, navigator, sessionStorage, BroadcastChannel, console: { ...console, debug() {} }, URL, setTimeout, clearTimeout, setInterval: () => 0, clearInterval: () => {}, queueMicrotask, requestAnimationFrame: callback => queueMicrotask(callback), ResizeObserver, Event, EventTarget, AbortController, TextEncoder, TextDecoder }, { timeout: 5000 });
   await tick();
   assert.ok(sent.some(item => item.method === 'ui/notifications/initialized'));
   const notify = structuredContent => listeners.get('message')?.({ data: { jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: { content: [], structuredContent } }, source: window.parent });
@@ -195,11 +196,24 @@ export async function exerciseDeliveredScript(script) {
   assert.equal(nodes['#radio'].src, 'https://stream-relay-geo.ntslive.net/stream2?client=direct');
   assert.equal(nodes['#radio'].playCalls, playsBeforeLateResolve, 'late resolver cannot play an old episode');
   channels[0].onmessage?.({ data: { v: 1, type: 'status', sender: 'other-frame', epoch: 'remote-epoch', active: true, station: 'Other Dial' } });
-  notify({ launchMode: 'pause-control', requestId: 'once-1' }); await tick();
-  notify({ launchMode: 'pause-control', requestId: 'once-1' }); await tick();
+  notify({ launchMode: 'pause-control', requestId: 'once-1', issuedAt: Date.now() }); await tick();
+  notify({ launchMode: 'pause-control', requestId: 'once-1', issuedAt: Date.now() }); await tick();
   assert.equal(nodes['#pause-panel'].hidden, false);
   assert.equal(channelMessages.filter(m => m.type === 'pause').length, 1, 'duplicate pause-control result issues one request');
   const request = channelMessages.find(m => m.type === 'pause');
   channels[0].onmessage?.({ data: { v: 1, type: 'ack', sender: 'other-frame', target: request.sender, request: request.request, epoch: 'remote-epoch' } }); await tick();
   assert.match(nodes['#pause-status'].textContent, /confirmed/);
+  nodes['#country-select'].value = 'GB'; nodes['#country-select'].dispatchEvent(new Event('change')); await tick();
+  const lateCountry = delayedFind.shift();
+  notify({ launchMode: 'nts', channel: '1' }); await tick();
+  reply(lateCountry, { ...result([row(54, 'GB')], { countryCode: 'GB' }), requestId: lateCountry.params.arguments.requestId }); await tick();
+  assert.equal(nodes['#nts-panel'].hidden, false, 'late country picker cannot replace a new NTS launch');
+  assert.equal(nodes['#station-title'].textContent, 'NTS 1');
+  notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'empty', items: [], query: 'initial' });
+  nodes['#archive-query'].value = 'old'; nodes['#archive-search-button'].click(); await tick();
+  const lateSearch = delayedArchive.shift();
+  notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'ok', items: [item('New launch')], query: 'new' }); await tick();
+  reply(lateSearch, { kind: 'nts-search', status: 'ok', items: [item('Old search')] }); await tick();
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[0].textContent, 'New launch', 'late app search cannot replace a newer chat search');
+  assert.equal(nodes['#archive-search-button'].disabled, false, 'new launch clears stale busy state');
 }

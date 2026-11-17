@@ -120,7 +120,7 @@ function makeServer() {
   registerAppTool(server, 'pause_dial', {
     title: 'Pause Dial in another thread', description: 'For “Dial, pause”. Opens a small control that attempts a same-browser Dial pause and displays its acknowledgement; no cross-device control.',
     inputSchema: {}, _meta: { ui: { resourceUri: CANONICAL_URI } }
-  }, async () => ({ content: [{ type: 'text', text: 'Dial pause control opened. The app will report whether another thread acknowledged Pause.' }], structuredContent: { launchMode: 'pause-control', requestId: crypto.randomUUID() } }));
+  }, async () => ({ content: [{ type: 'text', text: 'Dial pause control opened. The app will report whether another thread acknowledged Pause.' }], structuredContent: { launchMode: 'pause-control', requestId: crypto.randomUUID(), issuedAt: Date.now() } }));
   registerAppTool(server, 'search_nts_archive_in_app', {
     title: 'Search NTS archive in app', description: 'Bounded NTS metadata search.', inputSchema: { query: z.string() },
     _meta: { ui: { resourceUri: CANONICAL_URI, visibility: ['app'] } }

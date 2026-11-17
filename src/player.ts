@@ -2,6 +2,7 @@ import { App } from '@modelcontextprotocol/ext-apps';
 import { installPlayer } from './player-controller.js';
 import { createStationCatalog } from './station-list.js';
 import { NTS_CHANNELS } from './nts-policy.js';
+import { rememberPauseRequest } from './pause-request.js';
 
 const audio = document.querySelector<HTMLAudioElement>('#radio')!;
 const toggle = document.querySelector<HTMLButtonElement>('#toggle')!;
@@ -31,7 +32,7 @@ const playerSection = document.querySelector<HTMLElement>('#player-section');
 const pauseStatus = document.querySelector<HTMLElement>('#pause-status');
 const pauseRetry = document.querySelector<HTMLButtonElement>('#pause-retry');
 type ArchiveItem = { kind: 'show' | 'episode'; title: string; show: string; date: string; showAlias: string; episodeAlias?: string; url: string; audioSource: string };
-type ArchiveResult = { kind?: string; status?: string; items?: ArchiveItem[]; query?: string; launchMode?: string; channel?: string; requestId?: string };
+type ArchiveResult = { kind?: string; status?: string; items?: ArchiveItem[]; query?: string; launchMode?: string; channel?: string; requestId?: string; issuedAt?: number };
 const player = installPlayer(audio, toggle, status, {
   coordination: {
     locks: navigator.locks,
@@ -75,8 +76,8 @@ if (list && summary) {
     if (pausePanel) pausePanel.hidden = true;
     if (playerSection) playerSection.hidden = false;
   };
-  countriesTab?.addEventListener('click', () => showCollection('countries'));
-  ntsTab?.addEventListener('click', () => showCollection('nts'));
+  countriesTab?.addEventListener('click', () => { supersede(); showCollection('countries'); });
+  ntsTab?.addEventListener('click', () => { supersede(); showCollection('nts'); });
   for (const [tab, other] of [[countriesTab, ntsTab], [ntsTab, countriesTab]] as const) tab?.addEventListener('keydown', event => {
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); other?.click(); other?.focus(); }
   });
@@ -112,6 +113,7 @@ if (list && summary) {
       button.append(title, sub);
       button.addEventListener('click', () => {
         if (item.kind === 'show') {
+          supersede();
           const serial = ++archiveSerial;
           archiveStatus.textContent = `Loading episodes for ${item.title}…`;
           void app.callServerTool({ name: 'list_nts_show_episodes', arguments: { showAlias: item.showAlias } }).then(response => { if (serial === archiveSerial) showArchive(response.structuredContent as ArchiveResult); }).catch(() => { if (serial === archiveSerial) archiveStatus.textContent = 'Could not load episodes. Try again.'; });
@@ -132,6 +134,7 @@ if (list && summary) {
   const search = () => {
     const query = archiveQuery?.value.trim() ?? '';
     if (!query || Array.from(query).length > 120) { if (archiveStatus) archiveStatus.textContent = 'Enter 1–120 characters to search.'; return; }
+    supersede();
     const serial = ++archiveSerial;
     if (archiveStatus) archiveStatus.textContent = 'Searching NTS…';
     if (archiveSearch) archiveSearch.disabled = true;
@@ -140,13 +143,26 @@ if (list && summary) {
   archiveSearch?.addEventListener('click', search);
   archiveQuery?.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); search(); } });
   let pauseRequest = '';
-  const pauseOnce = (requestId: string) => {
-    if (pauseRequest === requestId) return;
+  const seenPauseRequests = new Set<string>();
+  const pauseOnce = (requestId: string, userInitiated = false, issuedAt?: number) => {
+    if (seenPauseRequests.has(requestId)) return;
+    seenPauseRequests.add(requestId);
     pauseRequest = requestId;
     if (countriesPanel) countriesPanel.hidden = true;
     if (ntsPanel) ntsPanel.hidden = true;
     if (playerSection) playerSection.hidden = true;
     if (pausePanel) pausePanel.hidden = false;
+    let pauseStore: Storage | undefined;
+    try { pauseStore = globalThis.sessionStorage; } catch { /* opaque origin */ }
+    const record = rememberPauseRequest(pauseStore, requestId);
+    if (!userInitiated && (!Number.isFinite(issuedAt) || Math.abs(Date.now() - issuedAt!) > 30_000)) {
+      if (pauseStatus) pauseStatus.textContent = 'This Pause card is no longer fresh. Press Pause again to try.';
+      return;
+    }
+    if (!userInitiated && record !== 'new') {
+      if (pauseStatus) pauseStatus.textContent = record === 'seen' ? 'This Pause request was already attempted. Check the other thread or press Pause again.' : 'Automatic Pause is unavailable here. Press Pause again to try.';
+      return;
+    }
     if (pauseStatus) pauseStatus.textContent = player.remoteAvailable() ? 'Requesting Pause from another Dial thread…' : 'This host cannot coordinate Dial playback.';
     const tryPause = (remaining: number) => {
       if (pauseRequest !== requestId) return;
@@ -155,7 +171,7 @@ if (list && summary) {
     };
     tryPause(5);
   };
-  pauseRetry?.addEventListener('click', () => { pauseRequest = ''; pauseOnce(`${Date.now()}-${Math.random()}`); });
+  pauseRetry?.addEventListener('click', () => { pauseRequest = ''; pauseOnce(globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.floor(Math.random() * 1e9)}`, true); });
   document.querySelectorAll?.('#help-examples li')?.forEach(item => {
     const example = item.textContent ?? '';
     const copy = document.createElement('button'); copy.type = 'button'; copy.textContent = 'Copy'; copy.setAttribute('aria-label', `Copy prompt: ${example}`);
@@ -185,6 +201,7 @@ if (list && summary) {
   countrySelect?.addEventListener('change', () => {
     const countryCode = countrySelect.value;
     if (!countryCode) return;
+    supersede();
     const request = ++countryRequestSerial;
     const requestId = `${Date.now()}-${request}`;
     activeCountryRequest = request;
@@ -211,6 +228,14 @@ if (list && summary) {
     if (more) more.hidden = !catalog.canMore;
     if (retry) { retry.hidden = !catalog.canRetry; retry.disabled = pending !== null || activeCountryRequest !== null; }
   };
+  function supersede() {
+    activeCountryRequest = null;
+    pending = null;
+    archiveSerial++;
+    pauseRequest = '';
+    if (archiveSearch) archiveSearch.disabled = false;
+    refreshControls();
+  }
   more?.addEventListener('click', () => {
     catalog.reveal();
     refreshControls();
@@ -237,22 +262,22 @@ if (list && summary) {
   app.ontoolresult = (params) => {
     if (!params.structuredContent || typeof params.structuredContent !== 'object') return;
     const result = params.structuredContent as ArchiveResult;
-    if (result.launchMode === 'pause-control' && typeof result.requestId === 'string') { pauseOnce(result.requestId); return; }
+    if (result.launchMode === 'pause-control' && typeof result.requestId === 'string') { if (!seenPauseRequests.has(result.requestId)) { supersede(); pauseOnce(result.requestId, false, result.issuedAt); } return; }
     if (result.launchMode === 'nts' || result.launchMode === 'nts-search') {
+      supersede();
       showCollection('nts');
       if (result.channel === '1' || result.channel === '2') ntsPanel?.querySelector<HTMLButtonElement>(`.nts-option[data-channel="${result.channel}"]`)?.click();
       if (result.launchMode === 'nts-search') { if (archiveQuery && typeof result.query === 'string') archiveQuery.value = result.query; showArchive(result); }
       return;
     }
-    if (result.launchMode === 'country') showCollection('countries');
+    if (result.launchMode === 'country') { supersede(); showCollection('countries'); }
     // Retry notifications have no request identity. Only the matching promise may merge them.
     if (result.kind === 'retry') return;
     // Picker calls carry an echoed ID. Their correlated promise alone may apply them;
     // late or duplicate notifications must never replace a newer selection.
     if (result.kind !== 'initial' || typeof result.requestId === 'string') return;
     // A fresh chat request supersedes any in-flight picker request.
-    activeCountryRequest = null;
-    pending = null;
+    if (!result.launchMode) supersede();
     if (!acceptInitial(result)) catalog.error('Could not load station results. Try the country request again.');
     refreshControls();
   };
