@@ -241,6 +241,9 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     if (!wanted) { coordinator.release(lockEpoch); return; }
     show('buffering', selected?.archive ? 'Resolving NTS archive…' : 'Connecting to live stream…');
     try {
+      // A coordinator Pause clears the old source. Restore it only for an
+      // explicit Play, after ownership is granted; row selection stays inert.
+      if (!selected?.archive && !audio.src && selected?.streamUrl) audio.src = selected.streamUrl;
       if (selected?.archive) {
         const { showAlias, episodeAlias } = selected.archive;
         if (!archiveUrl || Date.now() - archiveResolvedAt >= 5 * 60 * 1000 || (archiveUrl.expires !== undefined && archiveUrl.expires * 1000 <= Date.now() + 60000)) {

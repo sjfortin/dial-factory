@@ -322,3 +322,33 @@ test('selecting active NTS cancels a prepared switch; remote Pause cannot start 
   assert.equal(a.audio.src, NTS_CHANNELS['2'].streamUrl);
   a.player.dispose();
 });
+
+test('cross-thread Pause clears NTS source; active reselect and pending Play recover only on explicit Play', async () => {
+  const env = shared(); const a = setup(env), remote = setup(env, 'remote');
+  const originalPlay = a.audio.play;
+  a.audio.play = () => a.audio.src ? originalPlay() : Promise.reject(new Error('no media source'));
+  a.player.selectStation({ ...NTS_CHANNELS['1'], source: 'nts' });
+  a.toggle.fire('click'); await settle();
+  a.player.selectStation({ ...NTS_CHANNELS['2'], source: 'nts' });
+  assert.equal(await remote.player.pauseRemote(), true);
+  await settle();
+  assert.equal(a.audio.src, '', 'cross-thread Pause clears the active source');
+  assert.equal(a.audio.isPlaying, false);
+  const plays = a.audio.playCalls;
+  a.player.selectStation({ ...NTS_CHANNELS['1'], source: 'nts' });
+  assert.equal(a.audio.src, '', 'active reselect neither reloads nor starts audio');
+  assert.equal(a.audio.playCalls, plays);
+  a.toggle.fire('click'); await settle();
+  assert.equal(a.audio.src, NTS_CHANNELS['1'].streamUrl);
+  assert.equal(a.audio.isPlaying, true);
+  a.player.selectStation({ ...NTS_CHANNELS['2'], source: 'nts' });
+  assert.equal(await remote.player.pauseRemote(), true);
+  await settle();
+  assert.equal(a.audio.src, '');
+  a.player.selectStation({ ...NTS_CHANNELS['2'], source: 'nts' });
+  assert.equal(a.audio.src, '', 'repeated pending selection stays non-destructive');
+  a.player.playPrepared(); await settle();
+  assert.equal(a.audio.src, NTS_CHANNELS['2'].streamUrl);
+  assert.equal(a.audio.isPlaying, true);
+  a.player.dispose(); remote.player.dispose();
+});
