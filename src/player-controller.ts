@@ -229,7 +229,9 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
         if (!archiveUrl) { fail('Audio unavailable here. Open this episode on NTS.'); return; }
         prepareRestore(currentAttempt, sourceId!);
         if (archiveUrl.format === 'hls') {
-          if (audio.canPlayType?.('application/vnd.apple.mpegurl')) audio.src = archiveUrl.url;
+          if (audio.canPlayType?.('application/vnd.apple.mpegurl')) {
+            if (audio.src !== archiveUrl.url) audio.src = archiveUrl.url;
+          }
           else if ((options.hlsAdapter?.isSupported ?? Hls.isSupported)()) {
             if (!hls) {
               const config = { enableWorker: false, xhrSetup: (_xhr: XMLHttpRequest, url: string) => { if (new URL(url).origin !== 'https://playback.media-streaming.soundcloud.cloud') throw new Error('Archive media origin rejected'); } };
@@ -240,7 +242,8 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
                 const timeout = setTimeout(() => { if (pending) { pending = false; reject(new Error('manifest timeout')); } }, 10000);
                 instance.on(Hls.Events.MANIFEST_PARSED, () => { if (pending) { pending = false; clearTimeout(timeout); resolve(); } });
                 instance.on(Hls.Events.ERROR, (_event, data) => {
-                  if (!data.fatal || hls !== instance || currentAttempt !== attempt || selected?.id !== sourceId) return;
+                  // The instance survives an ordinary pause, while each Play gets a new attempt.
+                  if (!data.fatal || hls !== instance || !wanted || selected?.id !== sourceId) return;
                   if (pending) { pending = false; clearTimeout(timeout); reject(new Error('media error')); }
                   fail('Archive audio failed. Press Play to retry with a fresh source, or open on NTS.');
                 });
@@ -250,7 +253,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
               await manifest;
             }
           } else { fail('This host cannot play the archive format. Open on NTS.'); return; }
-        } else audio.src = archiveUrl.url;
+        } else if (audio.src !== archiveUrl.url) audio.src = archiveUrl.url;
         if (!wanted || currentAttempt !== attempt || abort.signal.aborted) return;
         restorePosition?.();
       }

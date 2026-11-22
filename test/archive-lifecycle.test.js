@@ -4,9 +4,9 @@ import Hls from 'hls.js/light';
 import { installPlayer } from '../dist/player-controller.js';
 const tick = async () => { await new Promise(r => setImmediate(r)); await new Promise(r => setImmediate(r)); };
 class El extends EventTarget {
-  dataset = {}; textContent = ''; hidden = false; disabled = false; value = '0'; error = null; paused = true; currentTime = 0; duration = 100; readyState = 0; _src = ''; playCalls = 0;
+  dataset = {}; textContent = ''; hidden = false; disabled = false; value = '0'; error = null; paused = true; currentTime = 0; duration = 100; readyState = 0; _src = ''; srcAssignments = 0; playCalls = 0;
   ranges = [[10, 40], [60, 90]];
-  get src() { return this._src; } set src(value) { this._src = value; this.currentTime = 0; this.readyState = 1; this.dispatchEvent(new Event('loadedmetadata')); }
+  get src() { return this._src; } set src(value) { this.srcAssignments++; this._src = value; this.currentTime = 0; this.readyState = 1; this.dispatchEvent(new Event('loadedmetadata')); }
   get seekable() { return { length: this.ranges.length, start: i => this.ranges[i][0], end: i => this.ranges[i][1] }; }
   setAttribute() {} removeAttribute(name) { if (name === 'src') this._src = ''; }
   load() { this.error = null; this.currentTime = 0; this.readyState = 0; }
@@ -94,6 +94,42 @@ test('expired HLS candidate resolves again and restores position after synchrono
     assert.equal(s.audio.currentTime, 72);
     assert.equal(s.status.dataset.state, 'playing');
   } finally { Date.now = originalNow; s.player.dispose(); }
+});
+for (const format of ['direct', 'native HLS']) {
+  test(`ordinary ${format} pause/resume preserves position without resetting the media source`, async () => {
+    const env = shared(); let resolutions = 0;
+    const s = setup(env, { resolveArchive: async () => { resolutions++; return { format: format === 'direct' ? 'direct' : 'hls', url: format === 'direct' ? 'https://playback.media-streaming.soundcloud.cloud/test.mp3' : 'https://playback.media-streaming.soundcloud.cloud/a/playlist.m3u8' }; } });
+    if (format === 'native HLS') s.audio.canPlayType = () => 'maybe';
+    try {
+      s.player.selectStation(archive); s.toggle.click(); await tick();
+      s.audio.currentTime = 72; s.toggle.click(); await tick();
+      const assignments = s.audio.srcAssignments;
+      s.toggle.click(); await tick();
+      assert.equal(resolutions, 1, 'valid candidate is retained');
+      assert.equal(s.audio.srcAssignments, assignments, 'resume does not replace the attached source');
+      assert.equal(s.audio.currentTime, 72);
+      assert.equal(s.status.dataset.state, 'playing');
+    } finally { s.player.dispose(); }
+  });
+}
+test('retained HLS instance handles fatal errors after pause/resume, while stale instances cannot fail a retry', async () => {
+  const env = shared(); const instances = []; let resolutions = 0;
+  const s = setup(env, { resolveArchive: async () => { resolutions++; return { format: 'hls', url: 'https://playback.media-streaming.soundcloud.cloud/a/playlist.m3u8' }; }, hlsAdapter: { isSupported: () => true, create: () => { const instance = new FakeHls(); instance.autoManifest = true; instances.push(instance); return instance; } } });
+  try {
+    s.player.selectStation(archive); s.toggle.click(); await tick();
+    s.audio.currentTime = 72; s.toggle.click(); await tick();
+    s.toggle.click(); await tick();
+    assert.equal(instances.length, 1, 'ordinary resume retains the same HLS instance');
+    instances[0].emit(Hls.Events.ERROR, { fatal: true }); await tick();
+    assert.equal(s.status.dataset.state, 'error');
+    assert.equal(instances[0].destroyed, true);
+    assert.equal(env.lock.active, false, 'fatal error releases playback ownership');
+    s.toggle.click(); await tick();
+    assert.equal(resolutions, 2, 'retry resolves a fresh candidate');
+    assert.equal(s.status.dataset.state, 'playing');
+    instances[0].emit(Hls.Events.ERROR, { fatal: true }); await tick();
+    assert.equal(s.status.dataset.state, 'playing', 'old instance cannot fail the replacement');
+  } finally { s.player.dispose(); }
 });
 test('late media-key claim cannot relabel or release a newer source', async () => {
   const originalNavigator = Object.getOwnPropertyDescriptor(globalThis, 'navigator'); const originalMetadata = Object.getOwnPropertyDescriptor(globalThis, 'MediaMetadata');
