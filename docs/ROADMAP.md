@@ -1,49 +1,19 @@
-# Dial roadmap — proposal
+# Dial roadmap
 
-Current checkpoint (2026-11-12): DIAL-008 is independently reviewed and locally verified, waiting for actual host QA; DIAL-009 country/station expansion and NTS specs await exact approval. Globe-based selection is a separate owner-requested stretch goal. See [NEXT-SESSION.md](NEXT-SESSION.md) and canonical factory state records for current status; the phase descriptions below retain earlier proposal history.
+## Working now
 
-This is a proposed sequence, not approval to implement every phase. DIAL-004 playback coordination and DIAL-005 Studio redesign are complete. DIAL-006 is the current planning phase: bounded station coverage for FR, GB, US, CA, DE, JP, ES and IT. Hosting follows only after the owner accepts coverage and separately approves its scope.
+Country radio and NTS live playback are deployed. The owner confirmed both NTS channels, Play/Pause/Play-again, and channel switching. DIAL-011's missing-player compatibility fix is COMPLETE/PASS, supported by independent checks and owner confirmation. Known historical country resource addresses must continue to resolve. DIAL-010 retains unobserved host error/CSP telemetry and coordination subchecks separately; live audio success does not invent those observations.
 
-## Current delivery: country discovery (DIAL-002)
+## Next proposal — DIAL-012
 
-Country lookup, station selection and the player are implemented and independently reviewed; 19 automated tests and live Inspector checks passed. Owner reports successful ChatGPT QA. Formal verification still needs dated station-specific host evidence required by its approved spec. Existing work is pushed on work/DIAL-002; PR #2 targets main: https://github.com/sjfortin/dial-factory/pull/2. PR2 was merged into main at 5fb9ae7. main is now the repository default.
+Give country radio and NTS separate tools, prompts and default views on the shared playback engine. Add visible, copyable prompt help and acknowledged Pause controls usable from another thread within the tested browser profile/device. Natural-language examples are guidance, not registered slash commands or a promise to bypass browser Play gestures.
 
-## Completed: single active playback across threads (DIAL-003 probe, DIAL-004 integration)
+Add bounded NTS show/episode search using public metadata and the owner Omarchy reference. Archive audio is externally hosted; a sampled SoundCloud HLS route is a candidate for a finite in-app playback experiment, not verified ChatGPT audio. Preserve direct episode links for unsupported sources, but do not represent links as completing archive playback. The exact PRODUCT.md and TECH.md proposal lives in factory/work-items/DIAL-012 and requires owner approval before production changes.
 
-DIAL-004 COMPLETE/PASS on reviewed product candidate d196b7e. Regular-player integration passed independent Review, 28 automated tests, local Chromium startup checks, Inspector delivery and owner-reported ChatGPT takeover, remote Pause and close-tab recovery QA. The supported scope remains one tested browser profile/device. See its journal and handoff; earlier proposal language below explains the route and constraints.
+## Later proposals
 
-First proposed support boundary: two live Dial views in separate ChatGPT chats in the same browser profile/device. Proposed behavior: Play takes ownership from the other view; Pause can stop active playback from either. These choices were approved and implemented in DIAL-004.
+- Globe-based country selection: a compact, accessible visual proposal after core discovery and playback are dependable; retain a simple country-list alternative.
+- Reliability and hosting: operating/runbook/restart improvements after separate scope approval. The current transient test service is not reboot auto-start.
+- Favorites, queues and durable resume: only after explicit storage, identity and privacy semantics are agreed. No cross-device control is implied by same-browser coordination.
 
-First gate is an actual ChatGPT capability test for shared messaging and atomic ownership primitives. The host may partition iframe origins/storage or suspend old views; browser API availability in a local fixture is insufficient. If coordination cannot be made reliable, return with evidence and a revised proposal rather than silently introducing accounts, a server registry or cross-device promises.
-
-Then build the smallest supported protocol, clear ownership/status UI, safe failure behavior and rapid-interaction/lifecycle tests. Exit requires independent Review, automated verification and actual two-thread host observations demonstrating the approved Play/Pause/transfer behavior. No hard guarantee is made about paused/suspended or unreachable instances before that evidence exists.
-
-## Completed: DIAL-005 minimal inline player redesign
-
-Give Dial a polished, compact appearance within a ChatGPT thread. Prepare visual options with a clear station title, refined typography and spacing, restrained color, one obvious Play/Pause action, and quiet secondary controls. Country results should feel integrated without dominating the conversation. Include local/remote playback status, loading/error/empty states, narrow layouts, light/dark themes and accessible keyboard/focus behavior. Keep diagnostics in the dedicated probe. Obtain feedback on concrete visual mockups before implementing the chosen design; validate it at actual thread widths. This is a design request, not approval of an unseen visual revision.
-
-## Current planning: DIAL-006 station coverage and bounded browsing
-
-Measure compatible direct HTTPS MP3 streams for the eight requested countries and investigate FIP, Nova and Meuh without promising unsupported streams. Add at most two More stations requests after the initial 50-row page, preserving selected playback and finite media/CSP origins. Independent Review and Verify must record actual provider, stream and owner host QA evidence. The exact DIAL-006 spec revision requires owner approval before implementation. See `factory/work-items/DIAL-006/PRODUCT.md` and `TECH.md`.
-
-## Next gate: owner coverage acceptance, then hosting proposal
-
-After the DIAL-006 handoff, the owner reviews the measured coverage and remaining gaps. Hosting is a separate phase only after that acceptance, with its own scope, safety and operating decisions. No hosting work, public launch, merge or deployment is authorized by DIAL-006.
-
-## Later: reliability and easy operation (proposed)
-
-Make repeat testing and routine use predictable: an explicitly approved automatic-start setup for the local server, restart/reconnect handling, understandable ownership/provider/media errors and the previously deferred controlled stream-error/recovery host check. Define what happens on sleep, reboot, closed views and expired click tokens. Do not promise background playback through host teardown. Exit with a documented runbook and real interruption/recovery evidence.
-
-Rationale: playback should be dependable before adding more discovery or stored state. Hosting on a laptop still depends on its power, network and awake state; an always-on host would be a separate deployment decision.
-
-## Further discovery (proposed)
-
-After DIAL-006 evidence and a separate approval, evaluate name search and a conversational country-selection flow. Keep result sizes bounded and errors clear. Do not replace the finite media policy with unrestricted access without an approved design.
-
-## Later: favorites and resume (proposed)
-
-Save favorites and the last selected station only after choosing explicit storage, identity and privacy semantics. State what persists across threads, browsers and devices, and what the user can clear. A server has no safe basis to treat all unauthenticated listeners as the same user. Cross-device playback control depends on an identity-backed design and is deferred until explicitly requested and approved.
-
-## Release path
-
-Each phase receives bounded intake/criteria, Triage, a Spec when needed, exact revision approval, Implement, independent Review and Verify, then a Foreman handoff. Proposals are not automatic authorization. Merge, publication and production deployment remain separate human actions. Keep successful owner QA distinct from missing evidence and retain prior failures honestly.
+Each implementation uses real Triage/Spec/Implement/Review/Verify roles and exact candidate evidence. Merge, publication and rollout follow the owner's authorized scope. Current lifecycle details and evidence are in canonical factory state records and docs/NEXT-SESSION.md.

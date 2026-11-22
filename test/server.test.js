@@ -8,6 +8,7 @@ import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/
 import { exerciseDeliveredScript } from './ui-harness.js';
 import { COUNTRY_CANDIDATES, EXISTING_MEDIA_ORIGINS, MEDIA_ORIGINS } from '../dist/media-policy.js';
 import { NTS_CHANNELS, NTS_RESOURCE_ORIGINS } from '../dist/nts-policy.js';
+import { ARCHIVE_ORIGIN } from '../dist/nts-archive.js';
 
 test('HTTP MCP tool returns the station and its renderable UI resource', async (t) => {
   const port = 20000 + Math.floor(Math.random() * 30000);
@@ -77,8 +78,8 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.match(countryResource.contents[0].text, /\.station-option\[aria-pressed="true"\]/);
   assert.match(countryResource.contents[0].text, /id="remote-pause"/);
   assert.deepEqual(countryResource.contents[0]._meta.ui.csp, {
-    connectDomains: [],
-    resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS]
+    connectDomains: [ARCHIVE_ORIGIN],
+    resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS, ARCHIVE_ORIGIN]
   });
   for (let version = 1; version <= 12; version++) {
     const alias = `ui://dial/country-v${version}.html`;
@@ -116,8 +117,19 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   assert.match(countryResource.contents[0].text, /id="country-select"/);
   assert.match(countryResource.contents[0].text, /<option value="SE">Sweden<\/option>/);
   assert.match(countryResource.contents[0].text, /id="nts-panel"/);
-  assert.match(countryResource.contents[0].text, /Experimental in-player playback depends on this host and network/);
-  assert.match(countryResource.contents[0].text, /Open NTS 1 on NTS/);
+  assert.match(countryResource.contents[0].text, /NTS metadata uses an unofficial public API/);
+  assert.match(countryResource.contents[0].text, /Open on NTS/);
+  for (const name of ['open_country_radio', 'open_nts_radio', 'search_nts_archive', 'pause_dial']) {
+    const entry = tools.tools.find(tool => tool.name === name);
+    assert.ok(entry, `${name} registered`);
+    assert.equal(entry._meta.ui.resourceUri, 'ui://dial/listen-v1.html');
+  }
+  const canonical = await client.readResource({ uri: 'ui://dial/listen-v1.html' });
+  assert.equal(canonical.contents[0].text, countryResource.contents[0].text);
+  assert.deepEqual(canonical.contents[0]._meta.ui.csp, countryResource.contents[0]._meta.ui.csp);
+  assert.equal((await client.callTool({ name: 'open_nts_radio', arguments: { channel: '1' } })).structuredContent.launchMode, 'nts');
+  assert.equal((await client.callTool({ name: 'pause_dial', arguments: {} })).structuredContent.launchMode, 'pause-control');
+  for (const name of ['search_nts_archive_in_app', 'list_nts_show_episodes', 'resolve_nts_episode']) assert.deepEqual(tools.tools.find(tool => tool.name === name)._meta.ui.visibility, ['app']);
   const moreTool = tools.tools.find(entry => entry.name === 'retry_stations_by_country');
   assert.ok(moreTool);
   assert.deepEqual(moreTool._meta.ui.visibility, ['app']);

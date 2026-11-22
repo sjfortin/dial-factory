@@ -1,0 +1,23 @@
+{
+  "agent": "/root/dial012_review_restarted",
+  "architecture": "Retaining unchanged direct/native media avoids resetting currentTime. Persistent fatal HLS handling now follows the live instance and selected source rather than its creation Play attempt; wanted suppresses paused-state failures and instance identity rejects destroyed predecessors. Shared controller/coordinator and existing request-generation guards remain appropriate.",
+  "at": "2026-11-22T23:15:20+00:00",
+  "attempt": 3,
+  "candidate_commit": "c073716626a35d3db189bb814373afaa00864dd0",
+  "complexity": "Focused nine-line controller delta addresses the two lifetime mismatches without widening scope. Added tests cover the actual regression sequences and stale-instance immunity.",
+  "correctness": "No blocking finding in this revision. Independently confirmed ordinary direct resume preserves 72 seconds, retained HLS fatal error after resume becomes error, destroys the instance and releases ownership, and stale instances cannot fail a replacement. Reviewed earlier fixes for fresh resolution on Retry/five-minute age, remote pause position, ready-media restoration, seekable ranges, stale launch responses and stale OS claims. Their regression coverage passes. Pause remount protection remains bounded sessionStorage IDs plus issuedAt freshness and fail-closed automatic behavior.",
+  "findings": [],
+  "recommendation": "ACCEPT",
+  "requirements": "Read approved PRODUCT.md and TECH.md and confirmed their SHA-256 hashes match the dispatch approval. Reviewed prior actual Review reports and current source. Both attempt-2 followups are resolved. Dedicated country/NTS views, Help, explicit Play gesture, historical aliases and bounded archive policy remain intact. ACCEPT is code-review acceptance for independent Verify, not proof of ChatGPT audible archive playback or Android support.",
+  "role": "Review",
+  "run_id": "run-c2cee7414103",
+  "security": "Revision changes only controller source and regression tests; it does not broaden origin/CSP policy or signed-URL exposure. Source inspection confirms app-only resolver _meta, exact SoundCloud media origin, fixed NTS endpoint/alias validation, subprocess argv and timeout/output bounds remain. Five-minute candidate reuse and failure invalidation remain enforced. Existing first-playlist validation does not establish host handling of all redirects/nested playlists; actual host CSP/CORS remains a required independent verification boundary. No signed URL values exposed in this review.",
+  "tests": [
+    "Independently ran npm test against the exact candidate: build succeeded; 56/56 tests passed, including protocol, delivered bundle, lifecycle, native/direct ordinary resume, stale HLS instance, stale claim and pause remount checks.",
+    "Independently reran saved prior reviewer reproduction node --test /tmp/dial012-review-revision-lifecycle.mjs: 7/7 passed. Fatal-after-resume output: state=error, destroyed=true, lockHeld=false. Direct resume position=72.",
+    "Read the current controller, request invalidation and pause-remount implementation and test cases; inspected current shared-view/help HTML and server archive/CSP/meta boundaries.",
+    "git diff --check passed; git diff c073716 -- src public package.json package-lock.json test was empty. HEAD was the dispatched full commit. Only temporary report and ignored generated build outputs were written by this Review.",
+    "No new browser/network/audio or phone verification performed. Historical Nov17 Chromium evidence is not a fresh host/audio claim. Actual ChatGPT _meta forwarding, MSE/CSP, audible archives, prompt routing, cross-thread scope and Android/Bluetooth remain unverified."
+  ],
+  "work_item": "DIAL-012"
+}

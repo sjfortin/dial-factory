@@ -1,0 +1,27 @@
+{
+  "agent": "/root/dial012_spec",
+  "at": "2026-11-13T07:03:02+00:00",
+  "document_revisions": {
+    "PRODUCT.md": "89630a477167cf83888bc856efd68ccebce4862e1f1910532d0f1f75397028f8",
+    "TECH.md": "5757b54987749f9ebe876342b3ca258fe1127df49674a636b06b55fa244adaa2"
+  },
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "evidence": [
+    "Read current server, discovery UI, playback coordinator/controller, NTS policy, triage, and read-only owner Omarchy NTS reference.",
+    "On 2026-11-13 a bounded NTS v2 search returned public episode metadata and SoundCloud audio_sources; two sampled Floating Points episodes had no progressive candidate with native yt-dlp selector.",
+    "One 2024 sampled episode resolved to signed AAC m3u8 on playback.media-streaming.soundcloud.cloud; manifest GET returned 200 and CORS *, sampled segment references stayed on that origin, and first segment HEAD returned 200, CORS *, audio/mp4. Signed query values were not retained.",
+    "Primary MCP Apps CSP guidance and hls.js/yt-dlp documentation establish candidate mechanics; no ChatGPT-host archive audio test occurred."
+  ],
+  "open_risks": [
+    "Audible archive playback, MSE support, CSP and browser gesture behavior inside the ChatGPT host remain unverified.",
+    "NTS API is undocumented; SoundCloud signed-media origins/formats may change. Mixcloud in-app playback is outside this proposal pending separate evidence.",
+    "A control tool can only confirm pause after its mounted app receives a same-browser coordinator acknowledgement."
+  ],
+  "role": "Spec",
+  "run_id": "run-ace8572344fa",
+  "summary": "Specified distinct country and NTS launch views on one canonical UI resource, discoverable natural-language prompts, bounded NTS archive metadata/search, a fixed-origin SoundCloud HLS experiment, archive controls/seek/retry, and same-browser acknowledged pause control. Shared resource and legacy aliases receive the exact archive CSP origin in both lists; signed URLs use only app-only _meta, with no model/persistence exposure. Production changes require exact revision approval.",
+  "work_item": "DIAL-012"
+}

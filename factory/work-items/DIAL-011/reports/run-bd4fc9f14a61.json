@@ -1,0 +1,35 @@
+{
+  "agent": "/root/dial008_verify",
+  "at": "2026-11-13T06:50:56+00:00",
+  "attempt": 1,
+  "candidate_commit": "699560e5d3b710dc4d7500cc10b85f5957b50ed7",
+  "criteria": [
+    {
+      "criterion": "Investigate owner-reported ChatGPT card showing Choose a station without Countries/NTS tabs; distinguish current resource delivery, iframe sizing, stale connection metadata and actual observed host evidence.",
+      "evidence": "Before the fix, Foreman/Triage recorded public `resources/read` for `ui://dial/country-v9.html` returning -32602 not found, while canonical v13 served the current Countries/NTS renderer. After rollout, the public check confirms v1–v12 all resolve to the current HTML/CSP and include the NTS tab; v99 remains rejected. The owner then answered the explicit post-rollout France retry question, “awesome, yes that is working.” This is a narrow owner-reported host confirmation that the player opens. No ChatGPT URI/DOM trace or iframe dimensions were captured, and the exact causal link from v9 failure to the earlier open error remains inferred.",
+      "method": "Reconciled pre-fix public v9 not-found evidence, post-rollout public SDK alias checks, and the recorded owner response to the same-France-request question. Kept direct instrumentation separate from owner report.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Reproduce and fix any verified presentation or entry-point defect without changing approved station/playback/network policy; give a direct verifiable path to the existing NTS UI if needed.",
+      "evidence": "Prior independent verification ran `npm test` (40/40) and focused `node --test test/server.test.js` (1/1): the SDK read of each country-v1 through country-v12 alias returned the requested URI, canonical HTML/MIME/CSP, Countries/NTS UI, and fixed NTS URL; country-v99 was rejected. Public rollout check subsequently passed all twelve aliases and v99 rejection. The fix remains a finite alias map to the current renderer/CSP; no station, playback, or network policy changed.",
+      "method": "Reused the unchanged exact candidate’s independent SDK integration and test evidence from run-678462d76903; reviewed the public rollout check and implementation diff. No production changes followed that candidate.",
+      "result": "PASS"
+    },
+    {
+      "criterion": "Independently Review and Verify an exact fix candidate with real rendered resource checks; record actual host outcome or explicit missing evidence without inferring success.",
+      "evidence": "Review run-6790234c5efc ACCEPTed and Verify run-678462d76903 independently checked the exact candidate and local SDK rendering. Post-rollout public SDK checks confirm all v1–v12 aliases serve current HTML/CSP; the owner’s response to the France retry question confirms the player now opens. This is the owner’s reported outcome, not instrumented browser telemetry. No screenshot, iframe size, exact host URI request, or separate layout assessment is present.",
+      "method": "Bound previous independent Review and Verify to candidate 699560e5d3b710dc4d7500cc10b85f5957b50ed7; incorporated public post-rollout alias checks and the owner’s recorded host outcome.",
+      "result": "PASS"
+    }
+  ],
+  "overall": "PASS",
+  "role": "Verify",
+  "run_id": "run-bd4fc9f14a61",
+  "spec_skip": {
+    "assessment": "Bounded compatibility restoration remains limited to twelve explicitly historical country resource URIs resolving to the reviewed current renderer and CSP; the public alias checks and owner open confirmation do not justify adding broader resource matching.",
+    "mode": "skipped",
+    "reason": "Bounded compatibility restoration for already approved current player: only known historical country resource addresses resolve to current reviewed renderer/CSP; no new UX playback station or trust policy. Observed exact legacy resource failure supplies regression."
+  },
+  "work_item": "DIAL-011"
+}

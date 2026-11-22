@@ -7,7 +7,7 @@ class Element extends EventTarget {
   replaceChildren(...items) { this.children = items; }
   setAttribute(key, value) { this.attributes[key] = value; }
   querySelectorAll(selector) { return selector === 'button.station-option' ? this.children.map(item => item.children[0]) : selector === '.nts-option' ? this.children : []; }
-  querySelector() { return null; }
+  querySelector(selector) { const match = /\.nts-option\[data-channel=\"([12])\"\]/.exec(selector); return match ? this.children.find(item => item.dataset.channel === match[1]) ?? null : null; }
   focus() {}
   removeAttribute(key) { if (key === 'src') this.src = ''; }
   pause() { this.pauseCalls++; this.paused = true; this.dispatchEvent(new Event('pause')); }
@@ -22,23 +22,24 @@ const windows = partial => [0, 1, 2].map(pageIndex => ({ pageIndex, offset: page
 const result = (stations, { kind = 'initial', countryCode = 'FR', partial = false } = {}) => ({ kind, countryCode, status: 'ok', stations, windows: windows(partial), scanState: partial ? 'partial' : 'complete', choiceLimitReached: false });
 
 export async function exerciseDeliveredScript(script) {
-  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#retry-scan', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle', '#country-select', '#countries-tab', '#nts-tab', '#countries-panel', '#nts-panel', '#country-attribution'].map(id => [id, new Element()]));
+  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#retry-scan', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle', '#country-select', '#countries-tab', '#nts-tab', '#countries-panel', '#nts-panel', '#country-attribution', '#archive-query', '#archive-search-button', '#archive-results', '#archive-status', '#archive-link', '#pause-panel', '#player-section', '#pause-status', '#pause-retry', '#archive-seek', '#archive-time'].map(id => [id, new Element()]));
   const ntsButtons = [1, 2].map(channel => { const button = new Element(); button.dataset.channel = String(channel); return button; });
   nodes['#nts-panel'].append(...ntsButtons);
   nodes['#toggle'].disabled = true;
-  const listeners = new Map(); const sent = []; const delayed = []; const delayedFind = [];
-  const reply = (message, structuredContent) => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { content: [], structuredContent } }, source: window.parent });
+  const listeners = new Map(); const sent = []; const delayed = []; const delayedFind = []; const delayedArchive = []; const delayedResolve = []; const channels = []; const channelMessages = [];
+  const reply = (message, structuredContent, meta = {}) => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { content: [], structuredContent, _meta: meta } }, source: window.parent });
   const replyError = message => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, error: { code: -32000, message: 'Country request failed' } }, source: window.parent });
   const window = { innerWidth: 480, addEventListener(name, callback) { listeners.set(name, callback); }, removeEventListener(name, callback) { if (listeners.get(name) === callback) listeners.delete(name); }, parent: { postMessage(message) {
     sent.push(message);
     if (message.method === 'ui/initialize') queueMicrotask(() => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { protocolVersion: '2026-01-26', hostInfo: { name: 'test-host', version: '1' }, hostCapabilities: {}, hostContext: {} } }, source: window.parent }));
-    if (message.method === 'tools/call') queueMicrotask(() => { if (message.params?.name === 'retry_stations_by_country') delayed.push(message); else if (message.params?.name === 'find_stations_by_country') delayedFind.push(message); else reply(message, { counted: true }); });
+    if (message.method === 'tools/call') queueMicrotask(() => { if (message.params?.name === 'retry_stations_by_country') delayed.push(message); else if (message.params?.name === 'find_stations_by_country') delayedFind.push(message); else if (message.params?.name === 'search_nts_archive_in_app') delayedArchive.push(message); else if (message.params?.name === 'resolve_nts_episode') delayedResolve.push(message); else reply(message, { counted: true }); });
   } } };
   const document = { querySelector(selector) { return nodes[selector] ?? null; }, createElement() { return new Element(); }, documentElement: { style: { height: '' }, getBoundingClientRect() { return { height: 400 }; } }, body: new Element() };
   class ResizeObserver { observe() {} disconnect() {} }
-  class BroadcastChannel { onmessage = null; postMessage() {} close() {} }
+  class BroadcastChannel { onmessage = null; constructor() { channels.push(this); } postMessage(message) { channelMessages.push(message); } close() {} }
   const navigator = { locks: { request(_name, { signal }, callback) { return signal.aborted ? Promise.reject(new Error('aborted')) : Promise.resolve().then(callback); } } };
-  runInNewContext(script, { window, document, navigator, BroadcastChannel, console: { ...console, debug() {} }, URL, setTimeout, clearTimeout, setInterval: () => 0, clearInterval: () => {}, queueMicrotask, requestAnimationFrame: callback => queueMicrotask(callback), ResizeObserver, Event, EventTarget, AbortController, TextEncoder, TextDecoder }, { timeout: 5000 });
+  const saved = new Map(); const sessionStorage = { getItem: key => saved.get(key) ?? null, setItem: (key, value) => { saved.set(key, value); } };
+  runInNewContext(script, { window, document, navigator, sessionStorage, BroadcastChannel, console: { ...console, debug() {} }, URL, setTimeout, clearTimeout, setInterval: () => 0, clearInterval: () => {}, queueMicrotask, requestAnimationFrame: callback => queueMicrotask(callback), ResizeObserver, Event, EventTarget, AbortController, TextEncoder, TextDecoder }, { timeout: 5000 });
   await tick();
   assert.ok(sent.some(item => item.method === 'ui/notifications/initialized'));
   const notify = structuredContent => listeners.get('message')?.({ data: { jsonrpc: '2.0', method: 'ui/notifications/tool-result', params: { content: [], structuredContent } }, source: window.parent });
@@ -170,4 +171,49 @@ export async function exerciseDeliveredScript(script) {
   reply(supersededPicker, { ...result([row(54, 'GB')], { countryCode: 'GB' }), requestId: supersededPicker.params.arguments.requestId }); await tick();
   assert.equal(nodes['#country-select'].value, 'FR', 'fresh chat request wins over an in-flight picker');
   assert.equal(nodes['#stations'].children[0].children[0].children[0].children[0].textContent, 'Station 53');
+  notify({ launchMode: 'nts', channel: '1' }); await tick();
+  assert.equal(nodes['#nts-panel'].hidden, false);
+  assert.equal(nodes['#station-title'].textContent, 'NTS 1');
+  notify({ launchMode: 'country' }); await tick();
+  assert.equal(nodes['#countries-panel'].hidden, false);
+  notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'empty', items: [], query: 'old' }); await tick();
+  assert.equal(nodes['#nts-panel'].hidden, false);
+  assert.equal(nodes['#archive-query'].value, 'old');
+  nodes['#archive-query'].value = 'first'; nodes['#archive-search-button'].click(); await tick();
+  nodes['#archive-query'].value = 'second'; nodes['#archive-search-button'].click(); await tick();
+  const firstSearch = delayedArchive.shift(), secondSearch = delayedArchive.shift();
+  const item = title => ({ kind: 'episode', title, show: 'NTS', date: '2024', showAlias: 'floating-points', episodeAlias: 'floating-points-3rd-june-2024', url: 'https://www.nts.live/shows/floating-points/episodes/floating-points-3rd-june-2024', audioSource: 'soundcloud' });
+  reply(secondSearch, { kind: 'nts-search', status: 'ok', items: [item('Second')] }); await tick();
+  reply(firstSearch, { kind: 'nts-search', status: 'ok', items: [item('First')] }); await tick();
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[0].textContent, 'Second', 'late archive search cannot replace newer results');
+  nodes['#archive-results'].children[0].children[0].click(); await tick();
+  nodes['#toggle'].click(); await tick();
+  const resolving = delayedResolve.shift();
+  assert.ok(resolving, 'archive Play requests app-only resolution');
+  ntsButtons[1].click(); await tick();
+  const playsBeforeLateResolve = nodes['#radio'].playCalls;
+  reply(resolving, { status: 'candidate' }, { dialMedia: { format: 'hls', url: 'https://playback.media-streaming.soundcloud.cloud/a/playlist.m3u8?Signature=secret' } }); await tick();
+  assert.equal(nodes['#radio'].src, 'https://stream-relay-geo.ntslive.net/stream2?client=direct');
+  assert.equal(nodes['#radio'].playCalls, playsBeforeLateResolve, 'late resolver cannot play an old episode');
+  channels[0].onmessage?.({ data: { v: 1, type: 'status', sender: 'other-frame', epoch: 'remote-epoch', active: true, station: 'Other Dial' } });
+  notify({ launchMode: 'pause-control', requestId: 'once-1', issuedAt: Date.now() }); await tick();
+  notify({ launchMode: 'pause-control', requestId: 'once-1', issuedAt: Date.now() }); await tick();
+  assert.equal(nodes['#pause-panel'].hidden, false);
+  assert.equal(channelMessages.filter(m => m.type === 'pause').length, 1, 'duplicate pause-control result issues one request');
+  const request = channelMessages.find(m => m.type === 'pause');
+  channels[0].onmessage?.({ data: { v: 1, type: 'ack', sender: 'other-frame', target: request.sender, request: request.request, epoch: 'remote-epoch' } }); await tick();
+  assert.match(nodes['#pause-status'].textContent, /confirmed/);
+  nodes['#country-select'].value = 'GB'; nodes['#country-select'].dispatchEvent(new Event('change')); await tick();
+  const lateCountry = delayedFind.shift();
+  notify({ launchMode: 'nts', channel: '1' }); await tick();
+  reply(lateCountry, { ...result([row(54, 'GB')], { countryCode: 'GB' }), requestId: lateCountry.params.arguments.requestId }); await tick();
+  assert.equal(nodes['#nts-panel'].hidden, false, 'late country picker cannot replace a new NTS launch');
+  assert.equal(nodes['#station-title'].textContent, 'NTS 1');
+  notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'empty', items: [], query: 'initial' });
+  nodes['#archive-query'].value = 'old'; nodes['#archive-search-button'].click(); await tick();
+  const lateSearch = delayedArchive.shift();
+  notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'ok', items: [item('New launch')], query: 'new' }); await tick();
+  reply(lateSearch, { kind: 'nts-search', status: 'ok', items: [item('Old search')] }); await tick();
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[0].textContent, 'New launch', 'late app search cannot replace a newer chat search');
+  assert.equal(nodes['#archive-search-button'].disabled, false, 'new launch clears stale busy state');
 }

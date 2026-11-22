@@ -1,0 +1,319 @@
+{
+  "runAt": "2026-11-13T00:52:01.399Z",
+  "finished": "2026-11-13T00:52:08.863Z",
+  "browser": "/usr/bin/chromium --headless=new",
+  "gesture": "CDP Input.dispatchMouseEvent button presses; each channel got a fresh navigation/global event log",
+  "csp": "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; media-src 'self' https://stream-relay-geo.ntslive.net https://streams.radiomast.io https://audio-edge-kkqan.sin.d.radiomast.io",
+  "channels": [
+    {
+      "channel": "1",
+      "expectedUrl": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+      "deadlineMs": 30000,
+      "durationMs": 3624,
+      "ownFreshPlayingEvent": true,
+      "firstPlayingEvent": {
+        "type": "playing",
+        "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+        "time": 0,
+        "paused": false,
+        "readyState": 3
+      },
+      "currentTimeIncreasedByMoreThan100ms": true,
+      "pauseEventObserved": true,
+      "playAgainEventObserved": true,
+      "finalState": {
+        "channel": "1",
+        "events": [
+          {
+            "type": "select",
+            "src": "",
+            "time": 0,
+            "paused": true,
+            "readyState": 0
+          },
+          {
+            "type": "play-click",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": true,
+            "readyState": 0
+          },
+          {
+            "type": "waiting",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 0
+          },
+          {
+            "type": "loadstart",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 0
+          },
+          {
+            "type": "loadedmetadata",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 1
+          },
+          {
+            "type": "canplay",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "playing",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "play-resolved",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "timeupdate",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.02322,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "timeupdate",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.201512,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "pause-click",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.376416,
+            "paused": true,
+            "readyState": 3
+          },
+          {
+            "type": "timeupdate",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.376416,
+            "paused": true,
+            "readyState": 3
+          },
+          {
+            "type": "pause",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.376416,
+            "paused": true,
+            "readyState": 3
+          },
+          {
+            "type": "resume-click",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.376571,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "playing",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.409113,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "resume-resolved",
+            "src": "https://stream-relay-geo.ntslive.net/stream?client=direct",
+            "time": 0.409235,
+            "paused": false,
+            "readyState": 3
+          }
+        ],
+        "error": null
+      },
+      "network": [
+        {
+          "channel": "1",
+          "type": "redirect",
+          "url": "https://streams.radiomast.io/nts1",
+          "status": 302,
+          "location": "https://streams.radiomast.io/nts1"
+        },
+        {
+          "channel": "1",
+          "type": "redirect",
+          "url": "https://audio-edge-kkqan.sin.d.radiomast.io/nts1",
+          "status": 302,
+          "location": "https://audio-edge-kkqan.sin.d.radiomast.io/nts1"
+        },
+        {
+          "channel": "1",
+          "type": "response",
+          "url": "https://audio-edge-kkqan.sin.d.radiomast.io/nts1",
+          "status": 200,
+          "mimeType": "audio/mpeg"
+        }
+      ]
+    },
+    {
+      "channel": "2",
+      "expectedUrl": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+      "deadlineMs": 30000,
+      "durationMs": 2254,
+      "ownFreshPlayingEvent": true,
+      "firstPlayingEvent": {
+        "type": "playing",
+        "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+        "time": 0,
+        "paused": false,
+        "readyState": 3
+      },
+      "currentTimeIncreasedByMoreThan100ms": true,
+      "pauseEventObserved": true,
+      "playAgainEventObserved": true,
+      "finalState": {
+        "channel": "2",
+        "events": [
+          {
+            "type": "select",
+            "src": "",
+            "time": 0,
+            "paused": true,
+            "readyState": 0
+          },
+          {
+            "type": "play-click",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": true,
+            "readyState": 0
+          },
+          {
+            "type": "waiting",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 0
+          },
+          {
+            "type": "loadstart",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 0
+          },
+          {
+            "type": "loadedmetadata",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 1
+          },
+          {
+            "type": "canplay",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "playing",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "play-resolved",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "timeupdate",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.216133,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "pause-click",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.417717,
+            "paused": true,
+            "readyState": 3
+          },
+          {
+            "type": "timeupdate",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.417717,
+            "paused": true,
+            "readyState": 3
+          },
+          {
+            "type": "pause",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.417717,
+            "paused": true,
+            "readyState": 3
+          },
+          {
+            "type": "resume-click",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.417748,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "playing",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.499913,
+            "paused": false,
+            "readyState": 3
+          },
+          {
+            "type": "resume-resolved",
+            "src": "https://stream-relay-geo.ntslive.net/stream2?client=direct",
+            "time": 0.500091,
+            "paused": false,
+            "readyState": 3
+          }
+        ],
+        "error": null
+      },
+      "network": [
+        {
+          "channel": "2",
+          "type": "redirect",
+          "url": "https://streams.radiomast.io/nts2",
+          "status": 302,
+          "location": "https://streams.radiomast.io/nts2"
+        },
+        {
+          "channel": "2",
+          "type": "redirect",
+          "url": "https://audio-edge-kkqan.sin.d.radiomast.io/nts2",
+          "status": 302,
+          "location": "https://audio-edge-kkqan.sin.d.radiomast.io/nts2"
+        },
+        {
+          "channel": "2",
+          "type": "response",
+          "url": "https://audio-edge-kkqan.sin.d.radiomast.io/nts2",
+          "status": 200,
+          "mimeType": "audio/mpeg"
+        }
+      ]
+    }
+  ],
+  "hostEvidence": "Synthetic local browser fixture only; not ChatGPT or audible output."
+}

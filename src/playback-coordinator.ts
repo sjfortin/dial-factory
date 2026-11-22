@@ -11,7 +11,7 @@ type Message = {
   station?: string; active?: boolean;
 };
 type Channel = { postMessage(message: Message): void; close(): void; onmessage: ((event: any) => void) | null };
-type Locks = { request(name: string, options: { mode: 'exclusive'; signal: AbortSignal }, callback: () => Promise<void>): Promise<unknown> };
+type Locks = { request(name: string, options: { mode: 'exclusive'; signal?: AbortSignal; ifAvailable?: boolean }, callback: (lock?: unknown) => Promise<void>): Promise<unknown> };
 export type CoordinationEnvironment = {
   locks?: Locks; channel?: (name: string) => Channel; id?: () => string;
   now?: () => number; setTimeout?: typeof setTimeout; clearTimeout?: typeof clearTimeout;
@@ -145,8 +145,27 @@ export class PlaybackCoordinator {
     });
   }
 
-  release() {
-    if (!this.held) return;
+  async claimIfIdle(epoch: string, station: string, signal: AbortSignal): Promise<boolean> {
+    if (!this.available || this.disposed || signal.aborted || this.waiting || this.held) return false;
+    return new Promise<boolean>(resolve => {
+      let finished = false;
+      const finish = (value: boolean) => { if (!finished) { finished = true; resolve(value); } };
+      void this.locks!.request(LOCK_NAME, { mode: 'exclusive', ifAvailable: true }, async (lock) => {
+        if (!lock || signal.aborted || this.disposed || this.held) { finish(false); return; }
+        let release!: () => void;
+        const held = new Promise<void>(done => { release = done; });
+        this.held = { epoch, station, release };
+        this.remote = undefined;
+        this.publishRemote(); this.status();
+        this.heartbeat = this.interval(() => this.status(), 2000);
+        finish(true);
+        await held;
+      }).catch(() => finish(false));
+    });
+  }
+
+  release(epoch?: string) {
+    if (!this.held || (epoch !== undefined && this.held.epoch !== epoch)) return;
     const held = this.held;
     this.held = undefined;
     if (this.heartbeat) this.clearIntervalTimer(this.heartbeat);
@@ -185,6 +204,7 @@ export class PlaybackCoordinator {
       this.send({ type: 'pause', target: id, epoch, request });
     });
   }
+  hasRemote(): boolean { return !!this.remote && this.now() - this.remote.at <= STATUS_MS; }
   dispose() {
     if (this.disposed) return;
     this.disposed = true;

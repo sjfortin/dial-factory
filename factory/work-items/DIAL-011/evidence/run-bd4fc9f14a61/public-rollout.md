@@ -1,0 +1,5 @@
+# Compatibility correction rollout — 2026-11-13
+
+Applied within the prior owner-approved NTS testing rollout; scope assessment is in rollout-authorization.md, not a fabricated new approval. PR9 https://github.com/sjfortin/dial-factory/pull/9 merged at a1102c9bf9e6285a254200888eb3841f38797c6d, containing independently reviewed product candidate699560e5d3b710dc4d7500cc10b85f5957b50ed7. Main fast-forwarded; npm run build passed; existing dial-test restarted successfully. Endpoint and network/playback policy unchanged.
+
+Public SDK checks at2026-11-13T06:46:05Z read every registered historical country-v1 through country-v12 URI. Each returned matching requested URI, exact canonical country-v13-nts-experiment HTML and CSP, and NTS tab. Unknown country-v99 remained rejected. In particular the prior v9 not-found regression is resolved at the public endpoint. See rollout-check.json. No actual ChatGPT recovery was observed; prior causality remains inferred, host outcome BLOCKED pending owner retry.

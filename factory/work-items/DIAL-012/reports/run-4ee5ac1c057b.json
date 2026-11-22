@@ -1,0 +1,31 @@
+{
+  "agent": "/root/dial012_spec",
+  "artifacts": [
+    "DESIGN-PREVIEW.html"
+  ],
+  "at": "2026-11-17T00:30:06+00:00",
+  "document_revisions": {
+    "DESIGN-PREVIEW.html": "4568cda4dfff38dc840b6057fdaac9e2e18eb5686e2285089fa924972cb4f54d",
+    "PRODUCT.md": "1480c85708fa1da8760a74a76f10c1ee08d413e65e015c49e646978502eba50f",
+    "TECH.md": "acded72985799a25cde0d4b5c00479efd824d27108e2aff187bf68a4cf033e66"
+  },
+  "documents": [
+    "PRODUCT.md",
+    "TECH.md"
+  ],
+  "evidence": [
+    "Inspected prior PRODUCT.md and TECH.md, recorded revision packet, bootstrap contract and Spec role.",
+    "Used primary OpenAI plugin documentation for mobile plugin availability; it does not establish phone media controls. MDN Media Session API is a candidate mechanism, not host proof.",
+    "Validated static HTML preview with Python HTMLParser: no duplicate IDs, external assets, audio or script tags; responsive rule present. No browser or phone playback test occurred.",
+    "Prior 2026-11-13 bounded NTS metadata/HLS probe remains historical evidence only; no new archive network probe occurred in this revision."
+  ],
+  "open_risks": [
+    "Owner phone platform remains TBD; actual foreground/background, lock-screen, media-key, and Bluetooth audio behavior is unverified.",
+    "Actual ChatGPT-host archive playback and signed HLS path remain unverified.",
+    "Exact document revisions require owner approval before production implementation."
+  ],
+  "role": "Spec",
+  "run_id": "run-4ee5ac1c057b",
+  "summary": "Refined DIAL-012 into visually distinct geographic Country and editorial NTS experiences with shared playback controls; preserved bounded NTS archive proposal and same-browser pause; added a measured phone Media Session/Bluetooth control experiment and deferred casting. The static preview is not production UI or playback evidence.",
+  "work_item": "DIAL-012"
+}

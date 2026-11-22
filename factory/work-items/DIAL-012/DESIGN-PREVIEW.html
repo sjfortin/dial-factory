@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dial DIAL-012 design preview</title>
+  <style>
+    :root { font: 15px/1.45 system-ui, sans-serif; color: #252c30; background: #e8ebed; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .wrap { max-width: 1120px; margin: auto; padding: 24px; }
+    .notice { padding: 12px 15px; border-radius: 10px; background: #fff; border: 1px solid #cbd2d6; margin: 0 0 20px; font-size: 13px; }
+    .boards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: start; }
+    .board { min-width: 0; border-radius: 22px; overflow: hidden; box-shadow: 0 10px 32px #15242b19; }
+    .country { color: #18342e; background: #f8faf5; }
+    .nts { color: #f6f3ec; background: #15171a; }
+    .head { padding: 22px 24px 18px; }
+    .country .head { background: radial-gradient(circle at 85% 8%, #bdd9bc 0 11%, transparent 12%), linear-gradient(145deg, #e7f0df, #f8faf5 60%); }
+    .nts .head { background: radial-gradient(circle at 89% 10%, #d04638 0 13%, transparent 13.5%), linear-gradient(155deg, #272b30, #15171a 70%); }
+    .brandline { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .other { border: 1px solid currentColor; border-radius: 30px; padding: 5px 9px; font-size: 11px; letter-spacing: 0; white-space: nowrap; opacity: .8; }
+    h1 { font-size: clamp(27px, 4vw, 36px); line-height: 1.05; letter-spacing: -.04em; margin: 28px 0 8px; }
+    .nts h1 { font-size: clamp(34px, 5vw, 46px); text-transform: uppercase; letter-spacing: -.055em; }
+    .intro { margin: 0; max-width: 34ch; font-size: 13px; opacity: .78; }
+    .body { padding: 20px 24px 24px; }
+    .eyebrow { margin: 0 0 10px; font-size: 11px; text-transform: uppercase; font-weight: 800; letter-spacing: .12em; }
+    .country .eyebrow { color: #316747; }
+    .nts .eyebrow { color: #f18878; }
+    .picker { display: flex; justify-content: space-between; align-items: center; gap: 10px; border: 1px solid #8da892; border-radius: 12px; padding: 13px 15px; font-size: 17px; font-weight: 700; background: white; }
+    .picker small { color: #4b6756; font-size: 12px; }
+    .micro { font-size: 11px; margin: 10px 0 18px; opacity: .68; }
+    .station { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 12px 0; border-top: 1px solid #dbe5d8; }
+    .station strong, .episode strong { display: block; font-size: 14px; }
+    .station small, .episode small { display: block; font-size: 11px; opacity: .65; margin-top: 2px; }
+    .pill { background: #e8efe3; padding: 5px 8px; border-radius: 20px; font-size: 10px; white-space: nowrap; }
+    .livecards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+    .livecard { min-height: 103px; border: 1px solid #666a6d; border-radius: 12px; padding: 13px; background: #24282b; }
+    .livecard b { display: block; font-size: 20px; letter-spacing: -.04em; }
+    .livecard span { display: block; font-size: 11px; opacity: .63; margin-top: 18px; }
+    .livecard:first-child { border-color: #d8634d; }
+    .nts .search { border: 1px solid #838487; border-radius: 9px; padding: 12px 14px; color: #ddd; background: #222529; font-size: 13px; }
+    .episode { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 13px 0; border-top: 1px solid #383d41; }
+    .episode:first-of-type { margin-top: 13px; }
+    .tag { font-size: 10px; text-transform: uppercase; color: #e99d8f; letter-spacing: .07em; white-space: nowrap; }
+    .player { margin-top: 20px; border-radius: 13px; display: flex; align-items: center; gap: 11px; padding: 12px; }
+    .country .player { background: #e4ede0; }
+    .nts .player { background: #282d30; }
+    .play { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none; font-size: 18px; }
+    .country .play { color: #fff; background: #286b47; }
+    .nts .play { color: #fff; background: #d65f4b; }
+    .player strong { display: block; font-size: 12px; }
+    .player small { display: block; font-size: 10px; opacity: .7; }
+    .help { font-size: 11px; margin: 18px 0 0; opacity: .75; }
+    .help b { text-decoration: underline; }
+    .foot { font-size: 11px; opacity: .55; margin: 10px 0 0; }
+    @media (max-width: 760px) { .boards { grid-template-columns: 1fr; max-width: 520px; margin: auto; } .wrap { padding: 12px; } .head, .body { padding-left: 18px; padding-right: 18px; } }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="notice"><strong>Spec preview only.</strong> These are static mock controls. This file does not connect to Dial, fetch stations, or play audio. Open it at wide and narrow window widths to inspect the distinct experiences.</p>
+    <div class="boards">
+      <section class="board country" aria-labelledby="country-title">
+        <header class="head">
+          <div class="brandline"><span>Dial / Places</span><span class="other">Explore NTS ↗</span></div>
+          <h1 id="country-title">Radio by Country</h1>
+          <p class="intro">Find a live station from somewhere new. Start with a place, then choose the sound.</p>
+        </header>
+        <div class="body">
+          <p class="eyebrow">01 / Choose a country</p>
+          <div class="picker" aria-label="Preview country choice">Japan <small>Change country ▾</small></div>
+          <p class="micro">Stations from Radio Browser · scan complete · 18 choices</p>
+          <p class="eyebrow">02 / Live in Japan</p>
+          <div class="station"><div><strong>J-WAVE</strong><small>Tokyo · live radio</small></div><span class="pill">Select →</span></div>
+          <div class="station"><div><strong>FM Yokohama</strong><small>Yokohama · live radio</small></div><span class="pill">Select →</span></div>
+          <div class="station"><div><strong>Shonan Beach FM</strong><small>Hayama · live radio</small></div><span class="pill">Select →</span></div>
+          <div class="player"><span class="play" aria-hidden="true">▶</span><div><strong>J-WAVE selected</strong><small>Press Play to listen · preview</small></div></div>
+          <p class="help"><b>Help & prompts</b> · “Dial, find stations in Japan”</p>
+          <p class="foot">Mock names and count illustrate layout only.</p>
+        </div>
+      </section>
+      <section class="board nts" aria-labelledby="nts-title">
+        <header class="head">
+          <div class="brandline"><span>Dial / NTS</span><span class="other">Explore countries ↗</span></div>
+          <h1 id="nts-title">NTS Radio</h1>
+          <p class="intro">Two live channels. An archive of shows and episodes. Follow a sound, not a map.</p>
+        </header>
+        <div class="body">
+          <p class="eyebrow">Listen live</p>
+          <div class="livecards"><div class="livecard"><b>NTS 1</b><span>Live channel · select →</span></div><div class="livecard"><b>NTS 2</b><span>Live channel · select →</span></div></div>
+          <p class="eyebrow">Explore the archive</p>
+          <div class="search" aria-label="Preview archive search">Search shows and episodes · Floating Points</div>
+          <div class="episode"><div><strong>Floating Points</strong><small>Show · episodes available</small></div><span class="tag">Show</span></div>
+          <div class="episode"><div><strong>Floating Points · 3 Jun 2024</strong><small>Episode · audio availability checked on Play</small></div><span class="tag">Episode</span></div>
+          <div class="player"><span class="play" aria-hidden="true">▶</span><div><strong>NTS 1 selected</strong><small>Press Play to listen · preview</small></div></div>
+          <p class="help"><b>Help & prompts</b> · “Dial, search NTS archives for Floating Points”</p>
+          <p class="foot">Archive metadata from NTS; playback remains a host experiment.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

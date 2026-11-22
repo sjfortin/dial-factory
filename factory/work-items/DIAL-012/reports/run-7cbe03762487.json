@@ -1,0 +1,27 @@
+{
+  "agent": "/root/dial012_implement_resumed",
+  "ambiguities": [
+    "Actual ChatGPT MCP App forwarding of app-only _meta, MSE/blob admission, audible archive playback, prompt routing, and same-browser cross-thread scope remain for independent host verification.",
+    "Android foreground/background/lock-screen, notification, Bluetooth media-key control, and OS output behavior remain untested on the owner phone."
+  ],
+  "at": "2026-11-22T23:12:42+00:00",
+  "attempt": 3,
+  "blockers": [
+    "No authenticated ChatGPT MCP App browser or owner Android phone session was available to this Implement worker; host and phone acceptance remain unverified."
+  ],
+  "candidate_commit": "c073716626a35d3db189bb814373afaa00864dd0",
+  "change_summary": "Fixed the two remaining archive pause/resume defects in the DIAL-012 candidate: retained hls.js fatal errors now stop playback, and unchanged direct/native HLS media sources are reused so ordinary resume preserves position. Added durable regressions for both paths and stale HLS instances.",
+  "decisions": [
+    "The HLS fatal error listener follows the lifetime of its instance and selected source, checking that the instance is still current and playback is wanted. A new Play attempt can retain the instance without disabling its error path; destroyed instances cannot affect a replacement.",
+    "Direct and native HLS paths assign audio.src only when the attached URL differs from the valid archive candidate. This keeps ordinary paused media and its position intact while expired or cleared candidates still attach and restore a fresh source."
+  ],
+  "role": "Implement",
+  "run_id": "run-7cbe03762487",
+  "tests": [
+    "npm test passed 56/56, including TypeScript build, bundled UI, protocol, archive lifecycle, Media Session, and source policy tests.",
+    "New durable tests verify ordinary direct and native HLS resume at 72 seconds with no src reassignment; a retained HLS instance handles a fatal error after pause/resume, destroys it, releases the lock, and ignores the stale instance after a fresh retry.",
+    "Independent reviewer reproduction node --test /tmp/dial012-review-revision-lifecycle.mjs passed 7/7; its previous failures now report fatal HLS state=error, destroyed=true, lockHeld=false, and direct resume currentTime=72.",
+    "git diff --check passed before commit. Commit contains only src/player-controller.ts and test/archive-lifecycle.test.js."
+  ],
+  "work_item": "DIAL-012"
+}
