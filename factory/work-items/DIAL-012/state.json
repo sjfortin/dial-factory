@@ -416,6 +416,19 @@
       "seq": 42,
       "terminal_failure_reason": null,
       "to_state": "WAITING_FOR_HUMAN"
+    },
+    {
+      "at": "2026-11-22T23:23:21+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approve",
+      "kind": "intervention",
+      "possible_improvement": "Keep rollout authorization separate from actual ChatGPT and Android verification.",
+      "question": "Approve pushing merging and updating the testing endpoint for DIAL-012 host QA?",
+      "reason": "Owner explicitly approved push merge and existing testing-endpoint rollout of reviewed candidate",
+      "seq": 43,
+      "stage": "WAITING_FOR_HUMAN",
+      "work_item": "DIAL-012"
     }
   ],
   "final_result": null,
@@ -453,6 +466,17 @@
       "question": "Approve revised product and technical specs including separate experiences, archives and Android quick-control experiment?",
       "reason": "Owner explicitly approved refined Country/NTS design and exact revised product and technical specs",
       "stage": "WAITING_FOR_SPEC_APPROVAL",
+      "work_item": "DIAL-012"
+    },
+    {
+      "at": "2026-11-22T23:23:21+00:00",
+      "could_factory_have_avoided_this": false,
+      "human_implementation": false,
+      "human_response": "approve",
+      "possible_improvement": "Keep rollout authorization separate from actual ChatGPT and Android verification.",
+      "question": "Approve pushing merging and updating the testing endpoint for DIAL-012 host QA?",
+      "reason": "Owner explicitly approved push merge and existing testing-endpoint rollout of reviewed candidate",
+      "stage": "WAITING_FOR_HUMAN",
       "work_item": "DIAL-012"
     }
   ],
@@ -1140,5 +1164,5 @@
   },
   "state": "WAITING_FOR_HUMAN",
   "title": "Separate radio experiences, NTS archives and discoverable commands",
-  "updated_at": "2026-11-22T23:17:56+00:00"
+  "updated_at": "2026-11-22T23:23:21+00:00"
 }
