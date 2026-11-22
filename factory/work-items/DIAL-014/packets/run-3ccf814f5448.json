@@ -1,0 +1,26 @@
+{
+  "agent": "/root/dial014_implement",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "Make NTS archive browsing compact and easy to navigate at chat-card widths, with a bounded visible result page and reduced repeated per-row details.",
+    "Provide a clear route from a show episode list back to the prior search without losing query/results; distinguish shows and episodes and keep NTS links accessible.",
+    "Keep the active player and explicit playback controls accessible without browsing/searching stopping or changing audio; coordinate cleanly with DIAL-013 pending-live-selection behavior.",
+    "Preserve existing API request bounds, exact media/CSP policy, signed URL isolation, playback/seek/retry and stale-response guards.",
+    "Independent Review and Verify use exact candidate and realistic rendered narrow/desktop checks; do not infer actual host rendering from source or a mock alone."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Respond to owner host feedback: archive search works but layout is too long. Reduce visible density, add clear search/show navigation and keep player controls easy to reach without changing media trust or API scope.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-3ccf814f5448",
+  "spec": {
+    "at": "2026-11-22T23:36:43+00:00",
+    "by": "FOREMAN",
+    "mode": "skipped",
+    "reason": "Owner requests bounded cleanup of functioning archive UI. Concrete criteria and triage define five-row local pagination, search/show Back navigation and selected-item details; no new API/media/trust scope or broad design change."
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-014"
+}

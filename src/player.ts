@@ -24,11 +24,23 @@ const countriesTab = document.querySelector<HTMLButtonElement>('#countries-tab')
 const ntsTab = document.querySelector<HTMLButtonElement>('#nts-tab');
 const countriesPanel = document.querySelector<HTMLElement>('#countries-panel');
 const ntsPanel = document.querySelector<HTMLElement>('#nts-panel');
+const ntsLive = document.querySelector<HTMLDetailsElement>('#nts-live');
 const countryAttribution = document.querySelector<HTMLElement>('#country-attribution');
 const archiveQuery = document.querySelector<HTMLInputElement>('#archive-query');
 const archiveSearch = document.querySelector<HTMLButtonElement>('#archive-search-button');
 const archiveResults = document.querySelector<HTMLElement>('#archive-results');
 const archiveStatus = document.querySelector<HTMLElement>('#archive-status');
+const archiveBack = document.querySelector<HTMLButtonElement>('#archive-back');
+const archiveHeading = document.querySelector<HTMLElement>('#archive-heading');
+const archivePaging = document.querySelector<HTMLElement>('#archive-paging');
+const archivePrev = document.querySelector<HTMLButtonElement>('#archive-prev');
+const archiveNext = document.querySelector<HTMLButtonElement>('#archive-next');
+const archivePage = document.querySelector<HTMLElement>('#archive-page');
+const archiveDetail = document.querySelector<HTMLElement>('#archive-detail');
+const archiveDetailTitle = document.querySelector<HTMLElement>('#archive-detail-title');
+const archiveDetailMeta = document.querySelector<HTMLElement>('#archive-detail-meta');
+const archiveDetailAction = document.querySelector<HTMLButtonElement>('#archive-detail-action');
+const archiveDetailLink = document.querySelector<HTMLAnchorElement>('#archive-detail-link');
 const archiveLink = document.querySelector<HTMLAnchorElement>('#archive-link');
 const pausePanel = document.querySelector<HTMLElement>('#pause-panel');
 const playerSection = document.querySelector<HTMLElement>('#player-section');
@@ -110,38 +122,115 @@ if (list && summary) {
   const safeItem = (item: ArchiveItem) => item && (item.kind === 'show' || item.kind === 'episode') && /^[a-z0-9-]{1,100}$/.test(item.showAlias) &&
     (item.kind === 'show' || (typeof item.episodeAlias === 'string' && /^[a-z0-9-]{1,100}$/.test(item.episodeAlias))) &&
     item.url === `https://www.nts.live/shows/${item.showAlias}${item.kind === 'episode' ? `/episodes/${item.episodeAlias}` : ''}`;
-  const showArchive = (result: ArchiveResult) => {
+  const pageSize = 5;
+  let searchItems: ArchiveItem[] = [];
+  let episodeItems: ArchiveItem[] = [];
+  let searchQuery = '';
+  let episodeShow = '';
+  let archiveView: 'search' | 'episodes' = 'search';
+  let searchPage = 0;
+  let episodePage = 0;
+  let selectedItem: ArchiveItem | null = null;
+  const currentItems = () => archiveView === 'search' ? searchItems : episodeItems;
+  const currentPage = () => archiveView === 'search' ? searchPage : episodePage;
+  const renderArchive = () => {
     if (!archiveResults || !archiveStatus) return;
+    const items = currentItems();
+    const page = currentPage();
     archiveResults.replaceChildren();
-    if (result.status === 'error') { archiveStatus.textContent = 'NTS archive is unavailable or changed format. Try again.'; return; }
-    const items = Array.isArray(result.items) ? result.items.filter(safeItem).slice(0, 12) : [];
-    archiveStatus.textContent = items.length ? `${items.length} ${result.kind === 'nts-episodes' ? 'recent episodes' : 'show and episode results'} from NTS. Audio availability is checked on Play.` : 'No matching shows or episodes. Try another phrase.';
-    for (const item of items) {
+    if (archiveBack) archiveBack.hidden = archiveView !== 'episodes';
+    if (archiveHeading) { archiveHeading.hidden = archiveView !== 'episodes'; archiveHeading.textContent = archiveView === 'episodes' ? `${episodeShow} episodes` : ''; }
+    const first = page * pageSize;
+    const last = Math.min(first + pageSize, items.length);
+    archiveStatus.textContent = items.length ? `Showing ${first + 1}–${last} of ${items.length} ${archiveView === 'episodes' ? 'recent episodes' : 'show and episode results'} from NTS.` : archiveView === 'episodes' ? 'No recent episodes found for this show.' : 'No matching shows or episodes. Try another phrase.';
+    if (archivePaging) archivePaging.hidden = items.length <= pageSize;
+    if (archivePage) archivePage.textContent = `Page ${page + 1} of ${Math.max(1, Math.ceil(items.length / pageSize))}`;
+    if (archivePrev) archivePrev.disabled = page === 0;
+    if (archiveNext) archiveNext.disabled = last >= items.length;
+    for (const item of items.slice(first, last)) {
       const li = document.createElement('li'); li.className = 'archive-row';
       const button = document.createElement('button'); button.type = 'button';
-      const title = document.createElement('strong'); title.textContent = item.title;
-      const sub = document.createElement('small'); sub.textContent = [item.kind === 'show' ? 'Show' : 'Episode', item.show && item.kind === 'episode' ? item.show : '', item.date, item.audioSource === 'unavailable' && item.kind === 'episode' ? 'Audio availability checked on Play' : ''].filter(Boolean).join(' · ');
-      button.append(title, sub);
-      button.addEventListener('click', () => {
-        if (item.kind === 'show') {
-          supersede();
-          const serial = ++archiveSerial;
-          archiveStatus.textContent = `Loading episodes for ${item.title}…`;
-          void app.callServerTool({ name: 'list_nts_show_episodes', arguments: { showAlias: item.showAlias } }).then(response => { if (serial === archiveSerial) showArchive(response.structuredContent as ArchiveResult); }).catch(() => { if (serial === archiveSerial) archiveStatus.textContent = 'Could not load episodes. Try again.'; });
-          return;
-        }
-        selectedSource = 'nts'; catalog.clearSelected();
-        ntsPanel?.querySelectorAll<HTMLButtonElement>('.nts-option').forEach(option => option.setAttribute('aria-pressed', 'false'));
-        player.selectStation({ id: `nts:${item.showAlias}:${item.episodeAlias}`, name: item.title, streamUrl: '', source: 'nts', archive: { showAlias: item.showAlias, episodeAlias: item.episodeAlias!, url: item.url } });
-        toggle.disabled = false;
-        if (stationTitle) stationTitle.textContent = item.title;
-        if (stationSubtitle) stationSubtitle.textContent = [item.show || 'NTS', item.date, 'archive episode'].filter(Boolean).join(' · ');
-        if (archiveLink) { archiveLink.href = item.url; archiveLink.hidden = false; }
-      });
-      const link = document.createElement('a'); link.href = item.url; link.target = '_blank'; link.rel = 'noopener noreferrer'; link.textContent = 'Open on NTS';
-      li.append(button, link); archiveResults.append(li);
+      button.setAttribute('aria-pressed', String(selectedItem === item));
+      button.setAttribute('aria-label', `Details for ${item.kind} ${item.title}`);
+      const kind = document.createElement('span'); kind.className = 'archive-kind'; kind.textContent = item.kind === 'show' ? 'Show' : 'Episode';
+      const title = document.createElement('strong'); title.className = 'archive-title'; title.textContent = item.title;
+      const date = document.createElement('span'); date.className = 'archive-date'; date.textContent = item.date || '';
+      button.append(kind, title, date);
+      button.addEventListener('click', () => { selectedItem = item; renderArchive(); });
+      li.append(button); archiveResults.append(li);
+    }
+    if (archiveDetail) archiveDetail.hidden = !selectedItem;
+    if (selectedItem) {
+      if (archiveDetailTitle) archiveDetailTitle.textContent = selectedItem.title;
+      if (archiveDetailMeta) archiveDetailMeta.textContent = [selectedItem.kind === 'show' ? 'Show' : 'Episode', selectedItem.show && selectedItem.kind === 'episode' ? selectedItem.show : '', selectedItem.date, selectedItem.audioSource === 'unavailable' && selectedItem.kind === 'episode' ? 'Audio availability checked on Play' : ''].filter(Boolean).join(' · ');
+      if (archiveDetailAction) archiveDetailAction.textContent = selectedItem.kind === 'show' ? 'View episodes' : 'Select episode for playback';
+      if (archiveDetailLink) archiveDetailLink.href = selectedItem.url;
     }
   };
+  const showArchive = (result: ArchiveResult) => {
+    if (!archiveStatus) return;
+    if (result.status === 'error') { archiveStatus.textContent = 'NTS archive is unavailable or changed format. Try again.'; return; }
+    const items = Array.isArray(result.items) ? result.items.filter(safeItem).slice(0, 12) : [];
+    if (result.kind === 'nts-episodes') {
+      episodeItems = items;
+      episodePage = 0;
+      archiveView = 'episodes';
+    } else {
+      searchItems = items;
+      searchPage = 0;
+      searchQuery = typeof result.query === 'string' ? result.query : archiveQuery?.value.trim() ?? '';
+      archiveView = 'search';
+    }
+    selectedItem = null;
+    ntsPanel?.setAttribute('data-archive-browsing', 'true');
+    if (ntsLive) ntsLive.open = false;
+    renderArchive();
+  };
+  const loadShow = (item: ArchiveItem) => {
+    supersede();
+    const serial = ++archiveSerial;
+    if (archiveStatus) archiveStatus.textContent = `Loading episodes for ${item.title}…`;
+    void app.callServerTool({ name: 'list_nts_show_episodes', arguments: { showAlias: item.showAlias } }).then(response => {
+      if (serial !== archiveSerial) return;
+      const result = response.structuredContent as ArchiveResult;
+      if (result?.status === 'error') { if (archiveStatus) archiveStatus.textContent = 'Could not load episodes. Try again.'; return; }
+      episodeShow = item.title;
+      showArchive({ ...result, kind: 'nts-episodes' });
+    }).catch(() => { if (serial === archiveSerial && archiveStatus) archiveStatus.textContent = 'Could not load episodes. Try again.'; });
+  };
+  const selectEpisode = (item: ArchiveItem) => {
+    selectedSource = 'nts'; catalog.clearSelected();
+    ntsPanel?.querySelectorAll<HTMLButtonElement>('.nts-option').forEach(option => option.setAttribute('aria-pressed', 'false'));
+    player.selectStation({ id: `nts:${item.showAlias}:${item.episodeAlias}`, name: item.title, streamUrl: '', source: 'nts', archive: { showAlias: item.showAlias, episodeAlias: item.episodeAlias!, url: item.url } });
+    toggle.disabled = false;
+    if (stationTitle) stationTitle.textContent = item.title;
+    if (stationSubtitle) stationSubtitle.textContent = [item.show || 'NTS', item.date, 'archive episode'].filter(Boolean).join(' · ');
+    if (archiveLink) { archiveLink.href = item.url; archiveLink.hidden = false; }
+  };
+  archiveDetailAction?.addEventListener('click', () => {
+    if (!selectedItem || !currentItems().includes(selectedItem)) return;
+    if (selectedItem.kind === 'show') loadShow(selectedItem);
+    else selectEpisode(selectedItem);
+  });
+  archiveBack?.addEventListener('click', () => {
+    supersede();
+    archiveView = 'search';
+    selectedItem = null;
+    if (archiveQuery) archiveQuery.value = searchQuery;
+    renderArchive();
+  });
+  archivePrev?.addEventListener('click', () => {
+    if (currentPage() === 0) return;
+    if (archiveView === 'search') searchPage--; else episodePage--;
+    selectedItem = null;
+    renderArchive();
+  });
+  archiveNext?.addEventListener('click', () => {
+    if ((currentPage() + 1) * pageSize >= currentItems().length) return;
+    if (archiveView === 'search') searchPage++; else episodePage++;
+    selectedItem = null;
+    renderArchive();
+  });
   const search = () => {
     const query = archiveQuery?.value.trim() ?? '';
     if (!query || Array.from(query).length > 120) { if (archiveStatus) archiveStatus.textContent = 'Enter 1–120 characters to search.'; return; }
@@ -149,7 +238,7 @@ if (list && summary) {
     const serial = ++archiveSerial;
     if (archiveStatus) archiveStatus.textContent = 'Searching NTS…';
     if (archiveSearch) archiveSearch.disabled = true;
-    void app.callServerTool({ name: 'search_nts_archive_in_app', arguments: { query } }).then(response => { if (serial === archiveSerial) showArchive(response.structuredContent as ArchiveResult); }).catch(() => { if (serial === archiveSerial && archiveStatus) archiveStatus.textContent = 'NTS search failed. Try again.'; }).finally(() => { if (serial === archiveSerial && archiveSearch) archiveSearch.disabled = false; });
+    void app.callServerTool({ name: 'search_nts_archive_in_app', arguments: { query } }).then(response => { if (serial === archiveSerial) showArchive({ ...(response.structuredContent as ArchiveResult), query }); }).catch(() => { if (serial === archiveSerial && archiveStatus) archiveStatus.textContent = 'NTS search failed. Try again.'; }).finally(() => { if (serial === archiveSerial && archiveSearch) archiveSearch.disabled = false; });
   };
   archiveSearch?.addEventListener('click', search);
   archiveQuery?.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); search(); } });
@@ -276,6 +365,7 @@ if (list && summary) {
     if (result.launchMode === 'pause-control' && typeof result.requestId === 'string') { if (!seenPauseRequests.has(result.requestId)) { supersede(); pauseOnce(result.requestId, false, result.issuedAt); } return; }
     if (result.launchMode === 'nts' || result.launchMode === 'nts-search') {
       supersede();
+      if (result.launchMode === 'nts') { if (ntsLive) ntsLive.open = true; ntsPanel?.setAttribute('data-archive-browsing', 'false'); }
       showCollection('nts');
       if (result.channel === '1' || result.channel === '2') ntsPanel?.querySelector<HTMLButtonElement>(`.nts-option[data-channel="${result.channel}"]`)?.click();
       if (result.launchMode === 'nts-search') { if (archiveQuery && typeof result.query === 'string') archiveQuery.value = result.query; showArchive(result); }

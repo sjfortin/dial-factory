@@ -11,7 +11,8 @@ import { ARCHIVE_ORIGIN, searchArchive, showEpisodes, resolveEpisode } from './n
 
 const UI_URI = 'ui://dial/radio-v9.html';
 const DISCOVERY_URI = 'ui://dial/country-v13-nts-experiment.html';
-const CANONICAL_URI = 'ui://dial/listen-v1.html';
+const CANONICAL_URI = 'ui://dial/listen-v2.html';
+const PREVIOUS_CANONICAL_URI = 'ui://dial/listen-v1.html';
 // Previously registered country UI addresses may remain in ChatGPT tool metadata.
 // Each serves the current renderer; these are explicit historical URIs, not a pattern.
 const COUNTRY_RESOURCE_URIS = [
@@ -62,8 +63,8 @@ function makeServer() {
       }
     }]
   }));
-  for (const uri of [CANONICAL_URI, ...COUNTRY_RESOURCE_URIS]) {
-    registerAppResource(server, uri === CANONICAL_URI ? 'Dial country and NTS radio' : uri === DISCOVERY_URI ? 'Country radio player' : `Country radio player compatibility ${uri}`, uri, {}, async () => ({
+  for (const uri of [CANONICAL_URI, PREVIOUS_CANONICAL_URI, ...COUNTRY_RESOURCE_URIS]) {
+    registerAppResource(server, uri === CANONICAL_URI ? 'Dial country and NTS radio' : uri === PREVIOUS_CANONICAL_URI ? 'Dial radio compatibility listen v1' : uri === DISCOVERY_URI ? 'Country radio player' : `Country radio player compatibility ${uri}`, uri, {}, async () => ({
       contents: [{ uri, mimeType: RESOURCE_MIME_TYPE, text: discoveryHtml,
         _meta: { ui: { prefersBorder: true, csp: { connectDomains: [ARCHIVE_ORIGIN], resourceDomains: [...MEDIA_ORIGINS, ...NTS_RESOURCE_ORIGINS, ARCHIVE_ORIGIN] } } } }]
     }));

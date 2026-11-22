@@ -122,9 +122,12 @@ test('HTTP MCP tool returns the station and its renderable UI resource', async (
   for (const name of ['open_country_radio', 'open_nts_radio', 'search_nts_archive', 'pause_dial']) {
     const entry = tools.tools.find(tool => tool.name === name);
     assert.ok(entry, `${name} registered`);
-    assert.equal(entry._meta.ui.resourceUri, 'ui://dial/listen-v1.html');
+    assert.equal(entry._meta.ui.resourceUri, 'ui://dial/listen-v2.html');
   }
-  const canonical = await client.readResource({ uri: 'ui://dial/listen-v1.html' });
+  const canonical = await client.readResource({ uri: 'ui://dial/listen-v2.html' });
+  const previousCanonical = await client.readResource({ uri: 'ui://dial/listen-v1.html' });
+  assert.equal(previousCanonical.contents[0].text, canonical.contents[0].text);
+  assert.deepEqual(previousCanonical.contents[0]._meta.ui.csp, canonical.contents[0]._meta.ui.csp);
   assert.equal(canonical.contents[0].text, countryResource.contents[0].text);
   assert.deepEqual(canonical.contents[0]._meta.ui.csp, countryResource.contents[0]._meta.ui.csp);
   assert.equal((await client.callTool({ name: 'open_nts_radio', arguments: { channel: '1' } })).structuredContent.launchMode, 'nts');

@@ -22,18 +22,18 @@ const windows = partial => [0, 1, 2].map(pageIndex => ({ pageIndex, offset: page
 const result = (stations, { kind = 'initial', countryCode = 'FR', partial = false } = {}) => ({ kind, countryCode, status: 'ok', stations, windows: windows(partial), scanState: partial ? 'partial' : 'complete', choiceLimitReached: false });
 
 export async function exerciseDeliveredScript(script) {
-  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#retry-scan', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle', '#nts-prepared', '#nts-prepared-name', '#nts-prepared-play', '#country-select', '#countries-tab', '#nts-tab', '#countries-panel', '#nts-panel', '#country-attribution', '#archive-query', '#archive-search-button', '#archive-results', '#archive-status', '#archive-link', '#pause-panel', '#player-section', '#pause-status', '#pause-retry', '#archive-seek', '#archive-time'].map(id => [id, new Element()]));
+  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#retry-scan', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle', '#nts-prepared', '#nts-prepared-name', '#nts-prepared-play', '#country-select', '#countries-tab', '#nts-tab', '#countries-panel', '#nts-panel', '#nts-live', '#country-attribution', '#archive-query', '#archive-search-button', '#archive-results', '#archive-status', '#archive-back', '#archive-heading', '#archive-paging', '#archive-prev', '#archive-next', '#archive-page', '#archive-detail', '#archive-detail-title', '#archive-detail-meta', '#archive-detail-action', '#archive-detail-link', '#archive-link', '#pause-panel', '#player-section', '#pause-status', '#pause-retry', '#archive-seek', '#archive-time'].map(id => [id, new Element()]));
   const ntsButtons = [1, 2].map(channel => { const button = new Element(); button.dataset.channel = String(channel); return button; });
   nodes['#nts-panel'].append(...ntsButtons);
   nodes['#toggle'].disabled = true;
   nodes['#nts-prepared'].hidden = true;
-  const listeners = new Map(); const sent = []; const delayed = []; const delayedFind = []; const delayedArchive = []; const delayedResolve = []; const channels = []; const channelMessages = [];
+  const listeners = new Map(); const sent = []; const delayed = []; const delayedFind = []; const delayedArchive = []; const delayedShow = []; const delayedResolve = []; const channels = []; const channelMessages = [];
   const reply = (message, structuredContent, meta = {}) => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { content: [], structuredContent, _meta: meta } }, source: window.parent });
   const replyError = message => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, error: { code: -32000, message: 'Country request failed' } }, source: window.parent });
   const window = { innerWidth: 480, addEventListener(name, callback) { listeners.set(name, callback); }, removeEventListener(name, callback) { if (listeners.get(name) === callback) listeners.delete(name); }, parent: { postMessage(message) {
     sent.push(message);
     if (message.method === 'ui/initialize') queueMicrotask(() => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { protocolVersion: '2026-01-26', hostInfo: { name: 'test-host', version: '1' }, hostCapabilities: {}, hostContext: {} } }, source: window.parent }));
-    if (message.method === 'tools/call') queueMicrotask(() => { if (message.params?.name === 'retry_stations_by_country') delayed.push(message); else if (message.params?.name === 'find_stations_by_country') delayedFind.push(message); else if (message.params?.name === 'search_nts_archive_in_app') delayedArchive.push(message); else if (message.params?.name === 'resolve_nts_episode') delayedResolve.push(message); else reply(message, { counted: true }); });
+    if (message.method === 'tools/call') queueMicrotask(() => { if (message.params?.name === 'retry_stations_by_country') delayed.push(message); else if (message.params?.name === 'find_stations_by_country') delayedFind.push(message); else if (message.params?.name === 'search_nts_archive_in_app') delayedArchive.push(message); else if (message.params?.name === 'list_nts_show_episodes') delayedShow.push(message); else if (message.params?.name === 'resolve_nts_episode') delayedResolve.push(message); else reply(message, { counted: true }); });
   } } };
   const document = { querySelector(selector) { return nodes[selector] ?? null; }, createElement() { return new Element(); }, documentElement: { style: { height: '' }, getBoundingClientRect() { return { height: 400 }; } }, body: new Element() };
   class ResizeObserver { observe() {} disconnect() {} }
@@ -198,8 +198,9 @@ export async function exerciseDeliveredScript(script) {
   const item = title => ({ kind: 'episode', title, show: 'NTS', date: '2024', showAlias: 'floating-points', episodeAlias: 'floating-points-3rd-june-2024', url: 'https://www.nts.live/shows/floating-points/episodes/floating-points-3rd-june-2024', audioSource: 'soundcloud' });
   reply(secondSearch, { kind: 'nts-search', status: 'ok', items: [item('Second')] }); await tick();
   reply(firstSearch, { kind: 'nts-search', status: 'ok', items: [item('First')] }); await tick();
-  assert.equal(nodes['#archive-results'].children[0].children[0].children[0].textContent, 'Second', 'late archive search cannot replace newer results');
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[1].textContent, 'Second', 'late archive search cannot replace newer results');
   nodes['#archive-results'].children[0].children[0].click(); await tick();
+  nodes['#archive-detail-action'].click();
   nodes['#toggle'].click(); await tick();
   const resolving = delayedResolve.shift();
   assert.ok(resolving, 'archive Play requests app-only resolution');
@@ -228,6 +229,46 @@ export async function exerciseDeliveredScript(script) {
   const lateSearch = delayedArchive.shift();
   notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'ok', items: [item('New launch')], query: 'new' }); await tick();
   reply(lateSearch, { kind: 'nts-search', status: 'ok', items: [item('Old search')] }); await tick();
-  assert.equal(nodes['#archive-results'].children[0].children[0].children[0].textContent, 'New launch', 'late app search cannot replace a newer chat search');
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[1].textContent, 'New launch', 'late app search cannot replace a newer chat search');
   assert.equal(nodes['#archive-search-button'].disabled, false, 'new launch clears stale busy state');
+  const show = (n) => ({ kind: 'show', title: `Show ${n}`, show: '', date: '', showAlias: `show-${n}`, url: `https://www.nts.live/shows/show-${n}`, audioSource: '' });
+  const playingSource = nodes['#radio'].src, playingPauses = nodes['#radio'].pauseCalls, playingPlays = nodes['#radio'].playCalls;
+  notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'ok', items: Array.from({ length: 12 }, (_, i) => show(i + 1)), query: 'twelve' }); await tick();
+  assert.equal(nodes['#archive-results'].children.length, 5, 'only five rows are rendered');
+  assert.equal(nodes['#nts-live'].open, false, 'search results collapse live choices without changing audio');
+  assert.equal(nodes['#archive-paging'].hidden, false);
+  assert.match(nodes['#archive-status'].textContent, /Showing 1–5 of 12/);
+  assert.equal(nodes['#archive-prev'].disabled, true);
+  nodes['#archive-next'].click(); await tick();
+  assert.equal(nodes['#archive-results'].children.length, 5);
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[1].textContent, 'Show 6');
+  assert.match(nodes['#archive-page'].textContent, /Page 2 of 3/);
+  nodes['#archive-results'].children[0].children[0].click(); await tick();
+  assert.equal(nodes['#archive-detail'].hidden, false);
+  assert.equal(nodes['#archive-detail-link'].href, 'https://www.nts.live/shows/show-6');
+  assert.equal(nodes['#archive-detail-action'].textContent, 'View episodes');
+  assert.equal(nodes['#radio'].src, playingSource);
+  assert.equal(nodes['#radio'].pauseCalls, playingPauses);
+  assert.equal(nodes['#radio'].playCalls, playingPlays);
+  nodes['#archive-detail-action'].click(); await tick();
+  const staleShow = delayedShow.shift();
+  nodes['#archive-results'].children[1].children[0].click(); await tick();
+  nodes['#archive-detail-action'].click(); await tick();
+  const currentShow = delayedShow.shift();
+  reply(staleShow, { kind: 'nts-episodes', status: 'ok', items: [item('Stale episode')] }); await tick();
+  assert.equal(nodes['#archive-back'].hidden, true, 'stale show response does not open episodes');
+  reply(currentShow, { kind: 'nts-episodes', status: 'ok', items: [item('Fresh episode')] }); await tick();
+  assert.equal(nodes['#archive-back'].hidden, false);
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[1].textContent, 'Fresh episode');
+  nodes['#archive-results'].children[0].children[0].click(); await tick();
+  assert.equal(nodes['#archive-detail-action'].textContent, 'Select episode for playback');
+  assert.equal(nodes['#radio'].src, playingSource, 'episode details do not select audio');
+  nodes['#archive-back'].click(); await tick();
+  assert.equal(nodes['#archive-query'].value, 'twelve');
+  assert.equal(nodes['#archive-results'].children[0].children[0].children[1].textContent, 'Show 6');
+  assert.match(nodes['#archive-page'].textContent, /Page 2 of 3/);
+  assert.equal(nodes['#radio'].src, playingSource);
+  assert.equal(nodes['#radio'].pauseCalls, playingPauses);
+  assert.equal(nodes['#radio'].playCalls, playingPlays);
+
 }
