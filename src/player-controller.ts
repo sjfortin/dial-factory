@@ -4,6 +4,7 @@ import Hls from 'hls.js/light';
 type PlayerState = 'idle' | 'buffering' | 'playing' | 'paused' | 'error';
 export type Selection = { id: string; name: string; streamUrl: string; clickToken?: string; source?: 'nts'; archive?: { showAlias: string; episodeAlias: string; url: string } };
 type Options = { onPlaying?: (token: string) => void; coordination?: CoordinationEnvironment;
+  onSelectionChange?: (active: Selection | null, prepared: Selection | null) => void;
   remoteButton?: HTMLButtonElement | null; remoteStatus?: HTMLElement | null;
   resolveArchive?: (showAlias: string, episodeAlias: string) => Promise<{ format: 'hls' | 'direct'; url: string; expires?: number } | null>;
   hlsAdapter?: { isSupported: () => boolean; create: (config: ConstructorParameters<typeof Hls>[0]) => Hls };
@@ -14,6 +15,7 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
   let wanted = false;
   let attempt = 0;
   let selected: Selection | null = null;
+  let prepared: Selection | null = null;
   let reportedAttempt = -1;
   let playSettled = false;
   let mediaStarted = false;
@@ -165,18 +167,42 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
     }
   }
   function selectStation(next: Selection) {
+    // A live NTS row is a choice to prepare, not an instruction to interrupt
+    // another live NTS channel. The audio source and Media Session stay active.
+    if (selected?.source === 'nts' && !selected.archive && next.source === 'nts' && !next.archive) {
+      prepared = next.id === selected.id ? null : next;
+      options.onSelectionChange?.(selected, prepared);
+      return;
+    }
     stop();
     clearSource(); resumeTime = 0;
+    prepared = null;
     selected = next;
     if (!next.archive) audio.src = next.streamUrl;
     show('idle', `${next.name} selected. Press Play to listen.`);
     updateTime();
+    options.onSelectionChange?.(selected, prepared);
+  }
+  function playPrepared() {
+    if (!prepared) return;
+    const next = prepared;
+    stop();
+    clearSource(); resumeTime = 0;
+    selected = next;
+    prepared = null;
+    audio.src = next.streamUrl;
+    show('idle', `${next.name} selected. Press Play to listen.`);
+    updateTime();
+    options.onSelectionChange?.(selected, prepared);
+    void play();
   }
   function clearSelection() {
     stop();
     clearSource(); resumeTime = 0;
     selected = null;
+    prepared = null;
     show('idle', 'Select a station to listen.');
+    options.onSelectionChange?.(selected, prepared);
   }
   async function play(external = false) {
     if (!selected && !audio.src) return;
@@ -290,5 +316,5 @@ export function installPlayer(audio: HTMLAudioElement, toggle: HTMLButtonElement
   options.seek?.addEventListener('input', () => { if (!selected?.archive) return; const target = nearestSeek(Number(options.seek?.value)); if (target !== null) { audio.currentTime = target; updateTime(); } });
   const teardown = () => { stop(); clearSource(); coordinator.dispose(); };
   if (typeof globalThis.addEventListener === 'function') globalThis.addEventListener('pagehide', teardown, { once: true });
-  return { selectStation, clearSelection, pauseRemote: () => coordinator.pauseRemote(), remoteAvailable: () => coordinator.available, remoteKnown: () => coordinator.hasRemote(), dispose: teardown };
+  return { selectStation, playPrepared, clearSelection, pauseRemote: () => coordinator.pauseRemote(), remoteAvailable: () => coordinator.available, remoteKnown: () => coordinator.hasRemote(), dispose: teardown };
 }

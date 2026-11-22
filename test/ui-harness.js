@@ -22,10 +22,11 @@ const windows = partial => [0, 1, 2].map(pageIndex => ({ pageIndex, offset: page
 const result = (stations, { kind = 'initial', countryCode = 'FR', partial = false } = {}) => ({ kind, countryCode, status: 'ok', stations, windows: windows(partial), scanState: partial ? 'partial' : 'complete', choiceLimitReached: false });
 
 export async function exerciseDeliveredScript(script) {
-  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#retry-scan', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle', '#country-select', '#countries-tab', '#nts-tab', '#countries-panel', '#nts-panel', '#country-attribution', '#archive-query', '#archive-search-button', '#archive-results', '#archive-status', '#archive-link', '#pause-panel', '#player-section', '#pause-status', '#pause-retry', '#archive-seek', '#archive-time'].map(id => [id, new Element()]));
+  const nodes = Object.fromEntries(['#radio', '#toggle', '#status', '#stations', '#summary', '#more-stations', '#retry-scan', '#remote-pause', '#remote-status', '#station-title', '#station-subtitle', '#nts-prepared', '#nts-prepared-name', '#nts-prepared-play', '#country-select', '#countries-tab', '#nts-tab', '#countries-panel', '#nts-panel', '#country-attribution', '#archive-query', '#archive-search-button', '#archive-results', '#archive-status', '#archive-link', '#pause-panel', '#player-section', '#pause-status', '#pause-retry', '#archive-seek', '#archive-time'].map(id => [id, new Element()]));
   const ntsButtons = [1, 2].map(channel => { const button = new Element(); button.dataset.channel = String(channel); return button; });
   nodes['#nts-panel'].append(...ntsButtons);
   nodes['#toggle'].disabled = true;
+  nodes['#nts-prepared'].hidden = true;
   const listeners = new Map(); const sent = []; const delayed = []; const delayedFind = []; const delayedArchive = []; const delayedResolve = []; const channels = []; const channelMessages = [];
   const reply = (message, structuredContent, meta = {}) => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, result: { content: [], structuredContent, _meta: meta } }, source: window.parent });
   const replyError = message => listeners.get('message')?.({ data: { jsonrpc: '2.0', id: message.id, error: { code: -32000, message: 'Country request failed' } }, source: window.parent });
@@ -106,11 +107,23 @@ export async function exerciseDeliveredScript(script) {
   assert.equal(nodes['#country-attribution'].hidden, true, 'playing NTS keeps Radio Browser disclosure hidden on Countries tab');
   assert.equal(nodes['#status'].dataset.state, 'playing', 'tab change preserves NTS playback');
   nodes['#nts-tab'].click();
+  const activeSource = nodes['#radio'].src, activePauses = nodes['#radio'].pauseCalls, activePlays = nodes['#radio'].playCalls;
   ntsButtons[1].click(); await tick();
-  assert.equal(nodes['#radio'].paused, true, 'switch stops the previous NTS stream');
+  assert.equal(nodes['#radio'].paused, false, 'preparing NTS 2 leaves NTS 1 playing');
+  assert.equal(nodes['#radio'].src, activeSource);
+  assert.equal(nodes['#radio'].pauseCalls, activePauses);
+  assert.equal(nodes['#radio'].playCalls, activePlays);
+  assert.equal(nodes['#status'].dataset.state, 'playing');
+  assert.equal(nodes['#station-title'].textContent, 'NTS 1', 'current audio label remains NTS 1');
+  assert.equal(nodes['#nts-prepared'].hidden, false);
+  assert.equal(nodes['#nts-prepared-name'].textContent, 'NTS 2 ready');
+  assert.equal(nodes['#nts-prepared-play'].attributes['aria-label'], 'Play NTS 2');
+  assert.equal(nodes['#toggle'].attributes['aria-label'], 'Pause NTS 1');
+  nodes['#nts-prepared-play'].click(); await tick();
   assert.equal(nodes['#radio'].src, 'https://stream-relay-geo.ntslive.net/stream2?client=direct');
-  assert.equal(nodes['#status'].dataset.state, 'idle');
-  nodes['#toggle'].click(); await tick();
+  assert.equal(nodes['#radio'].pauseCalls, activePauses + 1);
+  assert.equal(nodes['#station-title'].textContent, 'NTS 2');
+  assert.equal(nodes['#nts-prepared'].hidden, true);
   nodes['#radio'].error = { code: 4 }; nodes['#radio'].dispatchEvent(new Event('error')); await tick();
   assert.equal(nodes['#status'].dataset.state, 'error');
   assert.match(nodes['#status'].textContent, /unavailable or blocked.*open on NTS/i);
@@ -208,7 +221,8 @@ export async function exerciseDeliveredScript(script) {
   notify({ launchMode: 'nts', channel: '1' }); await tick();
   reply(lateCountry, { ...result([row(54, 'GB')], { countryCode: 'GB' }), requestId: lateCountry.params.arguments.requestId }); await tick();
   assert.equal(nodes['#nts-panel'].hidden, false, 'late country picker cannot replace a new NTS launch');
-  assert.equal(nodes['#station-title'].textContent, 'NTS 1');
+  assert.equal(nodes['#station-title'].textContent, 'NTS 2', 'tool selection does not replace the current NTS source');
+  assert.equal(nodes['#nts-prepared-name'].textContent, 'NTS 1 ready');
   notify({ launchMode: 'nts-search', kind: 'nts-search', status: 'empty', items: [], query: 'initial' });
   nodes['#archive-query'].value = 'old'; nodes['#archive-search-button'].click(); await tick();
   const lateSearch = delayedArchive.shift();

@@ -16,6 +16,9 @@ const more = document.querySelector<HTMLButtonElement>('#more-stations');
 const retry = document.querySelector<HTMLButtonElement>('#retry-scan');
 const stationTitle = document.querySelector<HTMLElement>('#station-title');
 const stationSubtitle = document.querySelector<HTMLElement>('#station-subtitle');
+const preparedBar = document.querySelector<HTMLElement>('#nts-prepared');
+const preparedName = document.querySelector<HTMLElement>('#nts-prepared-name');
+const preparedPlay = document.querySelector<HTMLButtonElement>('#nts-prepared-play');
 const countrySelect = document.querySelector<HTMLSelectElement>('#country-select');
 const countriesTab = document.querySelector<HTMLButtonElement>('#countries-tab');
 const ntsTab = document.querySelector<HTMLButtonElement>('#nts-tab');
@@ -34,6 +37,15 @@ const pauseRetry = document.querySelector<HTMLButtonElement>('#pause-retry');
 type ArchiveItem = { kind: 'show' | 'episode'; title: string; show: string; date: string; showAlias: string; episodeAlias?: string; url: string; audioSource: string };
 type ArchiveResult = { kind?: string; status?: string; items?: ArchiveItem[]; query?: string; launchMode?: string; channel?: string; requestId?: string; issuedAt?: number };
 const player = installPlayer(audio, toggle, status, {
+  onSelectionChange: (active, prepared) => {
+    if (preparedBar) preparedBar.hidden = !prepared;
+    if (preparedName) preparedName.textContent = prepared ? `${prepared.name} ready` : '';
+    if (preparedPlay) preparedPlay.setAttribute('aria-label', prepared ? `Play ${prepared.name}` : 'Play prepared NTS channel');
+    if (active?.source === 'nts' && !active.archive) {
+      if (stationTitle) stationTitle.textContent = active.name;
+      if (stationSubtitle) stationSubtitle.textContent = 'NTS · live channel · experimental playback';
+    }
+  },
   coordination: {
     locks: navigator.locks,
     channel: (name) => new BroadcastChannel(name)
@@ -54,6 +66,7 @@ const player = installPlayer(audio, toggle, status, {
     void app.callServerTool({ name: 'report_station_click', arguments: { clickToken } }).catch(() => {});
   }
 });
+preparedPlay?.addEventListener('click', () => player.playPrepared());
 if (list && summary) {
   let selectedSource: 'country' | 'nts' | null = null;
   const catalog = createStationCatalog(list, summary, toggle, (row) => {
@@ -89,8 +102,6 @@ if (list && summary) {
     catalog.clearSelected();
     player.selectStation({ ...selection, source: 'nts' });
     toggle.disabled = false;
-    if (stationTitle) stationTitle.textContent = selection.name;
-    if (stationSubtitle) stationSubtitle.textContent = 'NTS · live channel · experimental playback';
     if (countryAttribution) countryAttribution.hidden = true;
     if (archiveLink) archiveLink.hidden = true;
     for (const option of ntsPanel.querySelectorAll<HTMLButtonElement>('.nts-option')) option.setAttribute('aria-pressed', String(option === button));

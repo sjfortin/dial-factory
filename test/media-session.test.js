@@ -26,16 +26,20 @@ test('Media Session pauses owner, resumes only when idle, and stale cleanup pres
   const shared = { lock: new Lock(), bus: new Bus() }; let a, b;
   try {
     a = setup(shared); b = setup(shared);
-    a.player.selectStation({ id: 'a', name: 'A', streamUrl: 'https://example.test/a' });
+    a.player.selectStation({ id: 'nts-1', name: 'NTS 1', streamUrl: 'https://example.test/a', source: 'nts' });
     b.player.selectStation({ id: 'b', name: 'B', streamUrl: 'https://example.test/b' });
     a.toggle.click(); await tick();
     assert.equal(session.playbackState, 'playing');
-    assert.equal(session.metadata.title, 'A');
+    assert.equal(session.metadata.title, 'NTS 1');
+    a.player.selectStation({ id: 'nts-2', name: 'NTS 2', streamUrl: 'https://example.test/nts2', source: 'nts' });
+    assert.equal(session.metadata.title, 'NTS 1', 'prepared NTS 2 does not change active Media Session metadata');
     session.handlers.pause(); await tick();
     assert.equal(a.audio.paused, true);
+    assert.equal(a.audio.src, 'https://example.test/a', 'remote Pause stays on NTS 1');
     assert.equal(session.playbackState, 'paused');
     session.handlers.play(); await tick();
     assert.equal(a.audio.paused, false, 'media Play resumes the matching paused source when lock is idle');
+    assert.equal(a.audio.src, 'https://example.test/a', 'media Play cannot start prepared NTS 2');
     session.handlers.pause(); await tick();
     const stalePlay = session.handlers.play;
     b.toggle.click(); await tick();
