@@ -1,0 +1,568 @@
+{
+  "created_at": "2026-11-22T23:33:07+00:00",
+  "criteria": [
+    "While NTS1 is playing, selecting NTS2 prepares that channel without pausing, clearing, reloading or changing the audible NTS1 stream; selecting a live row alone never starts audio.",
+    "Only an explicit Play action for the prepared NTS channel switches playback, stopping the prior stream before the new one starts and preserving shared ownership and stale-attempt protection.",
+    "The UI and Media Session metadata distinguish what is actually playing from the pending selection, and Pause for the currently playing audio remains accessible.",
+    "Handle repeated selections, selecting the active channel, remote Pause and buffering/error states without overlap or unintended restart; preserve country and archive selection behavior unless directly required by this bounded NTS fix.",
+    "Independent Review and Verify assess the exact candidate with delivered UI/controller regressions and preserve any unavailable audible host evidence honestly."
+  ],
+  "events": [
+    {
+      "at": "2026-11-22T23:33:07+00:00",
+      "kind": "created",
+      "seq": 1,
+      "title": "Keep current NTS audio while preparing another live channel"
+    },
+    {
+      "at": "2026-11-22T23:33:07+00:00",
+      "from_state": "INTAKE",
+      "kind": "advanced",
+      "seq": 2,
+      "terminal_failure_reason": null,
+      "to_state": "TRIAGE"
+    },
+    {
+      "at": "2026-11-22T23:33:08+00:00",
+      "could_factory_have_avoided_this": true,
+      "human_implementation": false,
+      "human_response": "NTS1 should keep playing until I actually say to play the newly selected NTS stream.",
+      "kind": "intervention",
+      "possible_improvement": "Model prepared selection separately from active playback and show both states honestly.",
+      "question": "What should happen when selecting NTS2 while NTS1 plays?",
+      "reason": "Owner explicitly changes NTS live selection semantics from immediate stop to prepare-then-Play",
+      "seq": 3,
+      "stage": "TRIAGE",
+      "work_item": "DIAL-013"
+    },
+    {
+      "agent": "/root/dial013_triage",
+      "at": "2026-11-22T23:33:20+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Triage",
+      "run_id": "run-fb176dfb8689",
+      "seq": 4
+    },
+    {
+      "at": "2026-11-22T23:35:10+00:00",
+      "attempt": null,
+      "candidate_commit": null,
+      "kind": "reported",
+      "result": "IMPLEMENT",
+      "role": "Triage",
+      "run_id": "run-fb176dfb8689",
+      "seq": 5
+    },
+    {
+      "at": "2026-11-22T23:35:10+00:00",
+      "by": "FOREMAN",
+      "kind": "spec_skipped",
+      "reason": "Owner supplied concrete NTS-only prepare-versus-playing behavior and observable criteria. Routine bounded controller/UI correction; no new media trust, backend or broad design scope. Keep active Pause and distinguish pending Play.",
+      "seq": 6
+    },
+    {
+      "at": "2026-11-22T23:35:10+00:00",
+      "from_state": "TRIAGE",
+      "kind": "advanced",
+      "seq": 7,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial013_implement",
+      "at": "2026-11-22T23:35:40+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-f645a4a7b86d",
+      "seq": 8
+    },
+    {
+      "at": "2026-11-22T23:39:23+00:00",
+      "attempt": 1,
+      "candidate_commit": "4f5883c0f2160e9d48724fd5e4331a1a214f93e4",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-f645a4a7b86d",
+      "seq": 9
+    },
+    {
+      "at": "2026-11-22T23:39:24+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 10,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial013_review",
+      "at": "2026-11-22T23:39:36+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-ed5b39f7fdbd",
+      "seq": 11
+    },
+    {
+      "at": "2026-11-22T23:41:03+00:00",
+      "attempt": 1,
+      "candidate_commit": "4f5883c0f2160e9d48724fd5e4331a1a214f93e4",
+      "kind": "reported",
+      "result": "REVISE",
+      "role": "Review",
+      "run_id": "run-ed5b39f7fdbd",
+      "seq": 12
+    },
+    {
+      "at": "2026-11-22T23:41:03+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 13,
+      "terminal_failure_reason": null,
+      "to_state": "BUILDING"
+    },
+    {
+      "agent": "/root/dial013_implement",
+      "at": "2026-11-22T23:41:03+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "role": "Implement",
+      "run_id": "run-cf5ec721f9bc",
+      "seq": 14
+    },
+    {
+      "at": "2026-11-22T23:42:32+00:00",
+      "attempt": 2,
+      "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+      "kind": "reported",
+      "result": "REPORTED",
+      "role": "Implement",
+      "run_id": "run-cf5ec721f9bc",
+      "seq": 15
+    },
+    {
+      "at": "2026-11-22T23:42:32+00:00",
+      "from_state": "BUILDING",
+      "kind": "advanced",
+      "seq": 16,
+      "terminal_failure_reason": null,
+      "to_state": "REVIEWING"
+    },
+    {
+      "agent": "/root/dial013_review",
+      "at": "2026-11-22T23:42:32+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "role": "Review",
+      "run_id": "run-9790b1e75722",
+      "seq": 17
+    },
+    {
+      "at": "2026-11-22T23:43:26+00:00",
+      "attempt": 2,
+      "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+      "kind": "reported",
+      "result": "ACCEPT",
+      "role": "Review",
+      "run_id": "run-9790b1e75722",
+      "seq": 18
+    },
+    {
+      "at": "2026-11-22T23:43:26+00:00",
+      "from_state": "REVIEWING",
+      "kind": "advanced",
+      "seq": 19,
+      "terminal_failure_reason": null,
+      "to_state": "VERIFYING"
+    },
+    {
+      "agent": "/root/dial013_verify",
+      "at": "2026-11-22T23:43:37+00:00",
+      "kind": "dispatched",
+      "replaces": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "role": "Verify",
+      "run_id": "run-7eb2784539ec",
+      "seq": 20
+    },
+    {
+      "at": "2026-11-22T23:45:57+00:00",
+      "attempt": 2,
+      "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+      "kind": "reported",
+      "result": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-7eb2784539ec",
+      "seq": 21
+    },
+    {
+      "at": "2026-11-22T23:45:57+00:00",
+      "from_state": "VERIFYING",
+      "kind": "advanced",
+      "seq": 22,
+      "terminal_failure_reason": null,
+      "to_state": "WAITING_FOR_HUMAN"
+    }
+  ],
+  "final_result": null,
+  "handoff": null,
+  "id": "DIAL-013",
+  "interventions": [
+    {
+      "at": "2026-11-22T23:33:08+00:00",
+      "could_factory_have_avoided_this": true,
+      "human_implementation": false,
+      "human_response": "NTS1 should keep playing until I actually say to play the newly selected NTS stream.",
+      "possible_improvement": "Model prepared selection separately from active playback and show both states honestly.",
+      "question": "What should happen when selecting NTS2 while NTS1 plays?",
+      "reason": "Owner explicitly changes NTS live selection semantics from immediate stop to prepare-then-Play",
+      "stage": "TRIAGE",
+      "work_item": "DIAL-013"
+    }
+  ],
+  "objective": "Honor owner-requested NTS selection versus playback separation: selecting a new live channel leaves current audio running until explicit Play, with truthful selected/playing UI and active Pause.",
+  "reports": [
+    {
+      "agent": "/root/dial013_triage",
+      "at": "2026-11-22T23:35:10+00:00",
+      "complexity": "Medium to high, bounded to NTS live. The user-visible distinction is small, but controller state and ownership currently assume one selected source. Keep active and prepared NTS selections separate, provide an explicit Play action for the prepared channel while preserving the global Pause for active audio, and switch the one audio element only on that action. Maintain the existing attempt/abort guards and coordinator serialization across the handoff.",
+      "evidence": [
+        "Current NTS row click invokes player.selectStation() at src/player.ts:90; the controller implementation immediately calls stop() and clearSource(), then assigns selected and the new audio.src at src/player-controller.ts:151-158. Thus selecting NTS2 while NTS1 plays pauses and clears NTS1 before any explicit Play.",
+        "The controller has one selected Selection used by play(), UI labels, error text, and Media Session metadata. It does not currently represent a pending NTS choice separately from the active source.",
+        "The shared toggle is wired as Pause when wanted and Play otherwise (src/player-controller.ts:106-112,270-273). During playback it cannot both remain an accessible Pause for NTS1 and serve as the explicit Play-NTS2 switch action; a distinct NTS Play action or an equivalent explicit interaction is needed.",
+        "Current Media Session handlers and metadata are installed from selected (src/player-controller.ts:39-50); assigning pending NTS2 as selected while NTS1 remains audible would make OS metadata report the wrong station unless active playback identity remains separate.",
+        "Existing tests do not cover select-NTS2-while-NTS1-playing or dual active/pending state; they assert the old stop-on-select rule in controller and delivered UI harness.",
+        "Country station and NTS archive selection also route through player.selectStation. The requested exception is explicitly only NTS live; implementation should retain their current stop/clear semantics."
+      ],
+      "handoff": "Proceed with a justified Spec skip: the packet records the owner’s explicit behavior decision and supplies bounded, testable criteria, so no remaining product choice requires a separate Spec. Treat the owner-defined DIAL-013 criteria as a narrow NTS-live-only override to the prior immediate-stop-on-selection rule. Split prepared and active identity in the player, keep NTS row selection non-destructive, expose explicit Play for the prepared NTS channel while retaining active Pause, and bind Media Session metadata/Pause to the actual active source. Implement the switch so old audio is synchronously paused and ownership safely released/transferred before new playback; retain stale-attempt protection. Add controller and delivered UI coverage for repeated selections, selecting active, remote Pause, buffering/error, actual active/pending labels and Media Session metadata, and country/archive non-regression. Independent Review and Verify should inspect the exact candidate; actual audible host verification remains an evidence question and must be reported honestly if unavailable.",
+      "open_questions": [
+        "No unresolved product decision blocks implementation. The owner response in the recorded intervention explicitly says NTS1 should keep playing until the owner actually says to play the newly selected NTS stream, and the packet gives observable acceptance criteria.",
+        "Suggested interaction detail for Implement: keep channel-row selection as preparation, add a separate explicit Play control for the selected NTS live channel, and leave the shared player toggle as Pause for the active channel while it is playing. This meets the packet's explicit-play requirement without making Pause inaccessible."
+      ],
+      "recommendation": "IMPLEMENT",
+      "relevant_code": [
+        "src/player.ts:84-97: selecting either NTS live row calls player.selectStation, updates the shared title and pressed row, and uses the single global toggle; this directly changes the player selection on row click.",
+        "src/player-controller.ts:39-50: Media Session metadata and handlers use the single selected value, so selection is also treated as current playback identity.",
+        "src/player-controller.ts:106-125: status and toggle labels use selected/wanted; stop() pauses audio, cancels coordination, and clears Media Session.",
+        "src/player-controller.ts:127-146: local pause preserves current selected identity, while coordinator stop clears the audio source; coordinator ownership is coupled to current selection.",
+        "src/player-controller.ts:151-267: play() captures selected ID for stale-attempt protection and uses the shared coordinator; changing source while already holding ownership needs a deliberate transition path because coordinator.acquire() rejects when already held.",
+        "public/discovery.html:104-105: each NTS live channel currently has one select button; the persistent shared player has one toggle which is the only Play/Pause control.",
+        "test/player.test.js:257-293 and test/ui-harness.js:86-120: existing regressions explicitly expect selecting NTS2 to stop NTS1 immediately, clear its source, set idle, then start NTS2 from the global toggle; these assertions require updating for the owner-defined exception.",
+        "factory/work-items/DIAL-013/packets/run-fb176dfb8689.json: defines the bounded criteria including preserved active audio, explicit Play to switch, truthful playing/pending UI and metadata, accessible active Pause, edge cases, and preservation of country/archive behavior."
+      ],
+      "risks": [
+        "A naive selected-value change can relabel the audible NTS1 stream as NTS2 in the player and Media Session, or make Pause target the pending rather than active source.",
+        "A naive switch can overlap streams or fail because PlaybackCoordinator.acquire() refuses when this player already holds the lock; the transition must pause/release the old source before the new source starts, while keeping stale attempts and other-thread handoff safe.",
+        "Rapid or repeated selection, selecting the already active channel, a user Pause while another channel is pending, and buffering/error events can cause stale UI or unintended restarts unless active and pending identities remain explicit.",
+        "Existing tests codify immediate-stop-on-select and must be revised; preserve country and archive behavior and their existing expected stop-on-selection semantics."
+      ],
+      "role": "Triage",
+      "run_id": "run-fb176dfb8689",
+      "scope": "Read-only triage of the owner-defined NTS live selection-versus-playing behavior, current player state/control paths, and delivered controller/UI regression coverage. No production, lifecycle, or service files were edited.",
+      "work_item": "DIAL-013"
+    },
+    {
+      "agent": "/root/dial013_implement",
+      "ambiguities": [],
+      "at": "2026-11-22T23:39:23+00:00",
+      "attempt": 1,
+      "blockers": [
+        "This implement run has no actual audible ChatGPT host observation; independent Verify must report host evidence availability honestly."
+      ],
+      "candidate_commit": "4f5883c0f2160e9d48724fd5e4331a1a214f93e4",
+      "change_summary": "Separated prepared NTS live channel selection from the active audio source. Selecting the other live row leaves the current stream, player Pause control, and Media Session metadata intact; a compact prepared bar provides explicit Play to switch. Preserved country and archive selection behavior.",
+      "decisions": [
+        "The controller's selected value remains the active audio identity; a separate prepared value exists only for NTS-live-to-NTS-live choices.",
+        "Explicit prepared Play first stops and releases the prior source, then sets and plays the new source through the existing coordinator and attempt guards.",
+        "The shared toggle remains bound to the active source, including when another channel is prepared. Selecting the active NTS row cancels preparation without restarting playback.",
+        "The player labels the active source as Current audio and names the prepared channel separately. Media Session handlers continue to use the active source."
+      ],
+      "role": "Implement",
+      "run_id": "run-f645a4a7b86d",
+      "tests": [
+        "npm test passed: TypeScript and esbuild build succeeded; 57/57 Node tests passed, including controller, Media Session and delivered browser UI resource regressions.",
+        "Controller regressions checked NTS selection while playing preserves src, pause/play counts and active status; repeated selection; active-channel selection; buffering; explicit switch; shared ownership transfer; error retry; country selection non-regression.",
+        "Media Session regression checked pending NTS 2 does not relabel active NTS 1, remote Pause stops NTS 1, and Media Play resumes NTS 1 rather than starting the pending channel.",
+        "Delivered UI regression checked active NTS 1 title/Pause while NTS 2 is prepared, separate prepared label and Play action, explicit switch, and tool-originated NTS selection.",
+        "git diff --check passed before candidate commit."
+      ],
+      "work_item": "DIAL-013"
+    },
+    {
+      "agent": "/root/dial013_review",
+      "architecture": "The separate prepared identity is appropriately bounded to live NTS and retains selected as active audio/Media Session identity. Explicit prepared Play synchronously stops and clears the previous source before reusing existing ownership and attempt guards. Country and archive selection continue through the old stop/clear path.",
+      "at": "2026-11-22T23:41:03+00:00",
+      "attempt": 1,
+      "candidate_commit": "4f5883c0f2160e9d48724fd5e4331a1a214f93e4",
+      "complexity": "Small, appropriately bounded change. Source recovery can be repaired in existing explicit live Play handling without expanding selection semantics or archive scope.",
+      "correctness": "Repeated/active selection, pending title versus active title, active Pause, Media Session, clearSelection, explicit switch and stale promise guards inspected. Found source restoration gap after coordinator stop: selecting the active live channel no longer restores the cleared source, while play does not restore it either.",
+      "findings": [
+        {
+          "description": "After remote Pause or ownership transfer, coordinator.onStop clears audio.src but retains selected. Reselecting the active NTS channel now returns early from the NTS preparation branch and leaves src empty. Main Play never restores selected.streamUrl and calls audio.play with no source, resulting in an error. Before this change, reselecting the row restored its URL via normal selectStation. This breaks an existing recovery action and the requested remote-Pause/active-selection edge behavior.",
+          "location": "src/player-controller.ts:172-175 (with coordinator.onStop at 142-148 and play at 207-295)",
+          "requested_change": "Restore the active live URL when explicitly playing after a coordinator source clear (or equivalent safe recovery), while keeping row selection non-destructive. Add a controller regression covering cross-thread Pause or transfer, active NTS reselect/cancel pending, and successful explicit Play with a source-validating audio double.",
+          "severity": "medium"
+        }
+      ],
+      "recommendation": "REVISE",
+      "requirements": "Read bootstrap contract, Review role, recorded Triage, Spec skip and all five criteria. Core NTS preparation/explicit Play behavior matches the owner decision; cross-thread remote-Pause recovery has a regression that prevents acceptance.",
+      "role": "Review",
+      "run_id": "run-ed5b39f7fdbd",
+      "security": "No new origins, backend calls, dynamic HTML injection or trust expansion. New labels use textContent and existing fixed NTS identities.",
+      "tests": [
+        "Independently ran npm test on exact candidate HEAD: TypeScript/esbuild succeeded; all 57 tests passed.",
+        "Read delivered UI/controller/Media Session test changes and existing stale callback, ownership and archive regressions.",
+        "Ran /tmp/dial013-review-remote.mjs, a temporary probe reusing controller test scaffolding and a play double that rejects empty source. NTS1 Play -> prepare NTS2 -> other player pauseRemote -> reselect NTS1 -> main Play produced src empty and error. Probe output: after remote Pause {src:\"\",state:\"paused\"}; after active reselect and Play {src:\"\",state:\"error\",message:\"Stream unavailable or blocked. Try Play again, or open on NTS.\"}.",
+        "Existing test named remote Pause in the new active-selection case actually clicks the local toggle; Media Session Pause also preserves src. Neither covers the coordinator remote Pause source-clear path with an empty-source-sensitive play double.",
+        "No actual audible ChatGPT host playback observed; automated tests are simulated media evidence only."
+      ],
+      "work_item": "DIAL-013"
+    },
+    {
+      "agent": "/root/dial013_implement",
+      "ambiguities": [],
+      "at": "2026-11-22T23:42:32+00:00",
+      "attempt": 2,
+      "blockers": [
+        "Actual audible ChatGPT host behavior was not observed in this implement run; automated media checks remain simulated."
+      ],
+      "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+      "change_summary": "Restored the selected live source on explicit Play after a coordinator remote Pause has cleared audio.src. Kept active and pending NTS row selection non-destructive, including active reselect and repeated pending selection.",
+      "decisions": [
+        "Restore a missing selected live URL only after coordinator ownership is granted and existing stale-attempt checks succeed, immediately before audio.play().",
+        "Apply source restoration to selected non-archive live audio so country playback after a coordinator clear also remains recoverable without changing country selection behavior.",
+        "Preserve archive resolution and source lifecycle unchanged."
+      ],
+      "role": "Implement",
+      "run_id": "run-cf5ec721f9bc",
+      "tests": [
+        "npm test passed: TypeScript/esbuild build and 58/58 Node tests, including the new source-validating cross-thread Pause, active reselect, explicit main Play, repeated pending selection and prepared Play recovery regression.",
+        "The independent review reproduction `node /tmp/dial013-review-remote.mjs` now reports after remote Pause src empty/state paused, then after active reselect and Play src https://stream-relay-geo.ntslive.net/stream?client=direct/state playing/message Playing NTS 1.",
+        "git diff --check passed before the revision commit."
+      ],
+      "work_item": "DIAL-013"
+    },
+    {
+      "agent": "/root/dial013_review",
+      "architecture": "Revision restores only a missing selected non-archive URL during explicit Play, after successful coordinator acquisition and stale-attempt guards. It neither changes the non-destructive NTS selection branch nor archive resolution. Existing country selection behavior remains unchanged.",
+      "at": "2026-11-22T23:43:26+00:00",
+      "attempt": 2,
+      "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+      "complexity": "Focused three-line production revision plus regression test resolves the issue without introducing parallel state or broadening archive UI scope.",
+      "correctness": "Confirmed NTS pending selection leaves active source, ownership, title, Pause and Media Session intact; prepared Play stops/releases before starting the new source. Revision repairs active reselect after remote Pause without reloading on selection. Repeated selections, selecting active, pending cancellation, source clearing, buffering/error, remote Pause and stale callback guards remain coherent. No outstanding defect found in bounded scope.",
+      "findings": [],
+      "recommendation": "ACCEPT",
+      "requirements": "Reviewed recorded attempt-2 dispatch, criteria and implementation report against exact HEAD. The bounded NTS pending/active semantics meet the owner decision in code and simulated tests; the prior remote-Pause recovery finding is resolved. Actual audible host evidence remains unavailable in this review.",
+      "role": "Review",
+      "run_id": "run-9790b1e75722",
+      "security": "No new media origins, trust boundaries or external requests. Restoration reuses the already selected URL under existing playback ownership controls.",
+      "tests": [
+        "Independently ran npm test at exact candidate: TypeScript/esbuild succeeded and all 58 tests passed, including delivered bundle, Media Session, ownership, stale events, country and archive checks.",
+        "Independently reran /tmp/dial013-review-remote.mjs: remote Pause leaves empty src/state paused; active reselect plus explicit Play now restores https://stream-relay-geo.ntslive.net/stream?client=direct and reaches state playing/message Playing NTS 1.",
+        "Inspected new source-validating test: verifies cross-thread Pause clearing, non-destructive active reselect, explicit main Play recovery, repeated pending selection, and explicit prepared Play recovery.",
+        "git diff --check a0cab0f^ a0cab0f passed.",
+        "These tests simulate media and do not prove audible playback in ChatGPT. No public service restart, real host audio observation or production/lifecycle edit performed by Review."
+      ],
+      "work_item": "DIAL-013"
+    },
+    {
+      "agent": "/root/dial013_verify",
+      "at": "2026-11-22T23:45:57+00:00",
+      "attempt": 2,
+      "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+      "criteria": [
+        {
+          "criterion": "While NTS1 is playing, selecting NTS2 prepares that channel without pausing, clearing, reloading or changing the audible NTS1 stream; selecting a live row alone never starts audio.",
+          "evidence": "58/58 tests passed. Controller and delivered UI regression coverage confirms a live-row selection does not initiate playback or interrupt active audio. Simulated media only; audible host behavior is not claimed. See evidence/run-7eb2784539ec/npm-test.log.",
+          "method": "Ran the exact-candidate npm test suite, including delivered UI/controller regression checks.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Only an explicit Play action for the prepared NTS channel switches playback, stopping the prior stream before the new one starts and preserving shared ownership and stale-attempt protection.",
+          "evidence": "Suite passed shared-lock transfer, no-overlap, stale-attempt, and prepared-Play checks. Reproduction observed remote Pause clearing src and setting paused; explicit Play then restored the selected stream and reached playing. See npm-test.log and remote-pause-reproduction.log.",
+          "method": "Ran the exact-candidate suite and focused cross-thread remote-Pause reproduction, then explicitly invoked Play.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "The UI and Media Session metadata distinguish what is actually playing from the pending selection, and Pause for the currently playing audio remains accessible.",
+          "evidence": "58/58 tests passed, including Media Session ownership and delivered UI/controller behavior. The independent accepted Review reports active metadata/Pause remain tied to playing audio while NTS2 is pending. No live host observation is inferred.",
+          "method": "Ran delivered browser-bundle and Media Session tests in the exact-candidate suite; inspected accepted Review bound to this commit.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Handle repeated selections, selecting the active channel, remote Pause and buffering/error states without overlap or unintended restart; preserve country and archive selection behavior unless directly required by this bounded NTS fix.",
+          "evidence": "58/58 tests passed, including repeated/pending selection, active selection, buffering/error, country/archive, and source recovery checks. Focused reproduction: after remote Pause src was empty/state paused; after active reselect and explicit Play src was the NTS stream URL/state playing. See saved logs.",
+          "method": "Ran the exact-candidate suite and focused remote-Pause recovery reproduction.",
+          "result": "PASS"
+        },
+        {
+          "criterion": "Independent Review and Verify assess the exact candidate with delivered UI/controller regressions and preserve any unavailable audible host evidence honestly.",
+          "evidence": "Independent Review run-9790b1e75722 accepted this exact candidate and reported delivered UI/controller tests. This Verify run independently passes automated checks, but actual audible ChatGPT host behavior remains unobserved, so the criterion is blocked rather than treated as passed.",
+          "method": "Confirmed the accepted Review report and run are bound to candidate a0cab0f4890f22a056a5cdd8946425c130d30a36; performed Verify against the same candidate. No ChatGPT audible-host observation was available.",
+          "result": "BLOCKED"
+        }
+      ],
+      "overall": "BLOCKED",
+      "role": "Verify",
+      "run_id": "run-7eb2784539ec",
+      "work_item": "DIAL-013"
+    }
+  ],
+  "resume_stage": "VERIFYING",
+  "runs": [
+    {
+      "agent": "/root/dial013_triage",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 110,
+      "ended_at": "2026-11-22T23:35:10+00:00",
+      "harness": "current-collaboration",
+      "id": "run-fb176dfb8689",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "IMPLEMENT",
+      "retry_of": null,
+      "role": "Triage",
+      "selection_reason": "Bounded read-only assessment of owner-specified NTS prepare-versus-playing semantics and truthful current/pending controls",
+      "started_at": "2026-11-22T23:33:20+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial013_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 223,
+      "ended_at": "2026-11-22T23:39:23+00:00",
+      "harness": "current-collaboration",
+      "id": "run-f645a4a7b86d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": null,
+      "role": "Implement",
+      "selection_reason": "Implement owner-specified NTS live pending selection without interrupting current audio, with distinct active Pause and explicit pending Play",
+      "started_at": "2026-11-22T23:35:40+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial013_review",
+      "attempt": 1,
+      "cost": null,
+      "duration_seconds": 87,
+      "ended_at": "2026-11-22T23:41:03+00:00",
+      "harness": "current-collaboration",
+      "id": "run-ed5b39f7fdbd",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "REVISE",
+      "retry_of": null,
+      "role": "Review",
+      "selection_reason": "Independent review of NTS prepared selection, active Pause/metadata truthfulness and explicit transfer without changing archive/country behavior",
+      "started_at": "2026-11-22T23:39:36+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial013_implement",
+      "attempt": null,
+      "cost": null,
+      "duration_seconds": 89,
+      "ended_at": "2026-11-22T23:42:32+00:00",
+      "harness": "current-collaboration",
+      "id": "run-cf5ec721f9bc",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-sol",
+      "requested_reasoning": "medium",
+      "result": "REPORTED",
+      "retry_of": "run-f645a4a7b86d",
+      "role": "Implement",
+      "selection_reason": "Fix independently reproduced remote-Pause live-source recovery while retaining non-destructive NTS selection",
+      "started_at": "2026-11-22T23:41:03+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial013_review",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 54,
+      "ended_at": "2026-11-22T23:43:26+00:00",
+      "harness": "current-collaboration",
+      "id": "run-9790b1e75722",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-astra",
+      "requested_reasoning": "medium",
+      "result": "ACCEPT",
+      "retry_of": "run-ed5b39f7fdbd",
+      "role": "Review",
+      "selection_reason": "Fresh review of explicit live-source restoration after remote Pause with preserved pending NTS semantics",
+      "started_at": "2026-11-22T23:42:32+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    },
+    {
+      "agent": "/root/dial013_verify",
+      "attempt": 2,
+      "cost": null,
+      "duration_seconds": 140,
+      "ended_at": "2026-11-22T23:45:57+00:00",
+      "harness": "current-collaboration",
+      "id": "run-7eb2784539ec",
+      "input_tokens": null,
+      "output_tokens": null,
+      "replaces": null,
+      "reported_model": null,
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning": "medium",
+      "result": "BLOCKED",
+      "retry_of": null,
+      "role": "Verify",
+      "selection_reason": "Independent exact-candidate verification of non-interrupting NTS preparation, explicit transfer and remote Pause recovery",
+      "started_at": "2026-11-22T23:43:37+00:00",
+      "status": "FINISHED",
+      "unavailable_reason": "collaboration harness does not expose per-worker usage or billing"
+    }
+  ],
+  "spec": {
+    "at": "2026-11-22T23:35:10+00:00",
+    "by": "FOREMAN",
+    "mode": "skipped",
+    "reason": "Owner supplied concrete NTS-only prepare-versus-playing behavior and observable criteria. Routine bounded controller/UI correction; no new media trust, backend or broad design scope. Keep active Pause and distinguish pending Play."
+  },
+  "state": "WAITING_FOR_HUMAN",
+  "title": "Keep current NTS audio while preparing another live channel",
+  "updated_at": "2026-11-22T23:45:57+00:00"
+}

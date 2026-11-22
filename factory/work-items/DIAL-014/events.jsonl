@@ -1,0 +1,6 @@
+{"at": "2026-11-22T23:34:56+00:00", "kind": "created", "seq": 1, "title": "Make NTS archive browsing compact and navigable"}
+{"at": "2026-11-22T23:34:56+00:00", "from_state": "INTAKE", "kind": "advanced", "seq": 2, "terminal_failure_reason": null, "to_state": "TRIAGE"}
+{"agent": "/root/dial014_triage", "at": "2026-11-22T23:35:10+00:00", "kind": "dispatched", "replaces": null, "requested_model": "gpt-6-luna", "requested_reasoning": "medium", "role": "Triage", "run_id": "run-c687091941bd", "seq": 3}
+{"at": "2026-11-22T23:36:43+00:00", "attempt": null, "candidate_commit": null, "kind": "reported", "result": "IMPLEMENT", "role": "Triage", "run_id": "run-c687091941bd", "seq": 4}
+{"at": "2026-11-22T23:36:43+00:00", "by": "FOREMAN", "kind": "spec_skipped", "reason": "Owner requests bounded cleanup of functioning archive UI. Concrete criteria and triage define five-row local pagination, search/show Back navigation and selected-item details; no new API/media/trust scope or broad design change.", "seq": 5}
+{"at": "2026-11-22T23:36:43+00:00", "from_state": "TRIAGE", "kind": "advanced", "seq": 6, "terminal_failure_reason": null, "to_state": "BUILDING"}

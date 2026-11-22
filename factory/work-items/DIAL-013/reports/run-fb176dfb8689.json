@@ -1,0 +1,39 @@
+{
+  "agent": "/root/dial013_triage",
+  "at": "2026-11-22T23:35:10+00:00",
+  "complexity": "Medium to high, bounded to NTS live. The user-visible distinction is small, but controller state and ownership currently assume one selected source. Keep active and prepared NTS selections separate, provide an explicit Play action for the prepared channel while preserving the global Pause for active audio, and switch the one audio element only on that action. Maintain the existing attempt/abort guards and coordinator serialization across the handoff.",
+  "evidence": [
+    "Current NTS row click invokes player.selectStation() at src/player.ts:90; the controller implementation immediately calls stop() and clearSource(), then assigns selected and the new audio.src at src/player-controller.ts:151-158. Thus selecting NTS2 while NTS1 plays pauses and clears NTS1 before any explicit Play.",
+    "The controller has one selected Selection used by play(), UI labels, error text, and Media Session metadata. It does not currently represent a pending NTS choice separately from the active source.",
+    "The shared toggle is wired as Pause when wanted and Play otherwise (src/player-controller.ts:106-112,270-273). During playback it cannot both remain an accessible Pause for NTS1 and serve as the explicit Play-NTS2 switch action; a distinct NTS Play action or an equivalent explicit interaction is needed.",
+    "Current Media Session handlers and metadata are installed from selected (src/player-controller.ts:39-50); assigning pending NTS2 as selected while NTS1 remains audible would make OS metadata report the wrong station unless active playback identity remains separate.",
+    "Existing tests do not cover select-NTS2-while-NTS1-playing or dual active/pending state; they assert the old stop-on-select rule in controller and delivered UI harness.",
+    "Country station and NTS archive selection also route through player.selectStation. The requested exception is explicitly only NTS live; implementation should retain their current stop/clear semantics."
+  ],
+  "handoff": "Proceed with a justified Spec skip: the packet records the owner’s explicit behavior decision and supplies bounded, testable criteria, so no remaining product choice requires a separate Spec. Treat the owner-defined DIAL-013 criteria as a narrow NTS-live-only override to the prior immediate-stop-on-selection rule. Split prepared and active identity in the player, keep NTS row selection non-destructive, expose explicit Play for the prepared NTS channel while retaining active Pause, and bind Media Session metadata/Pause to the actual active source. Implement the switch so old audio is synchronously paused and ownership safely released/transferred before new playback; retain stale-attempt protection. Add controller and delivered UI coverage for repeated selections, selecting active, remote Pause, buffering/error, actual active/pending labels and Media Session metadata, and country/archive non-regression. Independent Review and Verify should inspect the exact candidate; actual audible host verification remains an evidence question and must be reported honestly if unavailable.",
+  "open_questions": [
+    "No unresolved product decision blocks implementation. The owner response in the recorded intervention explicitly says NTS1 should keep playing until the owner actually says to play the newly selected NTS stream, and the packet gives observable acceptance criteria.",
+    "Suggested interaction detail for Implement: keep channel-row selection as preparation, add a separate explicit Play control for the selected NTS live channel, and leave the shared player toggle as Pause for the active channel while it is playing. This meets the packet's explicit-play requirement without making Pause inaccessible."
+  ],
+  "recommendation": "IMPLEMENT",
+  "relevant_code": [
+    "src/player.ts:84-97: selecting either NTS live row calls player.selectStation, updates the shared title and pressed row, and uses the single global toggle; this directly changes the player selection on row click.",
+    "src/player-controller.ts:39-50: Media Session metadata and handlers use the single selected value, so selection is also treated as current playback identity.",
+    "src/player-controller.ts:106-125: status and toggle labels use selected/wanted; stop() pauses audio, cancels coordination, and clears Media Session.",
+    "src/player-controller.ts:127-146: local pause preserves current selected identity, while coordinator stop clears the audio source; coordinator ownership is coupled to current selection.",
+    "src/player-controller.ts:151-267: play() captures selected ID for stale-attempt protection and uses the shared coordinator; changing source while already holding ownership needs a deliberate transition path because coordinator.acquire() rejects when already held.",
+    "public/discovery.html:104-105: each NTS live channel currently has one select button; the persistent shared player has one toggle which is the only Play/Pause control.",
+    "test/player.test.js:257-293 and test/ui-harness.js:86-120: existing regressions explicitly expect selecting NTS2 to stop NTS1 immediately, clear its source, set idle, then start NTS2 from the global toggle; these assertions require updating for the owner-defined exception.",
+    "factory/work-items/DIAL-013/packets/run-fb176dfb8689.json: defines the bounded criteria including preserved active audio, explicit Play to switch, truthful playing/pending UI and metadata, accessible active Pause, edge cases, and preservation of country/archive behavior."
+  ],
+  "risks": [
+    "A naive selected-value change can relabel the audible NTS1 stream as NTS2 in the player and Media Session, or make Pause target the pending rather than active source.",
+    "A naive switch can overlap streams or fail because PlaybackCoordinator.acquire() refuses when this player already holds the lock; the transition must pause/release the old source before the new source starts, while keeping stale attempts and other-thread handoff safe.",
+    "Rapid or repeated selection, selecting the already active channel, a user Pause while another channel is pending, and buffering/error events can cause stale UI or unintended restarts unless active and pending identities remain explicit.",
+    "Existing tests codify immediate-stop-on-select and must be revised; preserve country and archive behavior and their existing expected stop-on-selection semantics."
+  ],
+  "role": "Triage",
+  "run_id": "run-fb176dfb8689",
+  "scope": "Read-only triage of the owner-defined NTS live selection-versus-playing behavior, current player state/control paths, and delivered controller/UI regression coverage. No production, lifecycle, or service files were edited.",
+  "work_item": "DIAL-013"
+}

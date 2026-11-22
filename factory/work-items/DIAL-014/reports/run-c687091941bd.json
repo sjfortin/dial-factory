@@ -1,0 +1,33 @@
+{
+  "agent": "/root/dial014_triage",
+  "at": "2026-11-22T23:36:43+00:00",
+  "complexity": "Medium, bounded UI state and layout change: maintain search results/query and selected show context, add a five-item visible page with local Previous/Next, and use one selected-item detail area for metadata and its NTS link. Keep accessible keyboard controls and retain current safe URL filtering and response guards. A visual check is needed at chat-card/narrow width and desktop width.",
+  "evidence": [
+    "Owner dispatch reports archive search works, but layout is long; it identifies 12 mixed results, metadata, repeated per-row Open on NTS links, and no Back from a show's episodes.",
+    "The source caps each returned archive list at 12 (src/player.ts:106) but renders all accepted items in one pass (src/player.ts:108-132), with a subline for type/show/date and sometimes audio availability (src/player.ts:112).",
+    "Selecting a show clears/replaces the visible result list with its episode response, and no prior result list or query route is stored (src/player.ts:114-120). The query input is not cleared, but there is no in-app Back control.",
+    "Every result row appends an external NTS link (src/player.ts:130-131). The shared player section follows the archive panel in the document (public/discovery.html); a long result list can put its controls below the fold.",
+    "The archive search and show loading paths call supersede() and update archive state; they do not directly call player.stop(). Episode selection does call player.selectStation() (src/player.ts:122-128), so testing should separate passive browse/search from the explicit episode-selection action.",
+    "The live-channel click path is independent at src/player.ts:84-97 and is the subject of the separate DIAL-013 implementation."
+  ],
+  "open_questions": [],
+  "recommendation": "IMPLEMENT",
+  "relevant_code": [
+    "public/discovery.html: the NTS panel places archive search and the full result list above the shared player; each archive item currently has its own Open on NTS link.",
+    "src/player.ts:98-132: showArchive filters safe aliases/URLs, takes up to 12 items, renders every item with metadata and an external link, and replaces the list with episodes after selecting a show without retaining a back route.",
+    "src/player.ts:134-144: search keeps the query in the input, invokes the bounded search tool, and displays results; current request generation guards should remain intact.",
+    "src/player.ts:114-129: show selection loads episodes; episode selection updates the shared player selection and episode link. This behavior needs regression coverage while layout/navigation changes are made.",
+    "factory/work-items/DIAL-013/reports/run-fb176dfb8689.json: DIAL-013 separately addresses non-destructive NTS live-channel preparation; do not modify or conflate its pending/active selection behavior."
+  ],
+  "risks": [
+    "Replacing results for a show without preserving query and prior page would make Back lose context or return to stale results after a newer search.",
+    "Putting the only external NTS link behind an inaccessible or ambiguous interaction would reduce link discoverability; detail selection must be keyboard reachable and clearly labeled.",
+    "Moving/hiding the shared player or wiring archive interactions through player selection could interrupt audio or make Pause hard to reach. Browsing, searching, pagination, and show navigation should not change playback; episode selection should retain its explicit current semantics unless separately specified.",
+    "The current source has inline theme styles, and no actual host rendering evidence is present in this triage. Review/Verify should inspect realistic narrow and desktop rendered layouts and report host limits honestly."
+  ],
+  "role": "Triage",
+  "run_id": "run-c687091941bd",
+  "scope": "Read-only investigation of archive result density, show-to-episode navigation, and player reachability. No production or lifecycle files were edited.",
+  "spec_skip_reason": "The request describes a bounded routine polish and the dispatch gives measurable behaviors: show about five rows at once, provide local paging, preserve query/results on Back, keep NTS links accessible through selected-item details, and keep shared playback controls usable without browse/search changing audio. These choices can be implemented without a new provider, media policy, or API behavior. Validate the page size and navigation on narrow chat-card and desktop layouts.",
+  "work_item": "DIAL-014"
+}

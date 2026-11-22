@@ -1,0 +1,26 @@
+{
+  "agent": "/root/dial013_implement",
+  "candidate": null,
+  "contract": "factory/agents/implement/agent.md",
+  "criteria": [
+    "While NTS1 is playing, selecting NTS2 prepares that channel without pausing, clearing, reloading or changing the audible NTS1 stream; selecting a live row alone never starts audio.",
+    "Only an explicit Play action for the prepared NTS channel switches playback, stopping the prior stream before the new one starts and preserving shared ownership and stale-attempt protection.",
+    "The UI and Media Session metadata distinguish what is actually playing from the pending selection, and Pause for the currently playing audio remains accessible.",
+    "Handle repeated selections, selecting the active channel, remote Pause and buffering/error states without overlap or unintended restart; preserve country and archive selection behavior unless directly required by this bounded NTS fix.",
+    "Independent Review and Verify assess the exact candidate with delivered UI/controller regressions and preserve any unavailable audible host evidence honestly."
+  ],
+  "harness_note": "Dispatch with real collaboration tool; this packet is not execution.",
+  "objective": "Honor owner-requested NTS selection versus playback separation: selecting a new live channel leaves current audio running until explicit Play, with truthful selected/playing UI and active Pause.",
+  "requested_model": "gpt-6-sol",
+  "requested_reasoning": "medium",
+  "role": "Implement",
+  "run_id": "run-f645a4a7b86d",
+  "spec": {
+    "at": "2026-11-22T23:35:10+00:00",
+    "by": "FOREMAN",
+    "mode": "skipped",
+    "reason": "Owner supplied concrete NTS-only prepare-versus-playing behavior and observable criteria. Routine bounded controller/UI correction; no new media trust, backend or broad design scope. Keep active Pause and distinguish pending Play."
+  },
+  "state": "BUILDING",
+  "work_item": "DIAL-013"
+}

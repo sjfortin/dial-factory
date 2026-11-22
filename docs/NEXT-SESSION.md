@@ -17,3 +17,9 @@ Have owner open Dial's connection and select **Refresh tools**, then use a new c
 ## Recovery provenance
 
 The November 17 Review turn hit a real usage limit but saved its complete two-finding REVISE report. On resume, that report was recorded honestly and a replacement Implement fixed ordinary direct/native resume position and retained-HLS fatal errors. A subsequent daemon restart lost a dispatched-but-not-started reviewer; its run was closed BLOCKED. Fresh replacement Review and Verify completed against c073716. Context loss, replacements, prior defects and unknown per-worker usage/cost remain recorded. No worker, tool result or approval was invented.
+
+## DIAL-013/014 owner feedback — 2026-11-23
+
+Owner asked that selecting NTS2 while NTS1 plays prepare the new live channel without stopping current audio until explicit Play. DIAL-013 candidate a0cab0f has independent Review ACCEPT and Verify58 tests PASS; actual audible host behavior remains BLOCKED pending rollout/owner retry. The controller retains active identity/metadata/Pause, with a separate prepared-channel Play bar. A remote-Pause recovery regression was independently caught and fixed.
+
+Owner also reports archive search functionality works in ChatGPT but its layout is long. DIAL-014 Triage recommends five-row local pagination, preserved search/show Back context and selected-item details. Both items have recorded justified Spec skips for bounded owner-defined corrections, without new API/media/CSP trust. DIAL-014 implementation follows the checked DIAL-013 candidate; preserve it and its tests. No new corrective rollout has happened yet.

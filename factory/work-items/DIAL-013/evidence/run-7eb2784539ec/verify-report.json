@@ -1,0 +1,40 @@
+{
+  "work_item": "DIAL-013",
+  "run_id": "run-7eb2784539ec",
+  "agent": "/root/dial013_verify",
+  "candidate_commit": "a0cab0f4890f22a056a5cdd8946425c130d30a36",
+  "attempt": 2,
+  "criteria": [
+    {
+      "criterion": "While NTS1 is playing, selecting NTS2 prepares that channel without pausing, clearing, reloading or changing the audible NTS1 stream; selecting a live row alone never starts audio.",
+      "method": "Ran the exact-candidate npm test suite, including delivered UI/controller regression checks.",
+      "result": "PASS",
+      "evidence": "58/58 tests passed. Controller and delivered UI regression coverage confirms a live-row selection does not initiate playback or interrupt active audio. Simulated media only; audible host behavior is not claimed. See evidence/run-7eb2784539ec/npm-test.log."
+    },
+    {
+      "criterion": "Only an explicit Play action for the prepared NTS channel switches playback, stopping the prior stream before the new one starts and preserving shared ownership and stale-attempt protection.",
+      "method": "Ran the exact-candidate suite and focused cross-thread remote-Pause reproduction, then explicitly invoked Play.",
+      "result": "PASS",
+      "evidence": "Suite passed shared-lock transfer, no-overlap, stale-attempt, and prepared-Play checks. Reproduction observed remote Pause clearing src and setting paused; explicit Play then restored the selected stream and reached playing. See npm-test.log and remote-pause-reproduction.log."
+    },
+    {
+      "criterion": "The UI and Media Session metadata distinguish what is actually playing from the pending selection, and Pause for the currently playing audio remains accessible.",
+      "method": "Ran delivered browser-bundle and Media Session tests in the exact-candidate suite; inspected accepted Review bound to this commit.",
+      "result": "PASS",
+      "evidence": "58/58 tests passed, including Media Session ownership and delivered UI/controller behavior. The independent accepted Review reports active metadata/Pause remain tied to playing audio while NTS2 is pending. No live host observation is inferred."
+    },
+    {
+      "criterion": "Handle repeated selections, selecting the active channel, remote Pause and buffering/error states without overlap or unintended restart; preserve country and archive selection behavior unless directly required by this bounded NTS fix.",
+      "method": "Ran the exact-candidate suite and focused remote-Pause recovery reproduction.",
+      "result": "PASS",
+      "evidence": "58/58 tests passed, including repeated/pending selection, active selection, buffering/error, country/archive, and source recovery checks. Focused reproduction: after remote Pause src was empty/state paused; after active reselect and explicit Play src was the NTS stream URL/state playing. See saved logs."
+    },
+    {
+      "criterion": "Independent Review and Verify assess the exact candidate with delivered UI/controller regressions and preserve any unavailable audible host evidence honestly.",
+      "method": "Confirmed the accepted Review report and run are bound to candidate a0cab0f4890f22a056a5cdd8946425c130d30a36; performed Verify against the same candidate. No ChatGPT audible-host observation was available.",
+      "result": "BLOCKED",
+      "evidence": "Independent Review run-9790b1e75722 accepted this exact candidate and reported delivered UI/controller tests. This Verify run independently passes automated checks, but actual audible ChatGPT host behavior remains unobserved, so the criterion is blocked rather than treated as passed."
+    }
+  ],
+  "overall": "BLOCKED"
+}

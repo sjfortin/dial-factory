@@ -1,0 +1,2 @@
+after remote Pause {"src":"","state":"paused"}
+after active reselect and Play {"src":"https://stream-relay-geo.ntslive.net/stream?client=direct","state":"playing","message":"Playing NTS 1"}

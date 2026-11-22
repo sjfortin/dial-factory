@@ -1,0 +1,82 @@
+
+> dial-one-station-proof@0.1.0 test
+> npm run build && node --test test/*.test.js
+
+
+> dial-one-station-proof@0.1.0 build
+> tsc && esbuild src/player.ts --bundle --format=iife --platform=browser --outfile=dist/player.js && esbuild src/probe.ts --bundle --format=iife --platform=browser --outfile=dist/probe.js
+
+
+  dist/player.js  1.8mb ⚠️
+
+⚡ Done in 139ms
+
+  dist/probe.js  986.7kb
+
+⚡ Done in 79ms
+✔ archive failure invalidates signed candidate, while pause keeps it for a bounded lifetime (34.142694ms)
+✔ seek and position restore stay inside offset and disjoint seekable ranges after remote Pause (7.921802ms)
+✔ fatal HLS errors before and after manifest become retryable and destroy stale instances (4.645835ms)
+✔ expired HLS candidate resolves again and restores position after synchronous metadata (3.806343ms)
+✔ ordinary direct pause/resume preserves position without resetting the media source (2.531645ms)
+✔ ordinary native HLS pause/resume preserves position without resetting the media source (3.417962ms)
+✔ retained HLS instance handles fatal errors after pause/resume, while stale instances cannot fail a retry (7.591821ms)
+✔ late media-key claim cannot relabel or release a newer source (6.97826ms)
+✔ all injected timers keep their provider receiver through acquire, remote Pause, and cleanup (14.584933ms)
+✔ all 15 currently admitted exact candidate pairs require matching directory rows (119.727638ms)
+✔ failed SE Bandit candidate and its origin are excluded while SE remains a valid country (1.753413ms)
+✔ new origins reject nearby URLs, changed query, wrong country/codec and unsafe URL forms (9.509003ms)
+✔ browser catalog rechecks candidate identity and renders names as text (1.526367ms)
+✔ invalid country uses zero requests; bounded scan always checks offsets 0, 50, 100 (60.419372ms)
+✔ short, empty and duplicate windows still reach later compatible choices (4.638451ms)
+✔ all 50 rows per window are filtered, with exact origin, codec, URL and UUID dedupe (4.408417ms)
+✔ choice cap remains 30 and still inspects third window (7.5773ms)
+✔ partial scan keeps successful later choices and distinguishes failure from exhaustion (4.595871ms)
+✔ provider requests retain bounds, redirect rejection and response cap (9.370041ms)
+✔ retry kind, canonical UUID and signed click token remain intact (3.812313ms)
+✔ exact UUID override remains finite and wrong codecs do not enter catalog (2.367276ms)
+✔ partial scan may reach the choice cap without claiming completeness (6.751817ms)
+✔ Media Session pauses owner, resumes only when idle, and stale cleanup preserves a newer registration (27.769447ms)
+✔ bounded NTS search and show drill-down normalize paths and metadata (78.355353ms)
+✔ unsafe input and changed provider schema fail closed (3.003641ms)
+✔ signed media candidates require one exact origin, path and fresh expiry (1.146814ms)
+✔ manifest rejects cross-origin segment before exposing a candidate (3.534506ms)
+✔ remounted old pause card does not send Pause to a newly active stream (361.808846ms)
+✔ remounted pause request is remembered without storing media or unbounded IDs (2.52114ms)
+✔ unsafe or unavailable session storage fails closed for automatic Pause (1.907897ms)
+✔ missing coordination fails closed without calling audio.play (27.325702ms)
+✔ two players transfer only after old audio pauses; remote Pause confirms after stopping (12.564453ms)
+✔ simultaneous Play and cancellation never overlap or report canceled start (8.897338ms)
+✔ unresponsive holder keeps contender silent; canceled waiter cannot start later (4.962778ms)
+✔ unresponsive owner times out Play and remote Pause without false success (6504.496527ms)
+✔ media rejection releases lock and does not report click; remount can acquire (2.027457ms)
+✔ late old play fulfillment and rejection cannot stop or relabel a newer playback (2.859402ms)
+✔ current media pause releases lock; queued old pause cannot interrupt resumed audio (1.670542ms)
+✔ queued old pause during a new lock wait does not cancel the user Play (2.2528ms)
+✔ retained media error retries through load and reports each confirmed resume once (2.229145ms)
+✔ late old-source events cannot turn a new idle selection into playback (5.922182ms)
+✔ NTS uses one audio element and coordinator, never reports a catalog click, and retries errors (8.119205ms)
+✔ selecting active NTS cancels a prepared switch; remote Pause cannot start it (2.748811ms)
+✔ cross-thread Pause clears NTS source; active reselect and pending Play recover only on explicit Play (5.39756ms)
+✔ delivered probe exchanges nonce and enforces shared lock before post-await play (234.865444ms)
+✔ holder teardown releases the simulated shared lock and permits recovery (105.059722ms)
+✔ Pause immediately after queued transfer cancels the lock request and prevents play (103.369373ms)
+✔ self-held lock cannot be counted as cross-frame contention (96.527473ms)
+✔ HTTP MCP tool returns the station and its renderable UI resource (1755.475965ms)
+✔ US nine choices reveal 8+1 locally with no speculative More (8.976006ms)
+✔ France six and Japan one show no More; duplicate-only retries add nothing (1.69734ms)
+✔ partial retry appends unique valid choices and preserves visible selection (1.600879ms)
+✔ same-country and cross-country stale retry cannot mutate new initial results (1.087734ms)
+✔ invalid result is ignored and load error does not erase prior choices (1.3476ms)
+✔ partial scan discloses both incompleteness and the 30-choice limit (3.252906ms)
+✔ retry merge discloses the client cap even when neither scan individually reached it (1.808325ms)
+✔ empty successful retry describes latest scan separately from retained choices (0.632511ms)
+✔ delivered browser bundle handles tool results and player controls (323.365322ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7303.802778
