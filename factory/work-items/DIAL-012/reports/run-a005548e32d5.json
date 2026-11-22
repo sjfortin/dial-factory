@@ -1,0 +1,72 @@
+{
+  "agent": "/root/dial012_review",
+  "architecture": "Shared canonical resource and one player/controller/coordinator are appropriate. hls.js light is pinned at 1.7.3 and bundled. claimIfIdle uses Web Locks ifAvailable rather than transfer. Main weaknesses are incomplete lifecycle management of HLS failures, pending requests and media callbacks.",
+  "at": "2026-11-17T01:08:11+00:00",
+  "attempt": 1,
+  "candidate_commit": "2c3216c3f30436e62a164b3818a412b7712f8341",
+  "complexity": "Scope is reasonable but dense controller functions combine ownership, resolver caching, HLS events, resume and Media Session state. Focused lifecycle helpers and tests for the defects below would make the intended invariants reviewable; no broad rewrite is requested.",
+  "correctness": "REVISE. Independently reproduced failed-candidate reuse, stale country and archive requests overwriting newer launches, and seek outside the media seekable range. Source inspection additionally confirms post-manifest fatal HLS errors have no live error path and remote archive Pause clears position without saving it.",
+  "findings": [
+    {
+      "evidence": "Independent controller harness produced resolver count 1 after first Play, media error, and Retry. fail() only calls stop(); it does not invalidate candidate/destroy HLS.",
+      "finding": "Archive failures retain archiveUrl and hls. Pressing Play to retry skips resolution whenever expires is absent or more than 60 seconds away, and reuses an existing failed HLS instance. A revoked URL/network failure therefore cannot obtain the fresh URL promised by the specification. The candidate is also cached indefinitely absent expires; no resolved-at five-minute limit exists.",
+      "id": "R1",
+      "location": "src/player-controller.ts:87,160-180,193-194",
+      "priority": "P1",
+      "requested_change": "Distinguish resumable pause from failure; on Retry invalidate failed candidate and rebuild HLS, preserving selected episode and safe resume position. Enforce the maximum candidate age and test retries before signature expiry and without expires."
+    },
+    {
+      "evidence": "The sole Hls.Events.ERROR handler is inside the startup Promise and only invokes reject; MANIFEST_PARSED resolves the same promise.",
+      "finding": "Fatal hls.js errors after MANIFEST_PARSED only reject the already-resolved manifest promise. They never call fail(), release ownership, or update status. HLS segment/network failures need not emit HTMLMediaElement error, so the player can remain Playing/Buffering indefinitely while holding ownership.",
+      "id": "R2",
+      "location": "src/player-controller.ts:174-177",
+      "priority": "P1",
+      "requested_change": "Keep an attempt/source/instance-scoped fatal-error handler throughout playback that transitions to a clean retryable error, releases ownership and invalidates failed media; ignore stale-instance events. Test fatal errors both before and after manifest parsing."
+    },
+    {
+      "evidence": "Independent delivered-script reproduction: late country response after open NTS yielded ntsHidden=true/title Choose a station; late old search after new nts-search launch rendered Old search.",
+      "finding": "New NTS/nts-search/pause-control launches return before invalidating pending country/archive requests. An old country picker response can clear the new NTS selection, stop playback and switch views; an old in-app archive search can replace newer chat-requested results while leaving the new query displayed.",
+      "id": "R3",
+      "location": "src/player.ts:237-255 (also country response at 193-200 and archive response at 138)",
+      "priority": "P1",
+      "requested_change": "Use a launch/action generation to invalidate superseded country/search/show requests and cancel pending automatic pause work when a newer view takes over. Restore busy controls on invalidation. Cover transitions across launch modes, not only same-kind request races."
+    },
+    {
+      "evidence": "Only pauseLocal saves currentTime at line 81; coordinator.onStop bypasses it. The loadedmetadata handler is registered after source attachment/manifest await and has no immediate-ready path.",
+      "finding": "Remote Pause calls stop() and clearSource() without saving archive currentTime. clearSource removes src and loads the element, resetting position; next Play uses the old resumeTime (often zero). Also the resume loadedmetadata listener is installed after awaiting HLS MANIFEST_PARSED, so metadata may already have arrived and restoration can be missed.",
+      "id": "R4",
+      "location": "src/player-controller.ts:89-92,185",
+      "priority": "P2",
+      "requested_change": "Preserve position on remote pause and ownership stop for the selected archive; restore position using a guarded media-readiness routine that handles metadata already available and ignores stale source/attempt callbacks. Add remote pause/resume and expired-candidate HLS restoration tests."
+    },
+    {
+      "evidence": "Independent controller harness exposed seekable start=10/end=90 with duration=100; requesting zero assigned currentTime=0.",
+      "finding": "Seek and resume clamp to 0..duration, not the actual seekable TimeRanges. Finite duration plus any range does not mean the full duration is seekable, so the UI permits unavailable positions and can seek into gaps.",
+      "id": "R5",
+      "location": "src/player-controller.ts:46-51,185,217",
+      "priority": "P2",
+      "requested_change": "Derive enabled range(s) from seekable, clamp user seek and restored position to a valid range, and test offset/disjoint ranges."
+    },
+    {
+      "evidence": "Source inspection: after await claimIfIdle, lines 142-145 unconditionally set wanted=false/show paused, before the later generic stale-attempt guard at line 155. Source change can occur during that await.",
+      "finding": "The external Media Play failure and invalid-token branches mutate wanted/status (and can release the coordinator) without first checking currentAttempt against attempt. A delayed claimIfIdle result from a canceled source can overwrite a newly selected/playing source; the normal acquire failure branch already has an epoch check but the external branch lacks it.",
+      "id": "R6",
+      "location": "src/player-controller.ts:141-152",
+      "priority": "P2",
+      "requested_change": "Check attempt/abort/source validity immediately after either ownership await before any global state mutation or lock release; associate releases with the acquired epoch. Test delayed external claim completion after selecting/playing another source."
+    }
+  ],
+  "recommendation": "REVISE",
+  "requirements": "Reviewed exact approved PRODUCT.md, TECH.md and DESIGN-PREVIEW.html against candidate. Dedicated entry tools, distinct country/NTS composition, six Help prompts, historical aliases, app-only resolver and pause-control are present. Archive recovery, position handling and stale launch handling do not yet satisfy the approved behavior. Actual ChatGPT audible archive playback, host _meta/MSE/CSP and cross-thread scope, prompt traces, and owner-phone Media Session/Bluetooth remain unverified; local Chromium evidence cannot pass those criteria.",
+  "role": "Review",
+  "run_id": "run-a005548e32d5",
+  "security": "Fixed NTS API endpoints, bounded aliases and normalized text, redirect:error, 8-second fetch signal, 256 KiB JSON bound, exact SoundCloud source hostname, argv-only /usr/bin/yt-dlp with ignored config/no playlist/bounded output and timeout, exact archive origin, first-playlist reference origin checks, and app-only _meta placement are implemented. No signed media query values were printed by this review. Model-visible content/structuredContent omit candidate URLs. Format selection relies on yt-dlp selector and URL shape rather than independently returned codec metadata; nested playlists/redirects are not recursively checked server-side, so browser CSP remains an essential boundary. No actual ChatGPT host network-policy assurance is claimed. Candidate lifetime lacks the specified five-minute maximum (included in R1).",
+  "tests": [
+    "Independently ran npm test on unchanged candidate production/test files: 45/45 passed; TypeScript and browser bundling passed.",
+    "Ran /tmp/dial012-review-ui.mjs, a temporary copy of delivered UI harness extended with independent sequences: late country response after NTS launch produced ntsHidden=true and title=Choose a station; old archive search after new nts-search launch replaced New launch with Old search.",
+    "Ran /tmp/dial012-review-player.mjs against compiled candidate: archive media error then Retry kept resolver count at 1; seek requested 0 with available range 10..90 assigned currentTime=0.",
+    "git diff 2c3216c3 -- src public package.json package-lock.json test was empty. Only unrelated Foreman files were dirty. Review wrote only temporary report/harness files and generated ignored build output; no production/lifecycle edits.",
+    "Inspected actual HTML/CSS against approved design preview: distinct light country header/chooser and dark editorial NTS live cards/archive hierarchy, Help details and labeled controls are present. No independent real-browser visual/audibility observation is claimed."
+  ],
+  "work_item": "DIAL-012"
+}

@@ -1,0 +1,40 @@
+{
+  "agent": "/root/dial012_review",
+  "architecture": "Revision adds appropriate candidate invalidation, seek range helpers, pre-attachment restoration listeners, epoch-scoped coordinator release and request invalidation. Two lifecycle mismatches remain: HLS instance lifetime outlives the captured play attempt, and restoration runs before an unnecessary media src reassignment.",
+  "at": "2026-11-22T23:10:29+00:00",
+  "attempt": 2,
+  "candidate_commit": "ab6e816e3b3f7dc8021817634fe0a516c7eccd1b",
+  "complexity": "The focused revision is appropriate. Complete source/instance lifetime versus play-attempt handling and avoid resetting already-attached native/direct media. Add the two regression sequences before returning for review.",
+  "correctness": "REVISE for two independently reproduced pause/resume defects. These are follow-through on the original archive lifecycle findings rather than new scope.",
+  "findings": [
+    {
+      "evidence": "Independent test in /tmp/dial012-review-revision-lifecycle.mjs starts HLS, pauses, resumes without expiry, emits fatal ERROR from the retained instance; observed state playing, destroyed false, lockHeld true.",
+      "finding": "A retained HLS instance loses fatal error handling after ordinary Pause/Play. Its only ERROR listener captures currentAttempt at instance creation; pause and resume increment attempt, but valid candidate resume retains hls and installs no new listener. Therefore currentAttempt !== attempt rejects every subsequent fatal error from the still-current instance, leaving Playing/Buffering and the ownership lock held.",
+      "id": "R2-followup",
+      "location": "src/player-controller.ts:234-245",
+      "priority": "P1",
+      "requested_change": "Bind the persistent error path to the current HLS/source lifetime or refresh its active attempt binding on each resume, while retaining stale-instance/source immunity. Add fatal-after-ordinary-resume coverage."
+    },
+    {
+      "evidence": "Independent test using the delivered lifecycle fake starts a direct archive, pauses at 72, and resumes: currentTime is 0 rather than 72. Native HLS follows the same unconditional src assignment at line 232; that path is source-inspected, not separately runtime-tested.",
+      "finding": "Ordinary direct or native-HLS Pause/Play restores position against the old ready media and immediately clears the restore listeners, then unconditionally assigns audio.src again. The source assignment restarts loading and resets currentTime to zero, with no remaining restore callback. Thus ordinary archive resume can restart the episode despite the same valid candidate.",
+      "id": "R4-followup",
+      "location": "src/player-controller.ts:80-93,230-253",
+      "priority": "P1",
+      "requested_change": "Reuse an already-attached unchanged direct/native-HLS source on ordinary resume, or install restoration for the replacement source without consuming it against old metadata. Add ordinary pause/resume position tests for direct and native-HLS paths, alongside existing expired-candidate tests."
+    }
+  ],
+  "recommendation": "REVISE",
+  "requirements": "Reviewed recorded attempt2 packet, implementation revision report and diff against attempt1 and approved PRODUCT/TECH/design already read. Original R1 retry/age, R3 launch invalidation, R5 seek range and R6 stale claim findings are addressed. Remote pause and expired-source restoration cases from R4 are addressed, but ordinary direct/native-HLS resume remains broken. R2 fatal HLS handling works on creation but fails after retained-instance resume. Dedicated views/help, source policy, historical aliases and explicit gesture behavior are preserved.",
+  "role": "Review",
+  "run_id": "run-156618abffb2",
+  "security": "Archive API, source resolver, subprocess constraints, exact media origin/CSP, signed-URL app-only _meta isolation and pinned hls.js are unchanged from first review. Candidate cache now has five-minute reuse age and failure invalidation. New sessionStorage records contain bounded request IDs only, with 30-second server issuedAt freshness gate and fail-closed automatic pause when storage is inaccessible. Remount protection is scoped to same tab/origin sessionStorage; it is not a cross-device guarantee. No signed URL values exposed by this review.",
+  "tests": [
+    "Independently ran npm test: 53/53 passed, including build and protocol/delivered UI tests.",
+    "Read all new archive-lifecycle, pause-request and two-mount pause-remount tests.",
+    "Ran node --test /tmp/dial012-review-revision-lifecycle.mjs, a temporary copy of new lifecycle tests with two independent additions: original five passed, added two failed. Fatal HLS after ordinary pause/resume left state=playing, destroyed=false, lockHeld=true. Direct archive pause at 72 then Play returned currentTime=0.",
+    "git diff ab6e816 -- src public package.json package-lock.json test was empty; git diff --check passed. No production or lifecycle files edited.",
+    "No fresh network/browser/audio run performed. Prior bounded Chromium evidence is historical evidence only; actual ChatGPT audible archive playback/_meta/MSE/CSP, prompt routing, cross-thread scope and Android/Bluetooth remain unverified."
+  ],
+  "work_item": "DIAL-012"
+}

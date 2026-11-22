@@ -1,0 +1,7 @@
+{
+  "method": "One fresh bounded searchArchive('Floating Points') and resolution of one returned episode using approved NTS and SoundCloud methods; values redacted at capture.",
+  "search": {"status": "ok", "count": 12, "resultKinds": ["show", "episode"]},
+  "selected": {"showAlias": "floating-points", "episodeAlias": "floating-points-21st-september-2026", "linkOrigin": "https://www.nts.live"},
+  "resolution": {"format": "hls", "origin": "https://playback.media-streaming.soundcloud.cloud", "path": "/WACK2GxPkeZL/aac_160k/9c0cd328-fc65-4e77-b8cd-fa9233769c04/playlist.m3u8", "queryKeys": ["expires", "Policy", "Signature", "Key-Pair-Id"], "expiresPresent": true},
+  "limitation": "Metadata and local resolver evidence; does not prove ChatGPT host forwarding or audible playback. No signed query values stored."
+}

@@ -1,0 +1,33 @@
+{
+  "agent": "/root/dial012_implement",
+  "ambiguities": [
+    "Actual ChatGPT host forwarding of app-only _meta, MSE/blob admission, audible archive playback, prompt routing, and same-browser cross-thread scope remain for independent host verification.",
+    "Android foreground/background/lock-screen, notification, Bluetooth media-key control, and OS output behavior remain untested on the owner phone.",
+    "Automatic pause deduplication across remounts relies on sessionStorage within the same browser tab/origin. When unavailable, automatic pause is disabled and the user can press the visible control."
+  ],
+  "at": "2026-11-17T01:16:43+00:00",
+  "attempt": 2,
+  "blockers": [
+    "No authenticated ChatGPT MCP App browser or owner Android phone session was available to this Implement worker. Host and phone acceptance remain unverified."
+  ],
+  "candidate_commit": "ab6e816e3b3f7dc8021817634fe0a516c7eccd1b",
+  "change_summary": "Revised the DIAL-012 candidate for all six independent Review findings: archive retry and five-minute candidate lifetime, fatal HLS error cleanup, cross-launch request invalidation, remote archive position restoration, seekable-range clamping, and stale media-key completion guards. Added remount-safe automatic pause deduplication with a bounded session marker and a 30-second freshness check.",
+  "decisions": [
+    "Archive failure now preserves the selected episode and safe position, clears failed URL/HLS instance, and resolves afresh on Retry. Ordinary Pause retains a valid candidate until expiry or five-minute age.",
+    "Fatal hls.js errors are scoped to the current instance/source/attempt throughout playback; they release ownership and leave a retryable error. Position restore listens before attachment and also handles already-ready metadata.",
+    "View changes and model-visible launches supersede old picker/search/show callbacks, restore busy controls, and cancel pending automatic pause work.",
+    "Seek uses actual TimeRanges, including offset and disjoint ranges. External media-key completion checks attempt/source/abort immediately after claim and releases only its matching lock epoch.",
+    "Automatic pause request IDs are stored without media data in bounded sessionStorage. A remounted old card cannot repeat the request; when storage is unavailable or a card is older than 30 seconds, automatic pause fails closed and the visible Pause button remains usable."
+  ],
+  "role": "Implement",
+  "run_id": "run-4701a1d19789",
+  "tests": [
+    "npm test passed 53/53 on the new candidate; TypeScript build and browser bundle succeeded.",
+    "Independent temporary reproductions /tmp/dial012-review-ui.mjs and /tmp/dial012-review-player.mjs now show NTS view/title retained after late country response, New launch retained after late search, resolver count 2 after archive error/Retry, and seek 0 clamped to range start 10.",
+    "New durable controller regressions cover failed URL retry, five-minute age, offset/disjoint seek ranges, remote Pause and saved position, expired HLS restoration when metadata fires synchronously, fatal HLS errors before/after manifest and stale-instance immunity, and delayed media-key claim after a new source starts.",
+    "Delivered UI regressions cover cross-launch country/search races and busy-state reset. A two-mount delivered-bundle test confirms an old pause card does not send Pause to a newly active owner, including after marker eviction when the old issuedAt has expired.",
+    "git diff --check passed before the new commit.",
+    "Prior redacted bounded Chromium archive fixture remains factory/work-items/DIAL-012/evidence/run-512e705572c7/local-archive-chromium.json. Media origin, CSP, resolver policy, and bundled hls.js version were unchanged in this revision; no new live network/browser run was needed."
+  ],
+  "work_item": "DIAL-012"
+}
