@@ -1,0 +1,9 @@
+# Owner-authorized DIAL-012 rollout — 2026-11-23
+
+Owner answered “approve” to pushing/merging the reviewed candidate and updating the testing endpoint. PR10 https://github.com/sjfortin/dial-factory/pull/10 merged at bb53968cb2be4a69877fcd426d06d204b9610764, containing reviewed product candidate c073716626a35d3db189bb814373afaa00864dd0. Production source/package files were confirmed identical to the tested candidate before push. Local main fast-forwarded, npm run build passed, and existing dial-test user service restarted successfully. Tailscale Funnel configuration and endpoint are unchanged: https://macbook-air.tail10dbb3.ts.net/mcp.
+
+Public MCP checks at 2026-11-22T23:24:36Z (November23 JST) connected successfully, listed open_country_radio/open_nts_radio/search_nts_archive/pause_dial, and read the canonical ui://dial/listen-v1.html resource. Country, NTS1 and pause-control tool calls returned the intended launch modes. Historical country-v9 and country-v13-nts-experiment resources returned identical current HTML/CSP with matching requested URIs. Archive search for Floating Points returned12 show/episode results. Resolving the returned 21 September2026 episode yielded an HLS candidate on the approved origin via app-only _meta; its signed URL was absent from model-visible content/structuredContent. Only redacted origin/path/query-key evidence is retained in rollout-check.json.
+
+This establishes public tool/resource/backend delivery. It does not establish ChatGPT _meta forwarding, actual rendered views, audible archive audio, remote-pause acknowledgement, or Android Bluetooth/background/media controls. DIAL-012 remains WAITING_FOR_HUMAN for those checks. The server-side pause-control smoke call did not mount a browser UI and did not pause a player. No host/phone pass is invented.
+
+Prior origin/main before this rollout was 3deb381f616e9ac10d624dd808610bff95cc62ba. No rollback was needed.

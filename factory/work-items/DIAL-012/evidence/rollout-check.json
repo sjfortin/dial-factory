@@ -1,0 +1,90 @@
+{
+  "at": "2026-11-22T23:24:36.378Z",
+  "endpoint": "https://macbook-air.tail10dbb3.ts.net/mcp",
+  "canonical": "ui://dial/listen-v1.html",
+  "tools": [
+    {
+      "name": "open_country_radio",
+      "advertised": true,
+      "uri": "ui://dial/listen-v1.html"
+    },
+    {
+      "name": "open_nts_radio",
+      "advertised": true,
+      "uri": "ui://dial/listen-v1.html"
+    },
+    {
+      "name": "search_nts_archive",
+      "advertised": true,
+      "uri": "ui://dial/listen-v1.html"
+    },
+    {
+      "name": "pause_dial",
+      "advertised": true,
+      "uri": "ui://dial/listen-v1.html"
+    }
+  ],
+  "resource": {
+    "bytes": 1929427,
+    "archiveOriginInConnect": true
+  },
+  "launches": [
+    {
+      "name": "open_country_radio",
+      "launchMode": "country",
+      "isError": false
+    },
+    {
+      "name": "open_nts_radio",
+      "launchMode": "nts",
+      "channel": "1",
+      "isError": false
+    },
+    {
+      "name": "pause_dial",
+      "launchMode": "pause-control",
+      "isError": false
+    }
+  ],
+  "aliases": [
+    {
+      "uri": "ui://dial/country-v9.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true
+    },
+    {
+      "uri": "ui://dial/country-v13-nts-experiment.html",
+      "matchingUri": true,
+      "currentHtml": true,
+      "sameCsp": true
+    }
+  ],
+  "search": {
+    "launchMode": "nts-search",
+    "status": "ok",
+    "count": 12,
+    "kinds": [
+      "show",
+      "episode"
+    ]
+  },
+  "resolution": {
+    "status": "candidate",
+    "selected": {
+      "showAlias": "floating-points",
+      "episodeAlias": "floating-points-21st-september-2026"
+    },
+    "mediaInAppMeta": true,
+    "format": "hls",
+    "modelVisibleContainsSignedUrl": false,
+    "origin": "https://playback.media-streaming.soundcloud.cloud",
+    "path": "/WACK2GxPkeZL/aac_160k/9c0cd328-fc65-4e77-b8cd-fa9233769c04/playlist.m3u8",
+    "queryKeys": [
+      "expires",
+      "Policy",
+      "Signature",
+      "Key-Pair-Id"
+    ]
+  }
+}
